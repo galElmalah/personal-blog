@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>learn on Gal.E</title>
+    <link>https://galelmalah.com/tags/learn/</link>
+    <description>Recent content in learn on Gal.E</description>
+    <image>
+      <url>https://galelmalah.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://galelmalah.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 09 Nov 2020 11:30:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/tags/learn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Create and Publish Your First CLI Using Typescript</title>
+      <link>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-ypescript/</link>
+      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-ypescript/</guid>
+      <description>Creating a CLI with Typescript</description>
+    </item>
+    
+  </channel>
+</rss>
