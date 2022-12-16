@@ -99,7 +99,7 @@ Now let's create an action map, according to our known actions.
 We seem to have all of the parts needed in order to visualize this nifty little thing!
 Let's give it a try.
 
-{{< gist galElmalah 5fdfc9cc26336e16aea346032a544044.js >}}
+{{< gist galElmalah 5fdfc9cc26336e16aea346032a544044 >}}
 
 I'll be damned! it seems like we got only the fully sorted state.
 How can we solve this? we need to time our painting somehow.
