@@ -33,9 +33,9 @@
     {{- if not (.Param "disableAnchoredHeadings") }}
     {{- partial "anchored_headings.html" .Content -}}
     {{- else }}{{ .Content }}{{ end }}
-    {{- if .Params.series }}
+    <!-- {{- if .Params.series }}
     {{- partial "series-posts.html" . -}}
-    {{- end }}  
+    {{- end }}   -->
   </div>
   {{- end }}
 
