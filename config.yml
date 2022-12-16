@@ -1,0 +1,130 @@
+baseURL: 'https://examplesite.com/'
+title: Gal.E
+paginate: 7
+theme: PaperMod
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+googleAnalytics: UA-123-45
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+
+params:
+
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  title: Gal.E
+  description: 'Gal Elmalah blog, blogging about programming, coding concepts, learning and life'
+  keywords: [Blog, Portfolio]
+  author: 'Gal Elmalah'
+  images: ['<link or path of image for opengraph, twitter-cards>']
+  DateFormat: 'January 2, 2006'
+  defaultTheme: light # dark, light
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: false
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: false
+  disableSpecial1stPost: false
+  comments: false
+  hidemeta: false
+  showtoc: true
+  ShowCodeCopyButtons: true
+
+  # assets:
+  #   favicon: 'assets/favicon/favicon.ico'
+  #   favicon16x16: 'assets/favicon/favicon16x16.png'
+  #   favicon32x32: 'assets/favicon/favicon32x32.png'
+  #   apple_touch_icon: 'assets/favicon/apple_touch_icon.png'
+  #   safari_pinned_tab: 'assets/favicon/favicon.ico'
+
+  cover:
+    hiddenInList: true # hide on list pages and home
+
+  label:
+    text: 'Home'
+    icon: /apple-touch-icon.png
+    iconHeight: 35
+
+  # home-info mode
+  homeInfoParams:
+    Title: "Hi there \U0001F44B"
+    Content: Welcome to my blog, I will mainly be posting about code related stuff
+
+  socialIcons:
+    - name: github
+      url: 'https://github.com/galelmalah'
+    - name: twitter
+      url: 'https://twitter.com/galelmalah'
+    - name: Linkedin
+      url: 'https://www.linkedin.com/in/gal-elmalah-71874115a/'
+    - name: RSS
+      url: 'index.xml'
+
+
+  analytics:
+    google:
+      SiteVerificationTag: 'XYZabc'
+    bing:
+      SiteVerificationTag: 'XYZabc'
+    yandex:
+      SiteVerificationTag: 'XYZabc'
+
+
+  editPost:
+    URL: 'https://github.com/galelmalah/blog/content'
+    Text: 'Suggest Changes' # edit text
+    appendFilePath: true # to append file path to Edit link
+
+  # for search
+  # https://fusejs.io/api/options.html
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ['title', 'permalink', 'summary', 'content','tags']
+menu:
+  main:
+    - identifier: Search
+      name: Search
+      url: /search/
+      weight: 1
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 2
+    - identifier: archive
+      name: Archive
+      url: /archives/
+      weight: 2
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 4
+# Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
+pygmentsUseClasses: true
+markup:
+  highlight:
+     # anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    # noClasses: false
+    style: monokai
