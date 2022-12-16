@@ -26,7 +26,13 @@
     <loc>https://galelmalah.com/tags/learning-go/</loc>
     <lastmod>2022-12-14T11:59:03+00:00</lastmod>
   </url><url>
+    <loc>https://galelmalah.com/series/learning-go/</loc>
+    <lastmod>2022-12-14T11:59:03+00:00</lastmod>
+  </url><url>
     <loc>https://galelmalah.com/posts/</loc>
+    <lastmod>2022-12-14T11:59:03+00:00</lastmod>
+  </url><url>
+    <loc>https://galelmalah.com/series/</loc>
     <lastmod>2022-12-14T11:59:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/tags/</loc>
@@ -93,8 +99,6 @@
     <lastmod>2020-10-07T11:59:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/archives/</loc>
-  </url><url>
-    <loc>https://galelmalah.com/categories/</loc>
   </url><url>
     <loc>https://galelmalah.com/search/</loc>
   </url>
