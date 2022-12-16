@@ -1,12 +1,13 @@
 ---
 title: '9 Great Tips To Use Javascript Array Methods Like a Pro!'
 date: 2020-10-07T11:59:03+00:00
-tags: ['Javascript', 'tips']
+tags: ['Javascript', 'tips', 'clean code']
 author: 'Gal Elmalah'
 showToc: true
+weight: 1
 cover:
-  image: 'media/aoc.jpg' # image path/url
-  alt: 'trees' # alt text
+  image: 'media/9-array-methods-cover.png'
+  alt: 'js array methods' # alt text
 ---
 
 As a developer, I always reflect upon the code I write and read. Through this process, I have collected a bunch of useful tips.
