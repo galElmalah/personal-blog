@@ -1,5 +1,6 @@
 ---
 title: 'Learning Go Series'
+series: ['Learning Go']
 date: 2022-12-02T11:30:03+00:00
 tags: ['Advent of Code', 'Go']
 author: 'Gal Elmalah'

@@ -20,6 +20,9 @@ outputs:
     - RSS
     - JSON
 
+taxonomies: 
+  series: 'series'
+  tags: 'tags'
 
 params:
 
@@ -44,13 +47,6 @@ params:
   hidemeta: false
   showtoc: true
   ShowCodeCopyButtons: true
-
-  # assets:
-  #   favicon: 'assets/favicon/favicon.ico'
-  #   favicon16x16: 'assets/favicon/favicon16x16.png'
-  #   favicon32x32: 'assets/favicon/favicon32x32.png'
-  #   apple_touch_icon: 'assets/favicon/apple_touch_icon.png'
-  #   safari_pinned_tab: 'assets/favicon/favicon.ico'
 
   cover:
     hiddenInList: true # hide on list pages and home
@@ -111,7 +107,7 @@ menu:
     - identifier: posts
       name: Posts
       url: /posts/
-      weight: 2
+      weight: 3
     - identifier: archive
       name: Archive
       url: /archives/
@@ -119,6 +115,10 @@ menu:
     - identifier: tags
       name: Tags
       url: /tags/
+      weight: 5
+    - identifier: series
+      name: Series
+      url: /series/
       weight: 4
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true

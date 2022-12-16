@@ -1,9 +1,11 @@
 ---
 title: 'Calorie Counting'
 date: 2022-12-02T11:30:03+00:00
+series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Learning Go']
 author: 'Gal Elmalah'
 showToc: true
+ShowRelatedContent: true
 description: 'Advent of Code day 1 solution'
 cover:
   image: 'media/cover.jpg' # image path/url

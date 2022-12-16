@@ -1,6 +1,7 @@
 ---
 title: 'Treetop Tree House'
 date: 2022-12-08T11:59:03+00:00
+series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Learning Go']
 author: 'Gal Elmalah'
 showToc: true
