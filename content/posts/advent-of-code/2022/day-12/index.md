@@ -10,8 +10,6 @@ cover:
   alt: 'hills' # alt text
 ---
 
-## Hill Climbing Algorithm
-
 [Question](https://adventofcode.com/2022/day/12)
 
 We are stuck at a river between two mountains, our communication device can't get a decent singal but don't worry

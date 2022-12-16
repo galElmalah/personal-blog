@@ -15,8 +15,6 @@ The moment we have all been waiting for, December first. The end of the year is 
 To those of you who don't know, AoC is a yearly programming competition where we try to help Santa do some funky sh\*\*.
 The competition itself is speed and time based, you can read more about it [here](https://adventofcode.com/2022/about).
 
-## Day 1 - Calorie Counting
-
 [Question](https://adventofcode.com/2022/day/1)
 
 ### Part 1
@@ -116,7 +114,7 @@ Again for the sake of speed we will just store all the results, sort them in asc
 
 I know, I know I could have found the max entry by comparing them inside the for loop but you'll see it will be worth it in part 2.
 
-## Part 2
+### Part 2
 
 In part 2 we are asked to return the sum of the 3 elves carrying the most calories i.e take our sorted array and sum the last 3 elements
 We can easily tweak our answer to accommodate these new requirements by adding this line
@@ -125,8 +123,6 @@ We can easily tweak our answer to accommodate these new requirements by adding t
 fmt.Println("Part 2")
 fmt.Println(result[len(result)-1] + result[len(result)-2] + result[len(result)-3])
 ```
-
-## Alternatives?
 
 I used sorting to get the biggest N elements in the array but there are other more performant approaches here like using a max-heap data structure **BUT** AoC is about keeping it simple and getting a valid answer ASAP so unless you know you'll have a performance problem it's better to go with the simpler and more naive solution most often.
 

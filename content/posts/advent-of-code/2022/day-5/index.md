@@ -10,8 +10,6 @@ cover:
   alt: 'crane' # alt text
 ---
 
-## Supply Stacks
-
 [Question](https://adventofcode.com/2022/day/5)
 
 Welcome to day 5 of AoC, aka, annoying AF parsing day.

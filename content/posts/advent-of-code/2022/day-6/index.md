@@ -10,8 +10,6 @@ cover:
   alt: 'tv noise' # alt text
 ---
 
-## Tuning Trouble
-
 [Question](https://adventofcode.com/2022/day/6)
 Finally, we move out of camp!
 As we start heading out of the camp one of the elves gives us a communication device, it will come as no surprise that we got the only malfunctioning device...

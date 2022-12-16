@@ -10,8 +10,6 @@ cover:
   alt: 'forest' # alt text
 ---
 
-## Camp Cleanup
-
 [Question](https://adventofcode.com/2022/day/4)
 Seems like this time we are tasked with optimizing the elves' cleaning tasks! those elves can improve their lists...
 The cleaning tasks are assigned to each pair of elves, for example:

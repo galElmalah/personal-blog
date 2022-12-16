@@ -10,8 +10,6 @@ cover:
   alt: 'trees' # alt text
 ---
 
-## Cathode-Ray Tube
-
 [Question](https://adventofcode.com/2022/day/10)
 
 Crap seems like our rope physics knowledge from yesterday didn't help and we wound up in the river...

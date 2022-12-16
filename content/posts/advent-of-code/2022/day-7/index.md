@@ -10,8 +10,6 @@ cover:
   alt: 'computer terminal' # alt text
 ---
 
-## No Space Left On Device
-
 [Question](https://adventofcode.com/2022/day/7)
 This was a fun day! we finally got something challenging.
 

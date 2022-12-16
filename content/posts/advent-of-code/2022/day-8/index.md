@@ -10,8 +10,6 @@ cover:
   alt: 'trees' # alt text
 ---
 
-## Treetop Tree House
-
 [Question](https://adventofcode.com/2022/day/8)
 
 The elves come to you with a problem, they want to build a tree house but they want to make sure that they have enough cover.

@@ -10,8 +10,6 @@ cover:
   alt: 'legolas from lord of the rings meme' # alt text
 ---
 
-## Rucksack Reorganization
-
 [Question](https://adventofcode.com/2022/day/3)
 We are going into the jungle! We put Legolas in charge of packing the supplies for our journey but it seems like his packing abilities are nothing like his bow-aiming skills and he kind of sucks at packing...
 We do however have a manifest of the items in each rucksack, that list looks as follows

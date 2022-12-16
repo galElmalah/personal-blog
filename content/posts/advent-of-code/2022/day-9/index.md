@@ -10,8 +10,6 @@ cover:
   alt: 'bridge rope' # alt text
 ---
 
-## Rope Bridge
-
 [Question](https://adventofcode.com/2022/day/9) AkA doing weird rope physics!
 
 You come across an old rope bridge and you are not sure it can hold your fat a\*\* so you decide to model some rope physics to distract yourself (like that's going to help...)
