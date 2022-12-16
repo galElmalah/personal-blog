@@ -2,119 +2,119 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Gal.E</title>
-    <link>https://personal-blog-mocha-ten.vercel.app/</link>
+    <link>https://galelmalah.com/</link>
     <description>Recent content on Gal.E</description>
     <image>
-      <url>https://personal-blog-mocha-ten.vercel.app/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
-      <link>https://personal-blog-mocha-ten.vercel.app/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+      <url>https://galelmalah.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://galelmalah.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 14 Dec 2022 11:59:03 +0000</lastBuildDate><atom:link href="https://personal-blog-mocha-ten.vercel.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Dec 2022 11:59:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hill Climbing Algorithm</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-12/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-12/</link>
       <pubDate>Wed, 14 Dec 2022 11:59:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-12/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-12/</guid>
       <description>Advent of Code day 12 solution</description>
     </item>
     
     <item>
       <title>Cathode-Ray Tube</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-10/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-10/</link>
       <pubDate>Tue, 13 Dec 2022 11:59:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-10/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-10/</guid>
       <description>Advent of Code day 10 solution</description>
     </item>
     
     <item>
       <title>Rope Bridge</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-9/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-9/</link>
       <pubDate>Sat, 10 Dec 2022 11:59:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-9/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-9/</guid>
       <description>Advent of Code day 9 solution</description>
     </item>
     
     <item>
       <title>Treetop Tree House</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-8/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-8/</link>
       <pubDate>Thu, 08 Dec 2022 11:59:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-8/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-8/</guid>
       <description>Advent of Code day 8 solution</description>
     </item>
     
     <item>
       <title>No Space Left On Device</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-7/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-7/</link>
       <pubDate>Thu, 08 Dec 2022 11:45:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-7/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-7/</guid>
       <description>Advent of Code day 7 solution</description>
     </item>
     
     <item>
       <title>Tuning Trouble</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-6/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-6/</link>
       <pubDate>Mon, 05 Dec 2022 11:45:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-6/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-6/</guid>
       <description>Advent of Code day 6 solution</description>
     </item>
     
     <item>
       <title>Supply Stacks</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-5/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-5/</link>
       <pubDate>Mon, 05 Dec 2022 11:30:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-5/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-5/</guid>
       <description>Advent of Code day 5 solution</description>
     </item>
     
     <item>
       <title>Camp Cleanup</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-4/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-4/</link>
       <pubDate>Sun, 04 Dec 2022 11:40:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-4/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-4/</guid>
       <description>Introduction to my journey learning Go</description>
     </item>
     
     <item>
       <title>Rucksack Reorganization</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-3/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-3/</link>
       <pubDate>Sun, 04 Dec 2022 11:30:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-3/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-3/</guid>
       <description>Introduction to my journey learning Go</description>
     </item>
     
     <item>
       <title>Rock Paper Scissors 🪨🧻✂</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-2/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-2/</link>
       <pubDate>Fri, 02 Dec 2022 11:40:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-2/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-2/</guid>
       <description>Introduction to my journey learning Go</description>
     </item>
     
     <item>
       <title>Calorie Counting</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-1/</link>
+      <link>https://galelmalah.com/posts/advent-of-code/2022/day-1/</link>
       <pubDate>Fri, 02 Dec 2022 11:30:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/advent-of-code/2022/day-1/</guid>
+      <guid>https://galelmalah.com/posts/advent-of-code/2022/day-1/</guid>
       <description>Advent of Code day 1 solution</description>
     </item>
     
     <item>
       <title>Learning Go Series</title>
-      <link>https://personal-blog-mocha-ten.vercel.app/posts/learning-go/intro/</link>
+      <link>https://galelmalah.com/posts/learning-go/intro/</link>
       <pubDate>Fri, 02 Dec 2022 11:30:03 +0000</pubDate>
       
-      <guid>https://personal-blog-mocha-ten.vercel.app/posts/learning-go/intro/</guid>
+      <guid>https://galelmalah.com/posts/learning-go/intro/</guid>
       <description>What, Why and Who?</description>
     </item>
     
