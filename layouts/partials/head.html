@@ -75,7 +75,7 @@
 {{- end }}
 {{ $sass := resources.Get "sass/style.scss" }}
 {{ $style := $sass | resources.ToCSS | resources.Fingerprint }}
-<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
+<link rel="stylesheet" href="{{ $style.Permalink }}">
 
 {{- /* Search */}}
 {{- if (eq .Layout `search`) -}}
