@@ -4,7 +4,6 @@ date: 2021-02-08T11:30:03+00:00
 tags: ['Typescript', 'tutorial']
 author: 'Gal Elmalah'
 showToc: true
-weight: 4
 cover:
   image: 'media/cover.jpg' # image path/url
   alt: 'computer with terminal open' # alt text

@@ -4,7 +4,6 @@ date: 2020-11-02T11:30:03+00:00
 tags: ['Javascript', 'HTML', 'algorithms']
 author: 'Gal Elmalah'
 showToc: true
-weight: 2
 description: Visualize what?!'
 cover:
   image: 'media/cover.jpg' # image path/url

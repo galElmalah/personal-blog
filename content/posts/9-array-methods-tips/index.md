@@ -4,7 +4,6 @@ date: 2020-10-07T11:59:03+00:00
 tags: ['Javascript', 'tips', 'clean code']
 author: 'Gal Elmalah'
 showToc: true
-weight: 1
 cover:
   image: 'media/9-array-methods-cover.png'
   alt: 'js array methods' # alt text
