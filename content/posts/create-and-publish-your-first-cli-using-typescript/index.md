@@ -1,6 +1,6 @@
 ---
 title: 'Create and Publish Your First CLI Using Typescript'
-date: 2020-11-09T11:30:03+00:00
+date: 2021-02-08T11:30:03+00:00
 tags: ['Typescript', 'tutorial']
 author: 'Gal Elmalah'
 showToc: true
