@@ -73,8 +73,9 @@
 {{- else }}
 <link crossorigin="anonymous" href="{{ $stylesheet.RelPermalink }}" rel="preload stylesheet" as="style">
 {{- end }}
-<link rel="stylesheet" type="text/css" href="{{.Site.BaseURL}}/style.css" />
-
+{{ $sass := resources.Get "sass/style.scss" }}
+{{ $style := $sass | resources.ToCSS | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
 
 {{- /* Search */}}
 {{- if (eq .Layout `search`) -}}

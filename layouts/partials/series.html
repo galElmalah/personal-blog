@@ -1,12 +1,15 @@
 
 {{/* From: https://npf.io/2014/08/making-it-a-series/ */}}
 {{- if .Params.series }}
+    <hr/>
     {{- $name := index .Params.series 0}}
     <p><a href="" id="series"></a>This post is part of the <a href="{{.Site.BaseURL}}/series/{{$name | urlize}}" class="series-name" >{{$name}}</a> series:</p>
     {{- $name := $name | urlize }}
-    {{- $series := index .Site.Taxonomies.series $name }}
+    {{- $series := index .Site.Taxonomies.series  $name }}
      <ol class="series-list">
-        {{- range $series.Pages -}}
+        {{- $reversedPosts := partial "reverse-slice.html" $series.Pages -}}
+
+        {{- range $reversedPosts -}}
         <li>
             {{- if eq .File.UniqueID $.File.UniqueID -}}
                 <b class="active item">{{ .Title }}</b>

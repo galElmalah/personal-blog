@@ -1,7 +1,7 @@
 ---
 title: 'Visualizing Bubble Sort in 5 Minutes Using HTML5 Canvas API'
 date: 2020-11-02T11:30:03+00:00
-tags: ['Javascript', 'HTML', 'canvas', 'sorting']
+tags: ['Javascript', 'HTML', 'algorithms']
 author: 'Gal Elmalah'
 showToc: true
 weight: 2
