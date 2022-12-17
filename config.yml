@@ -1,6 +1,6 @@
 baseURL: 'https://galelmalah.com/'
 title: Gal.E
-paginate: 7
+paginate: 4
 theme: PaperMod
 
 enableRobotsTXT: true
