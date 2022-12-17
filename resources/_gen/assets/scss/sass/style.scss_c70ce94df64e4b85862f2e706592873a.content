@@ -79,3 +79,8 @@
   transition: all 100ms; }
   .tag.advent-of-code:hover {
     background-color: #070711; }
+
+.post-content a {
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 3px; }
