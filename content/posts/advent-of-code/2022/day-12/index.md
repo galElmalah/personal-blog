@@ -7,7 +7,7 @@ author: 'Gal Elmalah'
 showToc: true
 description: 'Advent of Code day 12 solution'
 cover:
-  image: 'media/aoc.jpg' # image path/url
+  image: 'media/cover.jpg' # image path/url
   alt: 'hills' # alt text
 ---
 

@@ -8,7 +8,9 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 
-googleAnalytics: UA-123-45
+disqusShortname: 'yourDisqusShortname'
+
+# googleAnalytics: UA-123-45
 
 minify:
   disableXML: true
@@ -23,6 +25,7 @@ outputs:
 taxonomies: 
   series: 'series'
   tags: 'tags'
+
 
 params:
 
@@ -41,10 +44,7 @@ params:
   ShowCodeCopyButtons: false
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
-  UseHugoToc: false
-  disableSpecial1stPost: false
-  comments: false
-  hidemeta: false
+  comments: true
   showtoc: true
   ShowCodeCopyButtons: true
 
@@ -74,13 +74,13 @@ params:
       url: 'index.xml'
 
 
-  analytics:
-    google:
-      SiteVerificationTag: 'XYZabc'
-    bing:
-      SiteVerificationTag: 'XYZabc'
-    yandex:
-      SiteVerificationTag: 'XYZabc'
+  # analytics:
+  #   google:
+  #     SiteVerificationTag: 'XYZabc'
+  #   bing:
+  #     SiteVerificationTag: 'XYZabc'
+  #   yandex:
+  #     SiteVerificationTag: 'XYZabc'
 
 
   editPost:
