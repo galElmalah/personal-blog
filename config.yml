@@ -8,7 +8,7 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 
-disqusShortname: 'yourDisqusShortname'
+disqusShortname: 'https-www-galelmalah-com'
 
 # googleAnalytics: UA-123-45
 
