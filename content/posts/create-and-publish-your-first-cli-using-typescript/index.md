@@ -5,7 +5,6 @@ tags: ['Typescript', 'tutorial']
 author: 'Gal Elmalah'
 showToc: true
 weight: 4
-description: 'Creating a CLI with Typescript'
 cover:
   image: 'media/cover.jpg' # image path/url
   alt: 'computer with terminal open' # alt text
