@@ -59,7 +59,7 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Hi there \U0001F44B"
-    Content: Welcome to my blog, I will mainly be posting about code related stuff
+    Content: Gal Elmalah, a software team lead @ Wix.com. My main goal with this blog is to have fun, share my thoughts about whatever 
 
   socialIcons:
     - name: github

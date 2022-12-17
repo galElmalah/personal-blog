@@ -11,7 +11,7 @@ cover:
 ---
 
 Following my previous blog post
-[5-cli-tools-that-will-increase-your-dev-velocity-and-code-quality](./5-cli-tools-that-will-increase-your-dev-velocity-and-code-quality/)
+[5 Cli Tools That Will Increase Your Dev Velocity And Code Quality](../5-cli-tools-that-will-increase-your-velocity-and-code-quality/)
 I wrote a quick guide on how to write and publish a CLI.
 
 ## What's in it for you?
@@ -244,10 +244,3 @@ check it out by running `npx <your-module-name-here>` inside whatever folder you
 woohoo, we are all done.
 
 ![party](https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy-downsized.gif)
-**Check out my other blog posts on dev.to**
-
-{% link https://dev.to/galelmalah/5-cli-tools-that-will-increase-your-dev-velocity-and-code-quality-1fe8 %}
-
-{% link https://dev.to/galelmalah/what-is-scaffolder-and-how-you-can-use-it-to-increase-your-team-dev-velocity-558l %}
-
-{% link https://dev.to/galelmalah/9-great-tips-to-use-array-methods-like-a-pro-dcc %}
