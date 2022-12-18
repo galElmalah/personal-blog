@@ -22,26 +22,23 @@ outputs:
     - RSS
     - JSON
 
-taxonomies: 
+taxonomies:
   series: 'series'
   tags: 'tags'
 
-
 params:
-
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: Gal.E
-  description: 'Gal Elmalah blog, blogging about programming, coding concepts, learning and life'
+  description: 'A blog focused on coding, learning and managing by Gal Elmalah'
   keywords: [Blog, Portfolio]
   author: 'Gal Elmalah'
   images: ['<link or path of image for opengraph, twitter-cards>']
   DateFormat: 'January 2, 2006'
-  defaultTheme: light # dark, light
+  defaultTheme: light
   ShowReadingTime: true
   ShowShareButtons: true
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: false
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
   comments: true
@@ -59,7 +56,7 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Hi there \U0001F44B"
-    Content: Gal Elmalah, a software team lead @ Wix.com. My main goal with this blog is to have fun, share my thoughts about whatever 
+    Content: Gal Elmalah, a software team lead @ Wix.com. My main goal with this blog is to have fun, share my thoughts about whatever
 
   socialIcons:
     - name: github
@@ -73,7 +70,6 @@ params:
     - name: RSS
       url: 'index.xml'
 
-
   # analytics:
   #   google:
   #     SiteVerificationTag: 'XYZabc'
@@ -81,7 +77,6 @@ params:
   #     SiteVerificationTag: 'XYZabc'
   #   yandex:
   #     SiteVerificationTag: 'XYZabc'
-
 
   editPost:
     URL: 'https://github.com/galElmalah/personal-blog/tree/master/content'
@@ -97,7 +92,7 @@ params:
     distance: 1000
     threshold: 0.4
     minMatchCharLength: 0
-    keys: ['title', 'permalink', 'summary', 'content','tags']
+    keys: ['title', 'permalink', 'summary', 'content', 'tags']
 menu:
   main:
     - identifier: Search
@@ -124,7 +119,7 @@ menu:
 pygmentsUseClasses: true
 markup:
   highlight:
-     # anchorLineNos: true
+    # anchorLineNos: true
     codeFences: true
     guessSyntax: true
     lineNos: true
