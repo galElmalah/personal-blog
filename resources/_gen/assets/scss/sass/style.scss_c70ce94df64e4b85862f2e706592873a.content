@@ -84,3 +84,13 @@
   box-shadow: none;
   text-decoration: underline;
   text-underline-offset: 3px; }
+
+#menu a {
+  font-weight: 500;
+  transition: color 0.1s ease-in-out; }
+
+#menu a:hover {
+  color: #44BBBB; }
+
+#menu .active {
+  color: #44BBBB; }

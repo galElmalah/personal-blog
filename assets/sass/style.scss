@@ -7,6 +7,7 @@ $algorithms: #d94a8cff;
 $html: #f06529;
 $typescript: #007acc;
 $tutorial: #acacac;
+$favicon: #44BBBB;
 
 $tags: (
   'javascript' $javascript black,
@@ -49,4 +50,19 @@ $tags: (
   box-shadow: none;
   text-decoration: underline;
   text-underline-offset: 3px
+}
+
+#menu {
+  a {
+    font-weight: 500;
+    transition: color 0.1s ease-in-out; 
+  }
+
+  a:hover {
+    color: $favicon;
+  }
+
+  .active {
+    color: $favicon;
+  }
 }
