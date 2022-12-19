@@ -2,7 +2,7 @@
 title: 'Supply Stacks'
 date: 2022-12-05T11:30:03+00:00
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 description: 'Advent of Code day 5 solution'

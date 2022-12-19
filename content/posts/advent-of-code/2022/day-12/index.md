@@ -2,7 +2,7 @@
 title: 'Hill Climbing Algorithm'
 date: 2022-12-14T11:59:03+00:00
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 description: 'Advent of Code day 12 solution'

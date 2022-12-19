@@ -2,7 +2,7 @@
 title: 'Learning Go Series'
 series: ['Learning Go']
 date: 2022-12-02T11:30:03+00:00
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 description: 'What, Why and Who?'

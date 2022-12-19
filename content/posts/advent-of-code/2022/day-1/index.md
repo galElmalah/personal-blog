@@ -2,7 +2,7 @@
 title: 'Calorie Counting'
 date: 2022-12-02T11:30:03+00:00
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 ShowRelatedContent: true

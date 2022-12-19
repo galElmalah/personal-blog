@@ -2,7 +2,7 @@
 title: 'No Space Left On Device'
 date: 2022-12-08T11:45:03+00:00
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 description: 'Advent of Code day 7 solution'

@@ -80,6 +80,14 @@
   .tag.advent-of-code:hover {
     background-color: #070711; }
 
+.tag.coding-questions {
+  font-weight: 500;
+  color: white;
+  background-color: #4446bb;
+  transition: all 100ms; }
+  .tag.coding-questions:hover {
+    background-color: #3d3fa8; }
+
 .post-content a {
   box-shadow: none;
   text-decoration: underline;

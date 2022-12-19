@@ -2,7 +2,7 @@
 title: 'Rucksack Reorganization'
 date: 2022-12-04T11:30:03+00:00
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go']
+tags: ['Advent of Code', 'Go', 'Coding Questions']
 author: 'Gal Elmalah'
 showToc: true
 description: 'Introduction to my journey learning Go'
