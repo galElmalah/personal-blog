@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://galelmalah.com/posts/9-array-methods-tips/</loc>
-    <lastmod>2020-10-07T11:59:03+00:00</lastmod>
-  </url><url>
-    <loc>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</loc>
-    <lastmod>2020-11-02T11:30:03+00:00</lastmod>
-  </url><url>
-    <loc>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</loc>
-    <lastmod>2020-11-09T11:30:03+00:00</lastmod>
-  </url><url>
     <loc>https://galelmalah.com/tags/advent-of-code/</loc>
     <lastmod>2022-12-14T11:59:03+00:00</lastmod>
   </url><url>
@@ -21,9 +12,6 @@
     <lastmod>2022-12-14T11:59:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/posts/advent-of-code/2022/day-12/</loc>
-    <lastmod>2022-12-14T11:59:03+00:00</lastmod>
-  </url><url>
-    <loc>https://galelmalah.com/tags/learning-go/</loc>
     <lastmod>2022-12-14T11:59:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/series/learning-go/</loc>
@@ -71,16 +59,22 @@
     <loc>https://galelmalah.com/posts/learning-go/intro/</loc>
     <lastmod>2022-12-02T11:30:03+00:00</lastmod>
   </url><url>
-    <loc>https://galelmalah.com/tags/learn/</loc>
-    <lastmod>2020-11-09T11:30:03+00:00</lastmod>
+    <loc>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</loc>
+    <lastmod>2021-02-08T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/tags/tutorial/</loc>
-    <lastmod>2020-11-09T11:30:03+00:00</lastmod>
+    <lastmod>2021-02-08T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/tags/typescript/</loc>
+    <lastmod>2021-02-08T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://galelmalah.com/posts/5-cli-tools-that-will-increase-your-velocity-and-code-quality/</loc>
     <lastmod>2020-11-09T11:30:03+00:00</lastmod>
   </url><url>
-    <loc>https://galelmalah.com/tags/canvas/</loc>
+    <loc>https://galelmalah.com/tags/productivity/</loc>
+    <lastmod>2020-11-09T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://galelmalah.com/tags/algorithms/</loc>
     <lastmod>2020-11-02T11:30:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/tags/html/</loc>
@@ -89,8 +83,11 @@
     <loc>https://galelmalah.com/tags/javascript/</loc>
     <lastmod>2020-11-02T11:30:03+00:00</lastmod>
   </url><url>
-    <loc>https://galelmalah.com/tags/sorting/</loc>
+    <loc>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</loc>
     <lastmod>2020-11-02T11:30:03+00:00</lastmod>
+  </url><url>
+    <loc>https://galelmalah.com/posts/9-array-methods-tips/</loc>
+    <lastmod>2020-10-07T11:59:03+00:00</lastmod>
   </url><url>
     <loc>https://galelmalah.com/tags/clean-code/</loc>
     <lastmod>2020-10-07T11:59:03+00:00</lastmod>

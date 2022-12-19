@@ -11,6 +11,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Mon, 02 Nov 2020 11:30:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Visualizing Bubble Sort in 5 Minutes Using HTML5 Canvas API</title>
+      <link>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</link>
+      <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</guid>
+      <description>Visualize what?!&amp;#39;</description>
+    </item>
+    
+    <item>
       <title>9 Great Tips To Use Javascript Array Methods Like a Pro!</title>
       <link>https://galelmalah.com/posts/9-array-methods-tips/</link>
       <pubDate>Wed, 07 Oct 2020 11:59:03 +0000</pubDate>
@@ -19,15 +28,6 @@
       <description>As a developer, I always reflect upon the code I write and read. Through this process, I have collected a bunch of useful tips. In this post, I&amp;rsquo;m going to share those tips that relate to array methods.
 Although I&amp;rsquo;m talking about array methods, these tips apply in other situations. Keep them in mind while you code.
 The tips Some are better naming conventions and rules on when to apply them.</description>
-    </item>
-    
-    <item>
-      <title>Visualizing Bubble Sort in 5 Minutes Using HTML5 Canvas API</title>
-      <link>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</link>
-      <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</guid>
-      <description>Visualize what?!&amp;#39;</description>
     </item>
     
   </channel>

@@ -9,14 +9,15 @@
       <link>https://galelmalah.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 09 Nov 2020 11:30:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Feb 2021 11:30:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Create and Publish Your First CLI Using Typescript</title>
       <link>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</link>
-      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      <pubDate>Mon, 08 Feb 2021 11:30:03 +0000</pubDate>
       
       <guid>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</guid>
-      <description>Creating a CLI with Typescript</description>
+      <description>Following my previous blog post 5 Cli Tools That Will Increase Your Dev Velocity And Code Quality I wrote a quick guide on how to write and publish a CLI.
+What&amp;rsquo;s in it for you? Write a cool as f*** CLI tool. Learn how to set up a project using Typescript. Publish your new shiny CLI to npm. setup We will use Scaffolder to generate all the boilerplate we need for our shiny CLI.</description>
     </item>
     
   </channel>

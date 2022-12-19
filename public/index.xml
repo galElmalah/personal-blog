@@ -11,35 +11,6 @@
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Wed, 14 Dec 2022 11:59:03 +0000</lastBuildDate><atom:link href="https://galelmalah.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>9 Great Tips To Use Javascript Array Methods Like a Pro!</title>
-      <link>https://galelmalah.com/posts/9-array-methods-tips/</link>
-      <pubDate>Wed, 07 Oct 2020 11:59:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/posts/9-array-methods-tips/</guid>
-      <description>As a developer, I always reflect upon the code I write and read. Through this process, I have collected a bunch of useful tips. In this post, I&amp;rsquo;m going to share those tips that relate to array methods.
-Although I&amp;rsquo;m talking about array methods, these tips apply in other situations. Keep them in mind while you code.
-The tips Some are better naming conventions and rules on when to apply them.</description>
-    </item>
-    
-    <item>
-      <title>Visualizing Bubble Sort in 5 Minutes Using HTML5 Canvas API</title>
-      <link>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</link>
-      <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</guid>
-      <description>Visualize what?!&amp;#39;</description>
-    </item>
-    
-    <item>
-      <title>Create and Publish Your First CLI Using Typescript</title>
-      <link>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</link>
-      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</guid>
-      <description>Creating a CLI with Typescript</description>
-    </item>
-    
-    <item>
       <title>Hill Climbing Algorithm</title>
       <link>https://galelmalah.com/posts/advent-of-code/2022/day-12/</link>
       <pubDate>Wed, 14 Dec 2022 11:59:03 +0000</pubDate>
@@ -145,6 +116,48 @@ The tips Some are better naming conventions and rules on when to apply them.</de
       
       <guid>https://galelmalah.com/posts/learning-go/intro/</guid>
       <description>What, Why and Who?</description>
+    </item>
+    
+    <item>
+      <title>Create and Publish Your First CLI Using Typescript</title>
+      <link>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</link>
+      <pubDate>Mon, 08 Feb 2021 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/create-and-publish-your-first-cli-using-typescript/</guid>
+      <description>Following my previous blog post 5 Cli Tools That Will Increase Your Dev Velocity And Code Quality I wrote a quick guide on how to write and publish a CLI.
+What&amp;rsquo;s in it for you? Write a cool as f*** CLI tool. Learn how to set up a project using Typescript. Publish your new shiny CLI to npm. setup We will use Scaffolder to generate all the boilerplate we need for our shiny CLI.</description>
+    </item>
+    
+    <item>
+      <title>5 CLI Tools That Will Increase Your Velocity and Code Quality</title>
+      <link>https://galelmalah.com/posts/5-cli-tools-that-will-increase-your-velocity-and-code-quality/</link>
+      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/5-cli-tools-that-will-increase-your-velocity-and-code-quality/</guid>
+      <description>Everyone likes CLI&amp;rsquo;s (or maybe it&amp;rsquo;s just me).
+I have compiled a list of the CLI&amp;rsquo;s I use on a daily basis, some are well known some are less so, but all of them help me get things done faster and some even help me keep my code cleaner.
+This list is ordered from most used to least used on a daily basis.
+1. z - Go from A to Z with ease This one will make you look like a ninja and help you boost your productivity!</description>
+    </item>
+    
+    <item>
+      <title>Visualizing Bubble Sort in 5 Minutes Using HTML5 Canvas API</title>
+      <link>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</link>
+      <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/visualizing-bubble-sort-with-html-canvas/</guid>
+      <description>Visualize what?!&amp;#39;</description>
+    </item>
+    
+    <item>
+      <title>9 Great Tips To Use Javascript Array Methods Like a Pro!</title>
+      <link>https://galelmalah.com/posts/9-array-methods-tips/</link>
+      <pubDate>Wed, 07 Oct 2020 11:59:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/posts/9-array-methods-tips/</guid>
+      <description>As a developer, I always reflect upon the code I write and read. Through this process, I have collected a bunch of useful tips. In this post, I&amp;rsquo;m going to share those tips that relate to array methods.
+Although I&amp;rsquo;m talking about array methods, these tips apply in other situations. Keep them in mind while you code.
+The tips Some are better naming conventions and rules on when to apply them.</description>
     </item>
     
     

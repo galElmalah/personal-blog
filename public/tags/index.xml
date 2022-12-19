@@ -29,27 +29,9 @@
     </item>
     
     <item>
-      <title>Learning Go</title>
-      <link>https://galelmalah.com/tags/learning-go/</link>
-      <pubDate>Wed, 14 Dec 2022 11:59:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/tags/learning-go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>learn</title>
-      <link>https://galelmalah.com/tags/learn/</link>
-      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/tags/learn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>tutorial</title>
       <link>https://galelmalah.com/tags/tutorial/</link>
-      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      <pubDate>Mon, 08 Feb 2021 11:30:03 +0000</pubDate>
       
       <guid>https://galelmalah.com/tags/tutorial/</guid>
       <description></description>
@@ -58,18 +40,27 @@
     <item>
       <title>Typescript</title>
       <link>https://galelmalah.com/tags/typescript/</link>
-      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      <pubDate>Mon, 08 Feb 2021 11:30:03 +0000</pubDate>
       
       <guid>https://galelmalah.com/tags/typescript/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>canvas</title>
-      <link>https://galelmalah.com/tags/canvas/</link>
+      <title>productivity</title>
+      <link>https://galelmalah.com/tags/productivity/</link>
+      <pubDate>Mon, 09 Nov 2020 11:30:03 +0000</pubDate>
+      
+      <guid>https://galelmalah.com/tags/productivity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>algorithms</title>
+      <link>https://galelmalah.com/tags/algorithms/</link>
       <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
       
-      <guid>https://galelmalah.com/tags/canvas/</guid>
+      <guid>https://galelmalah.com/tags/algorithms/</guid>
       <description></description>
     </item>
     
@@ -88,15 +79,6 @@
       <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
       
       <guid>https://galelmalah.com/tags/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>sorting</title>
-      <link>https://galelmalah.com/tags/sorting/</link>
-      <pubDate>Mon, 02 Nov 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://galelmalah.com/tags/sorting/</guid>
       <description></description>
     </item>
     
