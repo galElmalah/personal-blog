@@ -15,7 +15,7 @@ cover:
 
 [Question](https://adventofcode.com/2022/day/13)
 
-> Phewww... This took a lot of googling to get right. Working with unstructured data in Go wasn't as simple as I'm used to from JS. Having said that, I think the outcome is quite alright.
+> Phew... This took a lot of googling to get right. Working with unstructured data in Go wasn't as simple as I'm used to from JS. Having said that, I think the outcome is quite alright.
 
 The communication device is still acting up...
 We receive a distress signal but it seems like the packets are arriving out of order (our puzzle input).
