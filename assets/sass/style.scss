@@ -1,4 +1,5 @@
-$advent-of-code: #0F0F23;
+// tags colors
+$advent-of-code: #0f0f23;
 $tips: #b4418eff;
 $clean-code: #1184a7ff;
 $go: #29beb0;
@@ -7,8 +8,10 @@ $algorithms: #d94a8cff;
 $html: #f06529;
 $typescript: #007acc;
 $tutorial: #acacac;
-$favicon: #44BBBB;
+$favicon: #44bbbb;
 $coding-questions: #4446bb;
+
+$terminal-background: #25193c;
 
 $tags: (
   'javascript' $javascript black,
@@ -20,19 +23,18 @@ $tags: (
   'typescript' $typescript white,
   'tutorial' $tutorial white,
   'advent-of-code' $advent-of-code white,
-  'coding-questions' $coding-questions white,
+  'coding-questions' $coding-questions white
 );
-
 
 .tag {
   &.small {
     font-size: 12px;
-    line-height:initial;
+    line-height: initial;
     padding: 5px;
     margin-right: 7px;
   }
   &::before {
-    content: "#";
+    content: '#';
     display: inline;
   }
   @each $name, $bg-color, $font-color in $tags {
@@ -48,16 +50,16 @@ $tags: (
   }
 }
 
-.post-content a { 
+.post-content a {
   box-shadow: none;
   text-decoration: underline;
-  text-underline-offset: 3px
+  text-underline-offset: 3px;
 }
 
 #menu {
   a {
     font-weight: 500;
-    transition: color 0.1s ease-in-out; 
+    transition: color 0.1s ease-in-out;
   }
 
   a:hover {
@@ -66,5 +68,142 @@ $tags: (
 
   .active {
     color: $favicon;
+  }
+}
+
+.terminal {
+  background-color: $terminal-background;
+  width: 100%;
+  height: 300px;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-y: scroll;
+  font-family: 'Fira Code';
+  font-size: 22px;
+
+  color: rgba(227, 227, 227, 0.823);
+
+  .cmd {
+    font-size: 22px;
+
+    &.first::before {
+      content: '';
+      animation: typing-whoami 1.5s forwards;
+      animation-delay: 2.5s;
+    }
+
+    &.second::before {
+      content: '';
+      animation: typing-find 1.5s forwards;
+      animation-delay: 3.5s;
+    }
+
+    &::after {
+      content: '';
+      margin-left: 3px;
+      border-right: 2px solid rgba(255, 255, 255, 0.906);
+      animation: blink-animation 1s steps(5, start) infinite;
+    }
+
+    &.supported {
+      color: rgb(44, 238, 64);
+    }
+  }
+
+  .whoami-output {
+    font-size: 18px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 5.5s;
+  }
+
+  .find-output {
+    font-size: 18px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 9s;
+  }
+  .social-icons {
+    * {
+      color: white;
+    }
+  }
+}
+
+@keyframes wait {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes typing-whoami {
+  0%,
+  14% {
+    content: '';
+  }
+  14%,
+  28% {
+    content: 'w';
+  }
+  28%,
+  42% {
+    content: 'wh';
+  }
+  42%,
+  56% {
+    content: 'who';
+  }
+  56%,
+  70% {
+    content: 'whoa';
+  }
+  70%,
+  84% {
+    content: 'whoam';
+  }
+  84%,
+  100% {
+    content: 'whoami';
+  }
+}
+
+@keyframes typing-gal {
+  0%,
+  12.5% {
+    content: '';
+  }
+  12.5%,
+  25% {
+    content: 'f';
+  }
+  25%,
+  37.5% {
+    content: 'fi';
+  }
+  37.5%,
+  50% {
+    content: 'fin';
+  }
+  50%,
+  62.5% {
+    content: 'find';
+  }
+  62.5%,
+  75% {
+    content: 'find ';
+  }
+  75%,
+  87.5% {
+    content: 'find m';
+  }
+  87.5%,
+  100% {
+    content: 'find me';
   }
 }

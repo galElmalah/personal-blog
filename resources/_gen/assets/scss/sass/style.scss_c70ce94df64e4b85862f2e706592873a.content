@@ -5,7 +5,7 @@
   margin-right: 7px; }
 
 .tag::before {
-  content: "#";
+  content: '#';
   display: inline; }
 
 .tag.javascript {
@@ -75,7 +75,7 @@
 .tag.advent-of-code {
   font-weight: 500;
   color: white;
-  background-color: #0F0F23;
+  background-color: #0f0f23;
   transition: all 100ms; }
   .tag.advent-of-code:hover {
     background-color: #070711; }
@@ -98,7 +98,107 @@
   transition: color 0.1s ease-in-out; }
 
 #menu a:hover {
-  color: #44BBBB; }
+  color: #44bbbb; }
 
 #menu .active {
-  color: #44BBBB; }
+  color: #44bbbb; }
+
+.terminal {
+  background-color: #25193c;
+  width: 100%;
+  height: 300px;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-y: scroll;
+  font-family: 'Fira Code';
+  font-size: 22px;
+  color: rgba(227, 227, 227, 0.823); }
+  .terminal .cmd {
+    font-size: 22px; }
+    .terminal .cmd.first::before {
+      content: '';
+      animation: typing-whoami 1.5s forwards;
+      animation-delay: 2.5s; }
+    .terminal .cmd.second::before {
+      content: '';
+      animation: typing-find 1.5s forwards;
+      animation-delay: 3.5s; }
+    .terminal .cmd::after {
+      content: '';
+      margin-left: 3px;
+      border-right: 2px solid rgba(255, 255, 255, 0.906);
+      animation: blink-animation 1s steps(5, start) infinite; }
+    .terminal .cmd.supported {
+      color: #2cee40; }
+  .terminal .whoami-output {
+    font-size: 18px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 5.5s; }
+  .terminal .find-output {
+    font-size: 18px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 9s; }
+  .terminal .social-icons * {
+    color: white; }
+
+@keyframes wait {
+  to {
+    opacity: 1; } }
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden; } }
+
+@keyframes typing-whoami {
+  0%,
+  14% {
+    content: ''; }
+  14%,
+  28% {
+    content: 'w'; }
+  28%,
+  42% {
+    content: 'wh'; }
+  42%,
+  56% {
+    content: 'who'; }
+  56%,
+  70% {
+    content: 'whoa'; }
+  70%,
+  84% {
+    content: 'whoam'; }
+  84%,
+  100% {
+    content: 'whoami'; } }
+
+@keyframes typing-gal {
+  0%,
+  14% {
+    content: ''; }
+  14%,
+  28% {
+    content: 'f'; }
+  28%,
+  42% {
+    content: 'fi'; }
+  42%,
+  56% {
+    content: 'fin'; }
+  56%,
+  70% {
+    content: 'find'; }
+  70%,
+  84% {
+    content: 'find '; }
+  84%,
+  100% {
+    content: 'find g'; }
+  84%,
+  100% {
+    content: 'find ga'; }
+  84%,
+  100% {
+    content: 'find gal'; } }
