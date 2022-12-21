@@ -1,3 +1,153 @@
+@use 'sass:string';
+.toolbar {
+  height: 15px;
+  background-color: black;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  position: relative;
+  bottom: -10px;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 10px;
+  align-items: center; }
+  .toolbar span:nth-child(1) {
+    width: 7.5px;
+    background-color: #92ff16;
+    height: 50%;
+    border-radius: 50%; }
+  .toolbar span:nth-child(2) {
+    width: 7.5px;
+    margin-left: 5px;
+    background-color: #ffaf2e;
+    height: 50%;
+    border-radius: 50%; }
+
+.terminal {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  background-color: var(--code-bg);
+  width: 100%;
+  height: max-content;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-y: scroll;
+  font-family: 'Fira Code';
+  font-size: 14px; }
+  .terminal .prompt.second {
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 4s; }
+  .terminal .prompt.final {
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 6.7s; }
+  .terminal .cmd.first::before {
+    content: '';
+    animation: typing-whoami 1.2s forwards;
+    animation-delay: 1s; }
+  .terminal .cmd.first::after {
+    content: '';
+    margin-left: 2px;
+    border-right: 5px solid var(--blinker);
+    animation: blink-animation 1s steps(5, start) 5 forwards, hide 0s steps(1) 3.3s forwards; }
+  .terminal .cmd.second::before {
+    content: '';
+    animation: typing-find 1.5s forwards;
+    animation-delay: 5s; }
+  .terminal .cmd.second::after {
+    content: '';
+    margin-left: 2px;
+    opacity: 0;
+    border-right: 5px solid var(--blinker);
+    animation: wait steps(1) 4s forwards, blink-animation 1s steps(5, start) 4s infinite, hide steps(1) 6.7s forwards; }
+  .terminal .cmd.third::after {
+    content: '';
+    margin-left: 2px;
+    opacity: 0;
+    border-right: 5px solid var(--blinker);
+    animation: wait steps(1) 6.7s forwards, blink-animation 1s steps(5, start) 6.7s infinite; }
+  .terminal .cmd.supported {
+    font-weight: 500;
+    color: var(--cmd-color); }
+  .terminal .whoami-output {
+    font-size: 14px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 3.7s;
+    margin-bottom: 5px; }
+    .terminal .whoami-output a {
+      color: var(--cmd-color);
+      text-decoration: underline; }
+  .terminal .find-output {
+    font-size: 14px;
+    opacity: 0;
+    animation: wait steps(1) forwards;
+    animation-delay: 6.7s;
+    margin-bottom: 5px; }
+  .terminal .social-icons {
+    padding: 0;
+    margin: 0; }
+
+@keyframes wait {
+  to {
+    opacity: 1; } }
+
+@keyframes hide {
+  to {
+    opacity: 0; } }
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden; } }
+
+@keyframes typing-whoami {
+  0%,
+  14% {
+    content: ''; }
+  14%,
+  28% {
+    content: 'w'; }
+  28%,
+  42% {
+    content: 'wh'; }
+  42%,
+  56% {
+    content: 'who'; }
+  56%,
+  70% {
+    content: 'whoa'; }
+  70%,
+  84% {
+    content: 'whoam'; }
+  84%,
+  100% {
+    content: 'whoami'; } }
+
+@keyframes typing-find {
+  0%,
+  12.5% {
+    content: ''; }
+  12.5%,
+  25% {
+    content: 'f'; }
+  25%,
+  37.5% {
+    content: 'fi'; }
+  37.5%,
+  50% {
+    content: 'fin'; }
+  50%,
+  62.5% {
+    content: 'find'; }
+  62.5%,
+  75% {
+    content: 'find '; }
+  75%,
+  87.5% {
+    content: 'find m'; }
+  87.5%,
+  100% {
+    content: 'find me'; } }
+
 .tag.small {
   font-size: 12px;
   line-height: initial;
@@ -102,103 +252,3 @@
 
 #menu .active {
   color: #44bbbb; }
-
-.terminal {
-  background-color: #25193c;
-  width: 100%;
-  height: 300px;
-  border-radius: 5px;
-  padding: 15px;
-  overflow-y: scroll;
-  font-family: 'Fira Code';
-  font-size: 22px;
-  color: rgba(227, 227, 227, 0.823); }
-  .terminal .cmd {
-    font-size: 22px; }
-    .terminal .cmd.first::before {
-      content: '';
-      animation: typing-whoami 1.5s forwards;
-      animation-delay: 2.5s; }
-    .terminal .cmd.second::before {
-      content: '';
-      animation: typing-find 1.5s forwards;
-      animation-delay: 3.5s; }
-    .terminal .cmd::after {
-      content: '';
-      margin-left: 3px;
-      border-right: 2px solid rgba(255, 255, 255, 0.906);
-      animation: blink-animation 1s steps(5, start) infinite; }
-    .terminal .cmd.supported {
-      color: #2cee40; }
-  .terminal .whoami-output {
-    font-size: 18px;
-    opacity: 0;
-    animation: wait steps(1) forwards;
-    animation-delay: 5.5s; }
-  .terminal .find-output {
-    font-size: 18px;
-    opacity: 0;
-    animation: wait steps(1) forwards;
-    animation-delay: 9s; }
-  .terminal .social-icons * {
-    color: white; }
-
-@keyframes wait {
-  to {
-    opacity: 1; } }
-
-@keyframes blink-animation {
-  to {
-    visibility: hidden; } }
-
-@keyframes typing-whoami {
-  0%,
-  14% {
-    content: ''; }
-  14%,
-  28% {
-    content: 'w'; }
-  28%,
-  42% {
-    content: 'wh'; }
-  42%,
-  56% {
-    content: 'who'; }
-  56%,
-  70% {
-    content: 'whoa'; }
-  70%,
-  84% {
-    content: 'whoam'; }
-  84%,
-  100% {
-    content: 'whoami'; } }
-
-@keyframes typing-gal {
-  0%,
-  14% {
-    content: ''; }
-  14%,
-  28% {
-    content: 'f'; }
-  28%,
-  42% {
-    content: 'fi'; }
-  42%,
-  56% {
-    content: 'fin'; }
-  56%,
-  70% {
-    content: 'find'; }
-  70%,
-  84% {
-    content: 'find '; }
-  84%,
-  100% {
-    content: 'find g'; }
-  84%,
-  100% {
-    content: 'find ga'; }
-  84%,
-  100% {
-    content: 'find gal'; } }

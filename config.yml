@@ -56,7 +56,7 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Hi there \U0001F44B"
-    Content: Gal Elmalah, a software team lead @ Wix.com. My main goal with this blog is to have fun, share my thoughts about whatever
+    Content: Gal Elmalah, a software team lead @ [Wix.com](www.wix.com). This blog is a trash bin for my thoughts, hopefully you'll find something that interest you as well.
 
   socialIcons:
     - name: github

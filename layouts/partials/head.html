@@ -93,6 +93,9 @@
 {{- end }}
 {{- end -}}
 
+
+<script defer crossorigin="anonymous" src="./terminal.js"></script>
+
 {{- /* Highlight.js */}}
 {{- $isHLJSdisabled := (site.Params.assets.disableHLJS | default .Params.disableHLJS ) }}
 {{- if (and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (not $isHLJSdisabled)) }}
@@ -147,7 +150,7 @@
             }
 
             .list {
-                background: var(--theme);
+                background: white;
             }
 
             .list:not(.dark)::-webkit-scrollbar-track {
