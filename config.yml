@@ -27,7 +27,7 @@ taxonomies:
   tags: 'tags'
 
 params:
-  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  env: 'production' # to enable google analytics, opengraph, twitter-cards and schema.
   title: Gal.E
   description: 'A blog focused on coding, learning and managing by Gal Elmalah'
   keywords: [Blog, Portfolio]
