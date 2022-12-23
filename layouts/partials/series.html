@@ -1,22 +1,22 @@
 
 {{/* From: https://npf.io/2014/08/making-it-a-series/ */}}
 {{- if .Params.series }}
-    <hr/>
-    {{- $name := index .Params.series 0}}
-    <p><a href="" id="series"></a>This post is part of the <a href="{{.Site.BaseURL}}/series/{{$name | urlize}}" class="series-name" >{{$name}}</a> series:</p>
-    {{- $name := $name | urlize }}
-    {{- $series := index .Site.Taxonomies.series  $name }}
-     <ol class="series-list">
-        {{- $reversedPosts := partial "reverse-slice.html" $series.Pages -}}
 
-        {{- range $reversedPosts -}}
-        <li>
-            {{- if eq .File.UniqueID $.File.UniqueID -}}
-                <b class="active item">{{ .Title }}</b>
-            {{- else -}}
-                <a class="item" href="{{ .Permalink }}">{{ .Title }}</a>
-            {{- end -}}
-        </li>
-        {{- end -}}
-    </ol>
+    {{- $name := index .Params.series 0}}
+
+    {{- $seriesUrl := $name | urlize }}
+    
+    {{- $series := index .Site.Taxonomies.series  $seriesUrl }}
+    {{- $reversedPosts := partial "reverse-slice.html" $series.Pages -}}
+    {{- $currentIndex := 0 -}}
+    {{- range $index, $file := $reversedPosts -}}
+    {{- if eq  $.File.UniqueID .File.UniqueID -}}
+    {{$currentIndex = add $index 1 }}
+    {{- end -}}
+    {{- end -}}
+    
+    {{$seriesLength :=   len $reversedPosts }}
+    <p class="page-series"><em><a href="" id="series"></a>This post is number <b>{{$currentIndex}}</b> of a {{$seriesLength}} posts series > <a href="{{.Site.BaseURL}}series/{{$seriesUrl}}" class="{{$seriesUrl}}" >{{$name}}</a>.</em></p>
+
+  
 {{- end }}

@@ -2,7 +2,7 @@
 title: 'Merging Intervals'
 date: 2022-12-19T05:33:23.419Z
 series: ['Learning Go']
-tags: ['Advent of Code', 'Go', 'Coding Questions']
+tags: ['Coding Questions', 'Go']
 author: 'Gal Elmalah'
 showToc: true
 draft: true

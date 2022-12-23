@@ -18,6 +18,9 @@ $coding-questions: #4446bb;
   font-family: "Fira Code" !important;
 }
  
+.post-content a {
+  color: $favicon
+}
 
 
 
@@ -76,5 +79,13 @@ $tags: (
 
   .active {
     color: $favicon;
+  }
+}
+
+.page-series {
+  .learning-go {
+    color: $go;
+    font-weight: bolder;
+    text-decoration: underline;
   }
 }

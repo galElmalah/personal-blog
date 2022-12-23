@@ -150,6 +150,9 @@
 .hljs {
   font-family: "Fira Code" !important; }
 
+.post-content a {
+  color: #44bbbb; }
+
 .tag.small {
   font-size: 12px;
   line-height: initial;
@@ -254,3 +257,8 @@
 
 #menu .active {
   color: #44bbbb; }
+
+.page-series .learning-go {
+  color: #29beb0;
+  font-weight: bolder;
+  text-decoration: underline; }

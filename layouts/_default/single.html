@@ -41,11 +41,10 @@
     {{- partial "anchored_headings.html" .Content -}}
     {{- else }}{{ .Content }}{{ end }}
     {{- if .Params.series }}
-    {{- partial "series.html" . -}}
-    {{- end }}  
   </div>
   {{- end }}
-
+    {{- partial "series.html" . -}}
+  {{- end }}  
 
   <hr/>
 
