@@ -10,7 +10,7 @@ buildExpired: false
 
 disqusShortname: 'https-www-galelmalah-com'
 
-# googleAnalytics: UA-123-45
+googleAnalytics: G-XVDB003Z78
 
 minify:
   disableXML: true
