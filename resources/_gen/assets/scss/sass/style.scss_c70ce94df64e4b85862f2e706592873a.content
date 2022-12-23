@@ -66,7 +66,6 @@
     border-right: 5px solid var(--blinker);
     animation: wait steps(1) 6.7s forwards, blink-animation 1s steps(5, start) 6.7s infinite; }
   .terminal .cmd.supported {
-    font-weight: 500;
     color: var(--cmd-color); }
   .terminal .whoami-output {
     font-size: 14px;
@@ -147,6 +146,9 @@
   87.5%,
   100% {
     content: 'find me'; } }
+
+.hljs {
+  font-family: "Fira Code" !important; }
 
 .tag.small {
   font-size: 12px;
