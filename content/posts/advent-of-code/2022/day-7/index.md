@@ -232,7 +232,7 @@ At the end of the function we backtrack to our root directory and add each direc
 
 Now that we have got our file system creation process all dialed in we can start implementing the first part solution
 
-### Part 1
+## Part 1
 
 We are tasked to find all directories with size <= 100,000
 To do that we need to have a way to walk over each directory in our file system structure. Let's add methods to support that capability
@@ -271,7 +271,7 @@ func Part1(raw string) int {
 
 ```
 
-### Part 2
+## Part 2
 
 In part 2 we are tasked with increasing the amount of free space to at least 3,000,000 we also know that the total memory on our device is 7,000,000
 We need to find the smallest directory that we can delete that will increase the amount of free memory >= 3,000,000

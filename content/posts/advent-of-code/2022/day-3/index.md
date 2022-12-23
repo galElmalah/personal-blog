@@ -36,13 +36,13 @@ Uppercase item types A through Z have priorities 27 through 52.
 
 > _In the above example, the priority of the item type that appears in both compartments of each rucksack is 16 (p), 38 (L), 42 (P), 22 (v), 20 (t), and 19 (s); the sum of these is 157._
 
-### Part 1
+## Part 1
 
 In part one we are tasked with summing up the priority of items that appears in both compartments
 
 Let's start with parsing our input
 
-#### Parsing
+### Parsing
 
 Ideally, we would like to have an array containing a tuple with a set for each half
 for example `vJrwpWtwJgWrhcsFMMfFFhFp -> [ [set(vJrwpWtwJgWr), set(hcsFMMfFFhFp)]... ]`
@@ -123,7 +123,7 @@ func pt1() int {
 
 cool cool cool, we're all done with part 1 let's see what part 2 got in store for us
 
-### Part 2
+## Part 2
 
 We are not tasked with finding the priority of the group badges, a badge is defined to be an `item` that is contained in 3 consecutive rucksacks
 

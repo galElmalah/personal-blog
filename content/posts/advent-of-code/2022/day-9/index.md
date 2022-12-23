@@ -15,7 +15,7 @@ cover:
 
 You come across an old rope bridge and you are not sure it can hold your fat a\*\* so you decide to model some rope physics to distract yourself (like that's going to help...)
 
-**Directly from AoC**
+**Directly from AoC**  
 _Consider a rope with a knot at each end; these knots mark the **head** and the **tail** of the rope. If the head moves far enough away from the tail, the tail is pulled toward the head._
 
 We are given a series of moves to be done by the head, for example:
@@ -31,7 +31,7 @@ L 5
 R 2
 ```
 
-### Parsing
+## Parsing
 
 Defining an `Instruction` struct, each instruction has a direction `L,R,U,D` and steps `<number of steps to perform>`
 Iterating over our input we can map each line to our new instruction struct as follows
@@ -52,7 +52,7 @@ func parse(raw string) (instructions []Instruction) {
 }
 ```
 
-### Part 1
+## Part 1
 
 We are asked to simulate the position of the tail after each instruction execution
 We will treat both the head and tail as if they are starting from position `0,0`
@@ -156,7 +156,7 @@ func Part1(raw string) int {
 }
 ```
 
-### Part 2
+## Part 2
 
 Crap the rope just snaps and for some reason that does not make any sense we now have **10** knots to simulate... that's what happens when you combine elves and rope physics.
 

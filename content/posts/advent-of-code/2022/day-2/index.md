@@ -34,7 +34,7 @@ We are also given a score table for the outcome and the decision we made, for ex
 
 Like previous questions, we'll start by parsing our input
 
-#### Parsing
+## Parsing
 
 We can go (see what I did there?) with several options to represent our game but in my opinion, an array of tuples is the simplest option
 
@@ -54,7 +54,7 @@ func parse(raw string) [][]string {
 
 > The [make](https://go.dev/tour/moretypes/13) function allocates a piece of memory in a certain, specified size for our array
 
-### Part 1
+## Part 1
 
 We are asked to provide our total score if we play exactly as instructed in the strategy guide.
 Let's think about this for a bit, there are several ways we can solve this, we can use a bunch of `if` statements or some fancy pattern matching, since go does not have pattern matching and I don't want to write a ton of `if` statements we will go with a hybrid approach.
@@ -136,7 +136,7 @@ func part1(raw []byte) int {
 
 At each loop iteration we first add the points based on our choice `score += scores[my]` then we check if `his` move is what we need based on our player choice, to win or get a tie, and if it is we add the necessary points to our total score.
 
-### Part 2
+## Part 2
 
 In part two the sneaky elves switch things up a bit.
 Instead of our column representing our moves, it represents the turn outcome where X = lose, Y = tie, and Z = win and we need to choose our choice accordingly.

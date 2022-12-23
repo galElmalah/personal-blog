@@ -17,7 +17,7 @@ As we start heading out of the camp one of the elves gives us a communication de
 
 The device receives streams of signals that are built from a list of chars, to fix our device we need to be able to find the _start-of-packet marker_.
 
-### Part 1
+## Part 1
 
 We are told that the start of the packet is defined as a series of **four different consecutive chars**.
 Given our signle, we need to determine how many chars should be processed before the first marker appears or in other words the index at the end of our marker.
@@ -96,7 +96,7 @@ func Part1(raw string) int {
 }
 ```
 
-### Part 2
+## Part 2
 
 Exactly like part 1 but now the marker needs to be 14 consecutive chars
 We can take our part 1 solution and have it accept an offset to fit both parts

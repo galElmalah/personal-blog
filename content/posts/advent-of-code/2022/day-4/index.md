@@ -31,7 +31,7 @@ The cleaning tasks are assigned to each pair of elves, for example:
 
 As always, let's start with parsing our list of assignments to something we can work with
 
-### Parsing
+## Parsing
 
 First, let's decide what we would like our output to look like.
 we can create a struct that represents each pair task but that seems a bit redundant, let's keep it simple and create something like
@@ -67,7 +67,7 @@ func parse(raw string) [][]int {
 
 > Its worth noting that the first match is the entire string we are passing and that's why we are skipping it when looping over the results `range match[1:]`
 
-### Part 1
+## Part 1
 
 The elves are really smart and noticed that some tasks entirely overlap with their partner tasks.
 We are tasked with finding and counting those overlaps.
@@ -120,7 +120,7 @@ func part1(raw []byte) int {
 
 > If you know a better way to take those values from `pairAssignmentRange` let me know in the comment section
 
-### Part 2
+## Part 2
 
 We are asked to count overlapping tasks of any kind meaning its enough that we will have one overlapping "section" in our range for it to count as an overlap
 What does that mean in code? it means that we are looking for tasks that are ending inside the range of the other task.

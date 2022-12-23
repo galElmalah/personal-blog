@@ -19,7 +19,7 @@ The competition itself is speed and time based, you can read more about it [here
 
 [Question](https://adventofcode.com/2022/day/1)
 
-### Part 1
+## Part 1
 
 We are given a list of numbers where each consecutive block of numbers represents the calories an elf is carrying with him.
 For example
@@ -44,7 +44,7 @@ For example
 This problem seems simple enough, we need to split the string on empty lines then take each chunk and sum the numbers in it.
 Once we obtained the various chunks (elf calories) we can search for the maximum value and we have our answer.
 
-#### Parsing
+### Parsing
 
 Reading our input from a file named "input.txt"
 
@@ -116,7 +116,7 @@ Again for the sake of speed we will just store all the results, sort them in asc
 
 I know, I know I could have found the max entry by comparing them inside the for loop but you'll see it will be worth it in part 2.
 
-### Part 2
+## Part 2
 
 In part 2 we are asked to return the sum of the 3 elves carrying the most calories i.e take our sorted array and sum the last 3 elements
 We can easily tweak our answer to accommodate these new requirements by adding this line

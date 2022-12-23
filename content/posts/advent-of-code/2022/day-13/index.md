@@ -11,7 +11,6 @@ cover:
   alt: '<alt text>' # alt text
 ---
 
-## Distress Signal
 
 [Question](https://adventofcode.com/2022/day/13)
 
@@ -51,14 +50,14 @@ Packet pairs are separated by an empty line and the packet data is represented a
 
 ```
 
-### Parsing
+## Parsing
 
 Splitting parsing into two parts:
 
 1. Parse the raw input into pairs of packets
 2. Deserialize each packet
 
-#### Parse the raw data into packets pairs
+### Parse the raw data into packets pairs
 
 From the question description, we know that packets are separated into pairs that and each pair is separated by an empty line
 Within a pair, each packet is on its on line.
@@ -82,7 +81,7 @@ At this stage, our data looks something like this
 [["[1,1,3,1,1]", "[1,1,5,1,1]"], ...//other pairs]
 ```
 
-#### Deserialize each packet
+### Deserialize each packet
 
 Let's take that string and construct something meaningful from that, in our case, it's going to be an array of integers and arrays.  
 Luckily for us, the packets are a valid JSON string, we can use Go built-in [json.Unmarshal](https://pkg.go.dev/encoding/json#Unmarshal) function.
@@ -116,7 +115,7 @@ func parse(raw string) []any {
 }
 ```
 
-### Part 1
+## Part 1
 
 We are asked to find **valid** pairs of packets and sum up their indexes.  
 But what exactly is an **invalid** pair of packets you ask?!
@@ -235,7 +234,7 @@ func Part1(raw string) int {
 
 > Adding 2 to each index to compensate for the fact that we start from zero and then divide by 2 to account for `i` jumping 2 steps on each iteration
 
-### Part 2
+## Part 2
 
 > Now, you just need to put all of the packets in the right order. Disregard the blank lines in your list of received packets.
 

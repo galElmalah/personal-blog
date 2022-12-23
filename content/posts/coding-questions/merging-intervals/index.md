@@ -23,17 +23,17 @@ cover:
 
 ```
 
-### Parsing
+## Parsing
 
 // <Explain about parsing>
 
-### Part 1
+## Part 1
 
 // <Overview of part 1>
 
 // <Go over solution and relevant structures>
 
-### Part 2
+## Part 2
 
 // <Overview of part 1>
 

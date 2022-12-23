@@ -25,7 +25,7 @@ We are given a map of the forest with a number representing each tree's height.
 35390
 ```
 
-### Parsing
+## Parsing
 
 We care about the location of each tree and its height.
 All of the above is available to us if we parse our map into a matrix `[][]int`
@@ -48,7 +48,7 @@ func parse(raw string) [][]int {
 }
 ```
 
-### Part 1
+## Part 1
 
 We are tasked with determining how many visible trees there are on the map.
 
@@ -154,7 +154,7 @@ This solution is very verbose and there are a lot of ways we can optimize it, fo
 
 But...the current solution is fast enough and run's in 0.35s on my local machine with my AoC input.
 
-### Part 2
+## Part 2
 
 Calculate how many trees are visible from each tree in every direction, multiply the numbers and find the maximum value tree in our map
 

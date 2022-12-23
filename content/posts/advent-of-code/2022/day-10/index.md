@@ -29,7 +29,7 @@ addx -5
 - addx - takes two rounds, add the right-hand value to X
 - noop - take one round, does nothing
 
-### Parsing
+## Parsing
 
 First, Create a new `Instruction` struct
 
@@ -62,7 +62,7 @@ you might notice that our function signature is a bit weird, it ends with `(inst
 This syntax creates a variable at the top of our function, and the last return statement is called a "naked" return, which returns `instructions` by default.
 In my opinion, it shouldn't be used for any function with more than a couple of lines of code, instead, we should use the named variable and `return instructions` but for the sake of learning new things we will stick with the "naked" return (I kind of like that terminology)
 
-### Part 1
+## Part 1
 
 We need to sample the value in register X\*ticks in various CPU cycles, more precisly during the `20th, 60th, 100th, 140th, 180th, and 220th` cycles and sum them up
 
@@ -105,7 +105,7 @@ func Part1(raw string) int {
 }
 ```
 
-### Part 2
+## Part 2
 
 using the value of X during each tick we need to draw some stuff to the screen
 Our screen is 40 pixels wide and its height is 6 pixels

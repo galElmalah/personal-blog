@@ -39,7 +39,7 @@ The second one is a series of moves we need to perform.
 
 **Crates can only be moved one at a time!**
 
-### Parsing
+## Parsing
 
 How can we parse that input into something meaningful?
 Well first let's seprate both halves using
@@ -136,7 +136,7 @@ func parse(raw string) ([][]string, []Instruction) {
 
 > In go you can have [more than one return value](https://gobyexample.com/multiple-return-values).
 
-### Part 1
+## Part 1
 
 Perform the list of instructions then construct a string built from the top crate of each stack, for example in our current example its `NDP` but after the instructions are applied its `CMZ`
 
@@ -173,7 +173,7 @@ func Part1(raw string) string {
 
 And that's it for part one, besides the parsing it was quite simple.
 
-### Part 2
+## Part 2
 
 Something was off with our stacks, we went to make sure that our crane is CrateMover 9000 but it was the 9001 model! this means we can move multiple crates at once.
 

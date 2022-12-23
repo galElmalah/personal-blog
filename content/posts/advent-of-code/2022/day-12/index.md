@@ -36,7 +36,7 @@ The value of **S = a** and **E = z**
 
 This smells like a graph problem...
 
-### Parsing
+## Parsing
 
 We could have used the structure of the input as is but I wanted to make it a bit more meaningful so we will parse it into a matrix of points!
 First, we will create a new `Point` struct
@@ -101,7 +101,7 @@ We will split each of these "rows" to get each "cell" in our input
 For each cell, we will create a new point and push it into the current row
 eventually we will end up with a matrix of points
 
-### Part 1
+## Part 1
 
 We are asked to get from `S` to `E` with the least amount of steps.
 Ohh and to make sure we won't get too tired along the way we can only travel from `p1` to `p2` if the value in `p2` is **at most one higher** than the value in `p1`.
@@ -240,7 +240,7 @@ func Part1(raw string) int {
 }
 ```
 
-### Part 2
+## Part 2
 
 Part 2 is where things gets interesting, we are now asked to find the shortest path to our destination point but we can use every `a` in our map as a starting position and `S`
 We can take a naive approach here and see if it works, what's the naive approach you ask?
