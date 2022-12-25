@@ -1,5 +1,5 @@
 ---
-title: 'Distress Signal'
+title: 'Advent of Code Day 13 - Distress Signal'
 date: 2022-12-19T05:33:23.419Z
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']
@@ -10,7 +10,6 @@ cover:
   image: 'media/cover.png' # image path/url
   alt: '<alt text>' # alt text
 ---
-
 
 [Question](https://adventofcode.com/2022/day/13)
 

@@ -1,5 +1,5 @@
 ---
-title: 'No Space Left On Device'
+title: 'Advent of Code Day 7 - No Space Left On Device'
 date: 2022-12-08T11:45:03+00:00
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']

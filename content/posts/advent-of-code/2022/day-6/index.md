@@ -1,5 +1,5 @@
 ---
-title: 'Tuning Trouble'
+title: 'Advent of Code Day 6 - Tuning Trouble'
 date: 2022-12-05T11:45:03+00:00
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']

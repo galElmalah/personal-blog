@@ -1,5 +1,5 @@
 ---
-title: 'Rucksack Reorganization'
+title: 'Advent of Code Day 3 - Rucksack Reorganization'
 date: 2022-12-04T11:30:03+00:00
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']

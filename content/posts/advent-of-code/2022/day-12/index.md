@@ -1,5 +1,5 @@
 ---
-title: 'Hill Climbing Algorithm'
+title: 'Advent of Code Day 12 - Hill Climbing Algorithm'
 date: 2022-12-14T11:59:03+00:00
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']

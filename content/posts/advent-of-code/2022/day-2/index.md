@@ -1,5 +1,5 @@
 ---
-title: 'Rock Paper Scissors 🪨🧻✂'
+title: 'Advent of Code Day 2 - Rock Paper Scissors 🪨🧻✂'
 date: 2022-12-02T11:40:03+00:00
 series: ['Learning Go']
 tags: ['Advent of Code', 'Go', 'Coding Questions']
