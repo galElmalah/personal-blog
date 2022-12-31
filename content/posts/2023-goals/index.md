@@ -84,7 +84,7 @@ I believe that achieving this goal will help me grow as a programmer and increas
 3. Write an interpreter for an RTL programming language
 4. Finish the compilers book [**Risk**]
 
-> Reading the compilers book is not a must for me and can wait for 2024. In case ill have a really good time I will probably try and read that one during the year as well.
+> Reading the compilers book is not a must for me and can wait for 2024. In case I'll have a really good time I will probably try and read that one during the year as well.
 
 ### Project & Team Management
 
@@ -124,7 +124,7 @@ I can start by creating a series of posts about interesting topics from the CSES
 3. Range queries
 
 These types of blog posts are pretty easy to write, assuming you understand the question.  
-There is also an added value of diving deeper into a solution/problem/approach.
+There is also an added value in diving deeper into a solution/problem/approach.
 
 Besides solving coding questions, I would also like to write about various topics like team management, project management, books I liked, and some random thoughts.
 
@@ -193,7 +193,7 @@ Things are finally starting to look better and I'm ready to get back on the hors
 
 #### Impact
 
-Running, for me at least, is hard at the begging when you are not in proper shape but after 2-3 weeks when it's not pure suffering lol it becomes so much fun and helps me clear my head.
+Running, for me at least, is hard at the begging when you are not in proper shape but after 2-3 weeks when it's not pure suffering it becomes so much fun and helps me clear my head.
 
 1. Joy
 2. Physical and mental health
@@ -205,7 +205,7 @@ Participate in a couple of races.
 
 ### Tour du Mont Blanc
 
-Wanting to go on this trip for a while now and I think 2023 will be the year I'll finally make it happen.
+I wanted to go on this trip for a while now and I think 2023 will be the year I'll finally make it happen.
 Ideally, set on this adventure with my wife & father, making this a really meaningful experience for me.
 
 #### Impact
