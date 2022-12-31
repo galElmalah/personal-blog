@@ -40,12 +40,12 @@
     {{- if not (.Param "disableAnchoredHeadings") }}
     {{- partial "anchored_headings.html" .Content -}}
     {{- else }}{{ .Content }}{{ end }}
-    {{- if .Params.series }}
-  </div>
-  {{- end }}
+    {{- if .Params.series }}  
+    {{- end }}
     {{- partial "series.html" . -}}
-  {{- end }}  
-
+    {{- end }}  
+    
+  </div>
   <hr/>
 
 

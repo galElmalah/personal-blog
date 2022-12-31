@@ -11,15 +11,25 @@ $html: #f06529;
 $typescript: #007acc;
 $tutorial: #acacac;
 $favicon: #44bbbb;
+$goals: #18e2fd;
 $coding-questions: #4446bb;
+$productivity: #ff4d00;
 
 
 .hljs {
   font-family: "Fira Code" !important;
 }
  
-.post-content a {
+.post-content  {
+  a { 
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   color: $favicon
+  }
+  ul,ol {
+    margin-left: 10px;
+  }
 }
 
 
@@ -34,7 +44,9 @@ $tags: (
   'typescript' $typescript white,
   'tutorial' $tutorial white,
   'advent-of-code' $advent-of-code white,
-  'coding-questions' $coding-questions white
+  'coding-questions' $coding-questions white,
+  'goals' $goals black,
+  'productivity' $productivity white
 );
 
 .tag {
@@ -61,11 +73,7 @@ $tags: (
   }
 }
 
-.post-content a {
-  box-shadow: none;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
+
 
 #menu {
   a {

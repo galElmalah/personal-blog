@@ -151,7 +151,13 @@
   font-family: "Fira Code" !important; }
 
 .post-content a {
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   color: #44bbbb; }
+
+.post-content ul, .post-content ol {
+  margin-left: 10px; }
 
 .tag.small {
   font-size: 12px;
@@ -243,10 +249,21 @@
   .tag.coding-questions:hover {
     background-color: #3d3fa8; }
 
-.post-content a {
-  box-shadow: none;
-  text-decoration: underline;
-  text-underline-offset: 3px; }
+.tag.goals {
+  font-weight: 500;
+  color: black;
+  background-color: #18e2fd;
+  transition: all 100ms; }
+  .tag.goals:hover {
+    background-color: #02dcf9; }
+
+.tag.productivity {
+  font-weight: 500;
+  color: white;
+  background-color: #ff4d00;
+  transition: all 100ms; }
+  .tag.productivity:hover {
+    background-color: #e64500; }
 
 #menu a {
   font-weight: 500;
