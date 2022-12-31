@@ -30,8 +30,9 @@ By answering these questions and categorizing my goals, I can stay focused and m
 #### Impact
 
 Overall it will make me a better coder and help me gain a deeper understanding of topics I want to know better like dynamic programming, data structures that support range queries and the list goes on and on.  
-Easier time during Advent of Code 2023.  
-And to be honest, I enjoy solving these questions.
+Easier time during Advent of Code 2023.
+
+> To be honest, I just enjoy solving these questions...
 
 #### Breakdown
 
