@@ -1,5 +1,5 @@
 ---
-title: 'My Goals for 2023'
+title: 'Ready, Set, Go! My Goals for a Productive and Fulfilling 2023'
 date: 2022-12-30T11:59:03+00:00
 tags: ['Goals', 'Productivity']
 author: 'Gal Elmalah'
