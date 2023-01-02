@@ -11,6 +11,4 @@ Instead of spending hours researching a topic, allocate just enough time of your
 
 By following along with this series, you'll have the opportunity to gain a deeper understanding of various topics, apply what you've learned in a practical setting, and achieve your goals. So let's get started and learn by doing!
 
----
-
-**P.s** The first topic is going to be Dynamic Programming so stay tuned!
+> The first topic is going to be Dynamic Programming so stay tuned!
