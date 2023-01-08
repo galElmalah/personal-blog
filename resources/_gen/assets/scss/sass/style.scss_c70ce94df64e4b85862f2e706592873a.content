@@ -265,6 +265,22 @@
   .tag.productivity:hover {
     background-color: #e64500; }
 
+.tag.book-review {
+  font-weight: 500;
+  color: white;
+  background-color: #18acac;
+  transition: all 100ms; }
+  .tag.book-review:hover {
+    background-color: #159696; }
+
+.tag.management {
+  font-weight: 500;
+  color: white;
+  background-color: #db07db;
+  transition: all 100ms; }
+  .tag.management:hover {
+    background-color: #c206c2; }
+
 #menu a {
   font-weight: 500;
   transition: color 0.1s ease-in-out; }

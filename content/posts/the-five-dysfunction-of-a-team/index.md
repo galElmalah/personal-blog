@@ -1,9 +1,8 @@
 ---
 title: 'Book Review: The Five Dysfunction of a Team'
 date: 2023-01-02T06:28:32.071Z
-tag: ['Management', 'Goals', 'Book Review']
+tags: ['Management', 'Goals', 'Book Review']
 author: 'Gal Elmalah'
-draft: true
 cover:
   image: 'media/cover.jpg'
   alt: 'The Five Dysfunction of a Team book cover with a note'

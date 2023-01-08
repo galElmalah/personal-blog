@@ -14,6 +14,8 @@ $favicon: #44bbbb;
 $goals: #18e2fd;
 $coding-questions: #4446bb;
 $productivity: #ff4d00;
+$book-review: #18acac;
+$management: #db07db;
 
 
 .hljs {
@@ -46,7 +48,9 @@ $tags: (
   'advent-of-code' $advent-of-code white,
   'coding-questions' $coding-questions white,
   'goals' $goals black,
-  'productivity' $productivity white
+  'productivity' $productivity white,
+  'book-review' $book-review white,
+  'management' $management white
 );
 
 .tag {
