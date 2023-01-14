@@ -101,6 +101,7 @@ $tags: (
 .text-divider {
   text-align: center;
   font-family: Snell Roundhand, cursive;
+  overflow: hidden;
   &::before,
   &::after {
     background-color: #000;
@@ -123,6 +124,4 @@ $tags: (
   }
 }
 
-.quote {
 
-}

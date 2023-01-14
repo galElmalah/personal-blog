@@ -299,7 +299,8 @@
 
 .text-divider {
   text-align: center;
-  font-family: Snell Roundhand, cursive; }
+  font-family: Snell Roundhand, cursive;
+  overflow: hidden; }
   .text-divider::before, .text-divider::after {
     background-color: #000;
     content: '';
