@@ -223,12 +223,11 @@ Team members
 When you lack attention toward results in your team, team members are more likely to put their goals and ambitions higher than the team/organization goals.  
 This isn't only about individuals, it might affect whole departments or teams that value their status or prestige at the expense of the organization success.
 
-As a team leader, you should strive to have your team understand what they are working toward and give clear metrics of success that define the desired result.  
+As a team leader, you should strive to have your team understand what they are working toward and give clear metrics of success that define the desired result.
 
 The author provides several examples throughout the book, but one that particularly resonated with me was a scenario in which a basketball team is in the final seconds of an important game.  
 The coach determines that the best way to win is to pass the ball to the team's best three-point shooter. However, the team's star player disagrees and wants the ball for himself, prioritizing his own ego over the wider goal of winning the game.  
 In the end, the coach benches him, the team wins, and the star player publicly apologizes for his behavior. This example effectively drives home the importance of maintaining focus on results.
-
 
 > This is not to say that individual goals and ambitions are not important it's just that when it comes to work they should **always** be second to the overall goal of the team or organization.
 
@@ -257,7 +256,7 @@ Team members
 In conclusion, "The Five Dysfunctions of a Team" is written in an engaging way that keeps you hooked and effectively delivers the author's message.
 
 The author did a great job emphasizing the importance of vulnerability-based trust, effective conflict, achieving commitment, holding team members accountable, and focusing on results.  
-I think it also acts as a reminder that team management is not only removing obstacles and getting work done and if you want to truly create an effective team for the long run you need to foster a culture where people feel safe to be vulnerable, communicate clearly and are committed to the wider goal
+I think it also acts as a reminder that team management is not only removing obstacles and getting work done and if you want to truly create an effective team for the long run you need to foster a culture where people feel safe to be vulnerable, communicate clearly and are committed to the wider goal.
 
 Throughout the book the author help guide leaders in their role in each of these dysfunctions and how you can work towards mitigating them.
 
