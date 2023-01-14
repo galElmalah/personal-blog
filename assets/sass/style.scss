@@ -15,26 +15,24 @@ $goals: #18e2fd;
 $coding-questions: #4446bb;
 $productivity: #ff4d00;
 $book-review: #18acac;
-$management: #db07db;
-
+$leadership: #db07db;
 
 .hljs {
-  font-family: "Fira Code" !important;
+  font-family: 'Fira Code' !important;
 }
- 
-.post-content  {
-  a { 
-  box-shadow: none;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  color: $favicon
+
+.post-content {
+  a {
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: $favicon;
   }
-  ul,ol {
+  ul,
+  ol {
     margin-left: 10px;
   }
 }
-
-
 
 $tags: (
   'javascript' $javascript black,
@@ -50,7 +48,7 @@ $tags: (
   'goals' $goals black,
   'productivity' $productivity white,
   'book-review' $book-review white,
-  'management' $management white
+  'leadership' $leadership white
 );
 
 .tag {
@@ -77,8 +75,6 @@ $tags: (
   }
 }
 
-
-
 #menu {
   a {
     font-weight: 500;
@@ -100,4 +96,33 @@ $tags: (
     font-weight: bolder;
     text-decoration: underline;
   }
+}
+
+.text-divider {
+  text-align: center;
+  font-family: Snell Roundhand, cursive;
+  &::before,
+  &::after {
+    background-color: #000;
+    content: '';
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 40%;
+  }
+
+  &::before {
+    right: 0.5em;
+    margin-left: -40%;
+  }
+
+  &::after {
+    left: 0.5em;
+    margin-right: -40%;
+  }
+}
+
+.quote {
+
 }
