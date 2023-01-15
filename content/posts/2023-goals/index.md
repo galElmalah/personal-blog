@@ -222,7 +222,7 @@ Just to do it!
 
 #### Impact
 
-1. Piece of mind
+1. Peace of mind
 2. Feeling of accomplishment
 3. Money money money
 
@@ -239,7 +239,7 @@ I need to create a clear picture regarding my current assets and investments, as
 
 #### Impact
 
-1. Piece of mind
+1. Peace of mind
 2. Organization
 3. Money money money
 
