@@ -55,7 +55,7 @@ This results in a shallow discussion of important topics, people just nod in agr
 
 - As a team lead, you should lead by example and set the standard for vulnerability within your team. This means admitting your mistakes, asking for help, and being open to feedback.
 - Trust is an important aspect of team building that need to be actively worked on.
-- Encourage transparency and open communication within your team by consistently sharing progress, challenges, and successes. This helps to build trust and create a sense of shared ownership among team members..
+- Encourage transparency and open communication within your team by consistently sharing progress, challenges, and successes. This helps to build trust and create a sense of shared ownership among team members.
   Here are a couple of examples
   - Got an important issue resolved? Share it with the team.
   - Have a question? Ask the entire team.
@@ -105,8 +105,8 @@ Team members
 ### Ways to Build Trust
 
 - Team activities.
-- Encourage discussions about their personal life .
-  This can be done by having each member answer a list of questions or more naturally by sharing something yourself and asking others to share as well
+- Encourage discussions about their personal life.
+  This can be done by having each member answer a list of questions or more naturally by sharing something yourself and asking others to share as well.
 - Lead by example. Admit when you are wrong, ask for help and make your work visible.
 
 > The author suggests an exercise where each team member takes a personality test and then discuss it with the team, in my opinion, they are too random and often time are just wrong but it's something to consider.
