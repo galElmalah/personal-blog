@@ -125,3 +125,10 @@ $tags: (
 }
 
 
+
+.post-entry {
+  &.rtl {
+    direction: rtl;
+    text-align: right;
+  }
+}

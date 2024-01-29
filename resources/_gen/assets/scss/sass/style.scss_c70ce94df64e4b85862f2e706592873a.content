@@ -315,3 +315,7 @@
   .text-divider::after {
     left: 0.5em;
     margin-right: -40%; }
+
+.post-entry.rtl {
+  direction: rtl;
+  text-align: right; }
