@@ -1,0 +1,445 @@
+---
+/**
+ * DesktopWindow.astro - Draggable window for displaying post content
+ * Inspired by macOS Big Sur window design
+ */
+
+interface Props {
+  id: string;
+  title: string;
+  postSlug: string;
+  initialPosition?: { x: number; y: number };
+  initialSize?: { width: number; height: number };
+  zIndex: number;
+}
+
+const {
+  id,
+  title,
+  postSlug,
+  initialPosition = { x: 100, y: 100 },
+  initialSize = { width: 600, height: 500 },
+  zIndex,
+} = Astro.props;
+---
+
+<div
+  class="desktop-window"
+  data-window-id={id}
+  data-post-slug={postSlug}
+  style={`left: ${initialPosition.x}px; top: ${initialPosition.y}px; width: ${initialSize.width}px; height: ${initialSize.height}px; z-index: ${zIndex};`}
+>
+  <!-- Window Title Bar -->
+  <div class="window-titlebar" data-draggable="true">
+    <!-- Traffic lights -->
+    <div class="traffic-lights">
+      <button
+        class="traffic-light traffic-light-close"
+        aria-label="Close window"
+        data-action="close"
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <line x1="3" y1="3" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" />
+          <line x1="9" y1="3" x2="3" y2="9" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </button>
+      <button
+        class="traffic-light traffic-light-minimize"
+        aria-label="Minimize window"
+        data-action="minimize"
+        disabled
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <line x1="3" y1="6" x2="9" y2="6" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </button>
+      <button
+        class="traffic-light traffic-light-maximize"
+        aria-label="Maximize window"
+        data-action="maximize"
+        disabled
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <polyline points="3,5 3,3 9,3 9,9 7,9" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <polyline points="5,7 5,9 9,9" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Window title -->
+    <div class="window-title">
+      {title}
+    </div>
+
+    <!-- Spacer for symmetry -->
+    <div class="traffic-lights-spacer"></div>
+  </div>
+
+  <!-- Window Content Area -->
+  <div class="window-content">
+    <!-- Loading spinner -->
+    <div class="window-loading">
+      <div class="spinner"></div>
+      <p>Loading post...</p>
+    </div>
+
+    <!-- Post content will be loaded here dynamically -->
+    <div class="window-post-content hidden"></div>
+  </div>
+</div>
+
+<style>
+  .desktop-window {
+    position: fixed;
+    background: var(--desktop-window-bg, rgba(30, 35, 50, 0.95));
+    border-radius: 12px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.5),
+      0 0 0 0.5px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .desktop-window:hover {
+    box-shadow:
+      0 25px 70px rgba(0, 0, 0, 0.6),
+      0 0 0 0.5px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Window Title Bar */
+  .window-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: move;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Traffic Lights */
+  .traffic-lights {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .traffic-light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    padding: 0;
+  }
+
+  .traffic-light svg {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .traffic-light:hover svg {
+    opacity: 1;
+  }
+
+  .traffic-light-close {
+    background: #ff5f57;
+  }
+
+  .traffic-light-close:hover {
+    background: #ff4136;
+  }
+
+  .traffic-light-minimize {
+    background: #ffbd2e;
+  }
+
+  .traffic-light-minimize:hover {
+    background: #ffaa00;
+  }
+
+  .traffic-light-maximize {
+    background: #28c840;
+  }
+
+  .traffic-light-maximize:hover {
+    background: #00d924;
+  }
+
+  .traffic-light:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .traffic-light svg line,
+  .traffic-light svg polyline {
+    stroke: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Window Title */
+  .window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--term-fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 1rem;
+    font-family: 'Fira Code', monospace;
+  }
+
+  .traffic-lights-spacer {
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  /* Window Content */
+  .window-content {
+    flex: 1;
+    overflow: auto;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .window-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--term-fg-dark);
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--term-cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .window-post-content {
+    color: var(--term-fg);
+    line-height: 1.6;
+  }
+
+  .window-post-content.hidden {
+    display: none;
+  }
+
+  /* Scrollbar styling */
+  .window-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .window-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .window-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .window-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Animation for window open */
+  @keyframes windowOpen {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .desktop-window {
+    animation: windowOpen 0.25s ease-out;
+  }
+
+  /* Hidden utility */
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  import { windowManager } from '@/scripts/desktop/window-manager';
+
+  function setupWindow() {
+    const windows = document.querySelectorAll('.desktop-window');
+
+    windows.forEach((windowEl) => {
+      const windowId = windowEl.getAttribute('data-window-id');
+      const postSlug = windowEl.getAttribute('data-post-slug');
+
+      if (!windowId || !postSlug) return;
+
+      // Handle close button
+      const closeBtn = windowEl.querySelector('[data-action="close"]');
+      closeBtn?.addEventListener('click', () => {
+        closeWindow(windowEl as HTMLElement, windowId);
+      });
+
+      // Handle click to bring to front
+      windowEl.addEventListener('mousedown', () => {
+        windowManager.bringToFront(windowId);
+        updateWindowZIndex(windowEl as HTMLElement, windowId);
+      });
+
+      // Setup dragging
+      setupDragging(windowEl as HTMLElement, windowId);
+
+      // Load post content
+      loadPostContent(windowEl as HTMLElement, postSlug);
+    });
+  }
+
+  function closeWindow(windowEl: HTMLElement, windowId: string) {
+    // Close animation
+    windowEl.style.animation = 'windowClose 0.2s ease-in forwards';
+
+    setTimeout(() => {
+      windowEl.remove();
+      windowManager.closeWindow(windowId);
+    }, 200);
+  }
+
+  function updateWindowZIndex(windowEl: HTMLElement, windowId: string) {
+    const state = windowManager.getWindow(windowId);
+    if (state) {
+      windowEl.style.zIndex = state.zIndex.toString();
+    }
+  }
+
+  function setupDragging(windowEl: HTMLElement, windowId: string) {
+    const titlebar = windowEl.querySelector('.window-titlebar');
+    if (!titlebar) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialX = 0;
+    let initialY = 0;
+
+    titlebar.addEventListener('mousedown', (e: Event) => {
+      const mouseEvent = e as MouseEvent;
+      if ((mouseEvent.target as HTMLElement).closest('.traffic-light')) return;
+
+      isDragging = true;
+      startX = mouseEvent.clientX;
+      startY = mouseEvent.clientY;
+
+      const rect = windowEl.getBoundingClientRect();
+      initialX = rect.left;
+      initialY = rect.top;
+
+      windowEl.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+
+      const newX = initialX + deltaX;
+      const newY = initialY + deltaY;
+
+      // Keep window within viewport bounds
+      const maxX = window.innerWidth - windowEl.offsetWidth;
+      const maxY = window.innerHeight - windowEl.offsetHeight;
+
+      const boundedX = Math.max(0, Math.min(newX, maxX));
+      const boundedY = Math.max(0, Math.min(newY, maxY));
+
+      windowEl.style.left = `${boundedX}px`;
+      windowEl.style.top = `${boundedY}px`;
+
+      windowManager.updatePosition(windowId, { x: boundedX, y: boundedY });
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        windowEl.style.cursor = '';
+      }
+    });
+  }
+
+  async function loadPostContent(windowEl: HTMLElement, postSlug: string) {
+    const contentEl = windowEl.querySelector('.window-post-content');
+    const loadingEl = windowEl.querySelector('.window-loading');
+
+    try {
+      // Fetch post content (this will be the rendered HTML from the post page)
+      const response = await fetch(`/posts/${postSlug}`);
+      if (!response.ok) throw new Error('Failed to load post');
+
+      const html = await response.text();
+
+      // Parse and extract post content
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const articleContent = doc.querySelector('article')?.innerHTML || doc.querySelector('main')?.innerHTML;
+
+      if (contentEl && articleContent) {
+        contentEl.innerHTML = articleContent;
+        loadingEl?.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+      }
+    } catch (error) {
+      console.error('Error loading post:', error);
+      if (contentEl) {
+        contentEl.innerHTML = '<p class="text-term-red">Failed to load post content.</p>';
+        loadingEl?.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+      }
+    }
+  }
+
+  // Add close animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes windowClose {
+      to {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupWindow);
+  } else {
+    setupWindow();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener('astro:page-load', setupWindow);
+</script>

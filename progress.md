@@ -2,9 +2,9 @@
 
 ## Current Status
 
-**Phase**: 1 - Foundation (COMPLETED)
-**Current Task**: Begin Phase 2 - Window System
-**Iteration**: 1
+**Phase**: 2 - Window System (COMPLETED)
+**Current Task**: Begin Phase 3 - File System & Navigation
+**Iteration**: 2
 **Last Updated**: 2026-01-25
 
 ---
@@ -12,7 +12,7 @@
 ## Phase Completion Tracker
 
 - [x] Phase 1: Foundation (Week 1)
-- [ ] Phase 2: Window System (Week 2)
+- [x] Phase 2: Window System (Week 2)
 - [ ] Phase 3: File System & Navigation (Week 3)
 - [ ] Phase 4: Dock & Interactions (Week 4)
 - [ ] Phase 5: Polish & Animations (Week 5)
@@ -79,27 +79,53 @@
 
 **Goal**: Functional window management
 
-**Status**: Not Started
+**Status**: ✅ COMPLETED
 
 ### Tasks
-- [ ] Create DesktopWindow component
-- [ ] Implement window open on double-click
-- [ ] Add window dragging functionality
-- [ ] Add window close button
-- [ ] Style window with macOS Big Sur aesthetic
-- [ ] Implement z-index management
-- [ ] Support multiple open windows
-- [ ] Add window content scrolling
+- [x] Create DesktopWindow component
+- [x] Implement window open on double-click
+- [x] Add window dragging functionality
+- [x] Add window close button
+- [x] Style window with macOS Big Sur aesthetic
+- [x] Implement z-index management
+- [x] Support multiple open windows
+- [x] Add window content scrolling
 
 ### Acceptance Criteria
-- [ ] Windows open with post content
-- [ ] Windows are draggable
-- [ ] Multiple windows supported
-- [ ] Windows can be closed
-- [ ] Proper stacking order
+- [x] Windows open with post content
+- [x] Windows are draggable
+- [x] Multiple windows supported
+- [x] Windows can be closed
+- [x] Proper stacking order
 
-### Notes
-- Refer to PRD.md "Window Management System" section
+### Implementation Details
+**Files Created:**
+- `src/scripts/desktop/window-manager.ts` - Window lifecycle and state management
+- `src/components/desktop/DesktopWindow.astro` - Window component (not used directly, rendered via script)
+- `tests/unit/window-manager.test.ts` - Unit tests (19 tests passing)
+
+**Files Modified:**
+- `src/components/desktop/Desktop.astro` - Added windows container and event handling
+- `src/components/desktop/DesktopIcon.astro` - Double-click opens windows
+- `src/styles/desktop.css` - Window styling with traffic lights
+
+**Features Implemented:**
+- ✅ macOS Big Sur window design with traffic lights
+- ✅ Red traffic light closes windows
+- ✅ Window dragging with mouse (stays within bounds)
+- ✅ Z-index management (click to bring to front)
+- ✅ Cascade positioning for new windows
+- ✅ Max 10 windows (oldest closed when limit reached)
+- ✅ No duplicate windows (same post reopens existing)
+- ✅ Dynamic content loading via fetch
+- ✅ Loading spinner while content loads
+- ✅ Smooth open/close animations
+- ✅ Window content scrolls for long posts
+- ✅ Blur backdrop effect
+
+**Test Results:**
+- Window Manager tests: 19/19 passing
+- All unit tests: 213/214 passing (1 pre-existing failure)
 
 ---
 
@@ -240,6 +266,23 @@
   - Wrote 10 unit tests (all passing)
 - **Status**: Phase 1 COMPLETE ✅
 - **Next**: Begin Phase 2 - Window System (DesktopWindow component)
+
+### Iteration 2 (Phase 2 - Window System)
+- **Date**: 2026-01-25
+- **Action**: Implemented complete Phase 2 - Window management system
+- **Completed**:
+  - Created window-manager.ts with full lifecycle management
+  - Built dynamic window rendering system in Desktop.astro
+  - Added macOS-style traffic lights (close, minimize, maximize)
+  - Implemented drag-to-move functionality with bounds checking
+  - Added z-index management (click to bring to front)
+  - Cascade positioning for multiple windows
+  - Max window limit (10) with auto-close of oldest
+  - Post content loading via fetch API
+  - Window styling with blur backdrop and animations
+  - Wrote 19 unit tests (all passing)
+- **Status**: Phase 2 COMPLETE ✅
+- **Next**: Begin Phase 3 - File System & Navigation (folders)
 
 ---
 

@@ -187,13 +187,25 @@ const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
     const icons = document.querySelectorAll('.desktop-icon');
 
     icons.forEach((icon) => {
-      // Double-click handler (placeholder for Phase 2)
+      // Double-click handler - open window for posts
       icon.addEventListener('dblclick', () => {
         const type = icon.getAttribute('data-type');
         const slug = icon.getAttribute(type === 'file' ? 'data-post' : 'data-folder');
 
-        console.log(`Double-clicked ${type}: ${slug}`);
-        // TODO: Open window or folder in Phase 2/3
+        if (type === 'file' && slug) {
+          // Get title from icon label
+          const title = icon.querySelector('.icon-label')?.textContent?.trim() || 'Untitled';
+
+          // Dispatch custom event to open post window
+          const event = new CustomEvent('desktop:open-post', {
+            detail: { slug, title },
+            bubbles: true,
+          });
+          document.dispatchEvent(event);
+        } else if (type === 'folder' && slug) {
+          // TODO: Open folder view in Phase 3
+          console.log('Opening folder:', slug);
+        }
       });
 
       // Single-click to select
