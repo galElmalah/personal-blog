@@ -2,9 +2,9 @@
 
 ## Current Status
 
-**Phase**: 3 - File System & Navigation (COMPLETED)
-**Current Task**: Begin Phase 4 - Dock & Interactions
-**Iteration**: 3
+**Phase**: 4 - Dock & Interactions (COMPLETED)
+**Current Task**: Begin Phase 5 - Polish & Animations
+**Iteration**: 4
 **Last Updated**: 2026-01-25
 
 ---
@@ -14,7 +14,7 @@
 - [x] Phase 1: Foundation (Week 1)
 - [x] Phase 2: Window System (Week 2)
 - [x] Phase 3: File System & Navigation (Week 3)
-- [ ] Phase 4: Dock & Interactions (Week 4)
+- [x] Phase 4: Dock & Interactions (Week 4)
 - [ ] Phase 5: Polish & Animations (Week 5)
 - [ ] Phase 6: Testing & Launch (Week 6)
 
@@ -191,27 +191,60 @@
 
 **Goal**: Enhanced navigation and interactions
 
-**Status**: Not Started
+**Status**: ✅ COMPLETED
 
 ### Tasks
-- [ ] Create Dock component
-- [ ] Add dock icons (Home, Posts, Series, Terminal)
-- [ ] Implement hover magnification effect
-- [ ] Wire up dock icon actions
-- [ ] Create ContextMenu component
-- [ ] Implement right-click context menu
-- [ ] Add keyboard navigation (arrow keys)
-- [ ] Add Enter key to open items
+- [x] Create Dock component
+- [x] Add dock icons (Home, Posts, Series, Terminal)
+- [x] Implement hover magnification effect
+- [x] Wire up dock icon actions
+- [x] Create ContextMenu component
+- [x] Implement right-click context menu
+- [x] Add keyboard navigation (arrow keys)
+- [x] Add Enter key to open items
 
 ### Acceptance Criteria
-- [ ] Dock visible and functional
-- [ ] All dock icons work correctly
-- [ ] Hover magnification smooth
-- [ ] Context menu appears on right-click
-- [ ] Keyboard navigation works
+- [x] Dock visible and functional
+- [x] All dock icons work correctly
+- [x] Hover magnification smooth
+- [x] Context menu appears on right-click
+- [x] Keyboard navigation works
+
+### Implementation Details
+**Files Created:**
+- `src/components/desktop/Dock.astro` - macOS-style dock component with navigation icons
+- `src/components/desktop/ContextMenu.astro` - Right-click context menu for files and folders
+- `tests/unit/dock-interactions.test.ts` - Unit tests (23 tests passing)
+
+**Files Modified:**
+- `src/components/desktop/Desktop.astro` - Added Dock and ContextMenu components, keyboard navigation handlers
+
+**Features Implemented:**
+- ✅ Dock component with 4 icons (Home, Posts, Series, Terminal)
+- ✅ Hover magnification effect (1.2x scale with smooth transition)
+- ✅ Dock backdrop blur and translucent background
+- ✅ Dock icon actions wired up (navigate home, switch to terminal)
+- ✅ Context menu for files (Open, Open in Terminal, Copy Link, View Details)
+- ✅ Context menu for folders (Open, View Details)
+- ✅ Right-click to show context menu
+- ✅ Context menu positioning (stays within viewport)
+- ✅ Keyboard navigation with arrow keys (Up, Down, Left, Right)
+- ✅ Enter/Space to open selected items
+- ✅ Backspace to navigate back (in folder views)
+- ✅ Escape to deselect all or close context menu
+- ✅ Accessibility (ARIA labels, keyboard focus, tooltips)
+- ✅ Reduced motion support
+
+**Test Results:**
+- Dock & Interactions tests: 23/23 passing
+- All unit tests: 265/266 passing (1 pre-existing failure)
 
 ### Notes
-- Dock positioning: bottom center, 16px margin
+- Dock positioned at bottom center with 16px margin
+- Hover tooltips show icon labels
+- Context menu closes on click outside or Escape key
+- Keyboard navigation calculates grid layout dynamically
+- Copy Link action uses navigator.clipboard API
 
 ---
 
@@ -330,6 +363,28 @@
   - Tested functionality - all acceptance criteria met
 - **Status**: Phase 3 COMPLETE ✅
 - **Next**: Begin Phase 4 - Dock & Interactions (dock component, context menu, keyboard nav)
+
+### Iteration 4 (Phase 4 - Dock & Interactions)
+- **Date**: 2026-01-25
+- **Action**: Implemented complete Phase 4 - Dock and enhanced interactions
+- **Completed**:
+  - Created Dock.astro component with macOS-style design
+  - Added 4 dock icons (Home, Posts, Series, Terminal) with proper actions
+  - Implemented hover magnification effect (1.2x scale with smooth cubic-bezier transition)
+  - Added dock backdrop blur and translucent background styling
+  - Wired up dock navigation events (dock:navigate-home, view:toggle-to-terminal)
+  - Created ContextMenu.astro component with right-click functionality
+  - Built context menu system with dynamic positioning (viewport-aware)
+  - Added file context menu (Open, Open in Terminal, Copy Link, View Details)
+  - Added folder context menu (Open, View Details)
+  - Implemented keyboard navigation in Desktop.astro (Arrow keys, Enter, Space, Backspace, Escape)
+  - Added keyboard selection management with visual feedback
+  - Added grid-aware navigation (calculates items per row dynamically)
+  - Integrated all components into Desktop.astro
+  - Wrote 23 unit tests for dock and keyboard interactions (all passing)
+  - Verified accessibility (ARIA labels, keyboard focus, reduced motion support)
+- **Status**: Phase 4 COMPLETE ✅
+- **Next**: Begin Phase 5 - Polish & Animations (window animations, resize, icon previews, theme integration)
 
 ---
 

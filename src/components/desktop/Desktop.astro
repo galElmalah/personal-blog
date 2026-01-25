@@ -2,10 +2,12 @@
 /**
  * Desktop.astro - Main desktop container component
  * Displays blog posts as icons in a grid layout (macOS-inspired)
- * Phase 3: Supports folders (series) and file system navigation
+ * Phase 4: Added Dock component
  */
 import { getCollection } from "astro:content";
 import DesktopIcon from "./DesktopIcon.astro";
+import Dock from "./Dock.astro";
+import ContextMenu from "./ContextMenu.astro";
 import type { Post } from "@/scripts/desktop/file-system";
 
 // Get all published posts
@@ -57,6 +59,12 @@ const postsData: Post[] = posts.map((post) => ({
       <p>Please switch to terminal view or use a desktop browser.</p>
     </div>
   </div>
+
+  <!-- Dock - macOS-style navigation bar -->
+  <Dock />
+
+  <!-- Context Menu - Right-click menu for files and folders -->
+  <ContextMenu />
 </div>
 
 <style>
@@ -359,6 +367,19 @@ const postsData: Post[] = posts.map((post) => ({
     document.addEventListener('desktop:navigate-back', (() => {
       navigateBack();
     }) as EventListener);
+
+    // Listen for dock navigation events
+    document.addEventListener('dock:navigate-home', (() => {
+      navigateToRoot();
+    }) as EventListener);
+
+    // Listen for dock terminal switch event
+    document.addEventListener('view:toggle-to-terminal', (() => {
+      switchToTerminal();
+    }) as EventListener);
+
+    // Setup keyboard navigation
+    setupKeyboardNavigation();
   }
 
   function renderDesktop() {
@@ -597,6 +618,102 @@ const postsData: Post[] = posts.map((post) => ({
   function navigateBack() {
     currentPath = getParentPath(currentPath);
     renderDesktop();
+  }
+
+  function navigateToRoot() {
+    currentPath = '~';
+    renderDesktop();
+  }
+
+  function switchToTerminal() {
+    // Dispatch the same event that ViewToggle uses
+    const event = new CustomEvent('view:toggle');
+    document.dispatchEvent(event);
+  }
+
+  function setupKeyboardNavigation() {
+    let selectedIndex = -1;
+
+    document.addEventListener('keydown', (e) => {
+      // Only handle keyboard when desktop is visible and not in a window or context menu
+      const desktopVisible = !document.querySelector('.terminal-view-container:not(.view-exit)');
+      const contextMenuVisible = !document.getElementById('context-menu')?.classList.contains('hidden');
+      const windowFocused = document.activeElement?.closest('.desktop-window');
+
+      if (!desktopVisible || contextMenuVisible || windowFocused) return;
+
+      const icons = Array.from(document.querySelectorAll('.desktop-icon'));
+      if (icons.length === 0) return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % icons.length;
+          selectIcon(icons, selectedIndex);
+          break;
+
+        case 'ArrowLeft':
+          e.preventDefault();
+          selectedIndex = selectedIndex <= 0 ? icons.length - 1 : selectedIndex - 1;
+          selectIcon(icons, selectedIndex);
+          break;
+
+        case 'ArrowDown':
+          e.preventDefault();
+          // Move down in grid (approximate 8 items per row)
+          const itemsPerRow = Math.floor(window.innerWidth / 140) || 8;
+          selectedIndex = Math.min(selectedIndex + itemsPerRow, icons.length - 1);
+          selectIcon(icons, selectedIndex);
+          break;
+
+        case 'ArrowUp':
+          e.preventDefault();
+          // Move up in grid
+          const itemsPerRowUp = Math.floor(window.innerWidth / 140) || 8;
+          selectedIndex = Math.max(selectedIndex - itemsPerRowUp, 0);
+          selectIcon(icons, selectedIndex);
+          break;
+
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (selectedIndex >= 0 && selectedIndex < icons.length) {
+            const icon = icons[selectedIndex] as HTMLElement;
+            icon.dispatchEvent(new Event('dblclick'));
+          }
+          break;
+
+        case 'Backspace':
+          e.preventDefault();
+          if (!isRootPath(currentPath)) {
+            navigateBack();
+            selectedIndex = -1;
+          }
+          break;
+
+        case 'Escape':
+          e.preventDefault();
+          // Deselect all
+          icons.forEach((icon) => icon.classList.remove('selected'));
+          selectedIndex = -1;
+          break;
+      }
+    });
+  }
+
+  function selectIcon(icons: Element[], index: number) {
+    // Clear previous selection
+    icons.forEach((icon) => icon.classList.remove('selected'));
+
+    // Select new icon
+    if (index >= 0 && index < icons.length) {
+      const icon = icons[index] as HTMLElement;
+      icon.classList.add('selected');
+      icon.focus({ preventScroll: false });
+
+      // Scroll into view if needed
+      icon.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
   function openPostWindow(slug: string, title: string) {

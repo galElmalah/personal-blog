@@ -1,0 +1,317 @@
+---
+/**
+ * ContextMenu.astro - Right-click context menu
+ * Provides additional actions for files and folders
+ * Phase 4: Dock & Interactions
+ */
+---
+
+<div id="context-menu" class="context-menu hidden" role="menu" aria-label="Context menu">
+  <!-- Menu items will be dynamically populated based on target -->
+</div>
+
+<style>
+  .context-menu {
+    position: fixed;
+    z-index: 2000;
+    min-width: 200px;
+    background: rgba(30, 35, 50, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 0.5rem;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 0 0.5px rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+  }
+
+  .context-menu.hidden {
+    display: none;
+  }
+
+  :global(.context-menu-item) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--term-fg);
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    width: 100%;
+    text-align: left;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+  }
+
+  :global(.context-menu-item:hover) {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--term-cyan);
+  }
+
+  :global(.context-menu-item:active) {
+    transform: scale(0.98);
+  }
+
+  :global(.context-menu-item:focus-visible) {
+    outline: 2px solid var(--term-cyan);
+    outline-offset: -2px;
+  }
+
+  :global(.context-menu-item svg) {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  :global(.context-menu-separator) {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.375rem 0;
+  }
+
+  :global(.context-menu-item[disabled]) {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  :global(.context-menu-item[disabled]:hover) {
+    background: transparent;
+    color: var(--term-fg);
+    transform: none;
+  }
+</style>
+
+<script>
+  interface ContextMenuTarget {
+    type: 'file' | 'folder';
+    slug?: string;
+    series?: string;
+    title?: string;
+  }
+
+  let currentTarget: ContextMenuTarget | null = null;
+
+  function setupContextMenu() {
+    const contextMenu = document.getElementById('context-menu');
+    if (!contextMenu) return;
+
+    // Close context menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!contextMenu.contains(e.target as Node)) {
+        closeContextMenu();
+      }
+    });
+
+    // Close context menu on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeContextMenu();
+      }
+    });
+
+    // Listen for right-click events on desktop icons
+    document.addEventListener('contextmenu', (e) => {
+      const icon = (e.target as HTMLElement).closest('.desktop-icon');
+      if (!icon) {
+        closeContextMenu();
+        return;
+      }
+
+      e.preventDefault();
+
+      const type = icon.getAttribute('data-type') as 'file' | 'folder';
+      const slug = icon.getAttribute('data-post') || undefined;
+      const series = icon.getAttribute('data-folder') || undefined;
+      const title = icon.querySelector('.icon-label')?.textContent?.trim() || 'Untitled';
+
+      currentTarget = { type, slug, series, title };
+
+      showContextMenu(e.clientX, e.clientY, currentTarget);
+    });
+  }
+
+  function showContextMenu(x: number, y: number, target: ContextMenuTarget) {
+    const contextMenu = document.getElementById('context-menu');
+    if (!contextMenu) return;
+
+    // Build menu based on target type
+    const menuItems = target.type === 'file'
+      ? getFileMenuItems(target)
+      : getFolderMenuItems(target);
+
+    contextMenu.innerHTML = menuItems.map((item) => {
+      if (item.separator) {
+        return '<div class="context-menu-separator"></div>';
+      }
+
+      return `
+        <button
+          class="context-menu-item"
+          data-action="${item.action}"
+          ${item.disabled ? 'disabled' : ''}
+          role="menuitem"
+        >
+          ${item.icon}
+          <span>${item.label}</span>
+        </button>
+      `;
+    }).join('');
+
+    // Position menu (ensure it stays within viewport)
+    const maxX = window.innerWidth - 220;
+    const maxY = window.innerHeight - 400;
+    const finalX = Math.min(x, maxX);
+    const finalY = Math.min(y, maxY);
+
+    contextMenu.style.left = `${finalX}px`;
+    contextMenu.style.top = `${finalY}px`;
+    contextMenu.classList.remove('hidden');
+
+    // Setup click handlers for menu items
+    contextMenu.querySelectorAll('.context-menu-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        const action = item.getAttribute('data-action');
+        if (action) {
+          handleMenuAction(action, target);
+        }
+        closeContextMenu();
+      });
+    });
+
+    // Focus first menu item for keyboard navigation
+    const firstItem = contextMenu.querySelector('.context-menu-item:not([disabled])') as HTMLElement;
+    firstItem?.focus();
+  }
+
+  function closeContextMenu() {
+    const contextMenu = document.getElementById('context-menu');
+    if (contextMenu) {
+      contextMenu.classList.add('hidden');
+      currentTarget = null;
+    }
+  }
+
+  function getFileMenuItems(target: ContextMenuTarget) {
+    return [
+      {
+        label: 'Open',
+        action: 'open',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>`,
+      },
+      {
+        label: 'Open in Terminal',
+        action: 'open-terminal',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect>
+          <line x1="7" y1="9" x2="11" y2="13"></line>
+          <line x1="7" y1="13" x2="11" y2="9"></line>
+        </svg>`,
+      },
+      { separator: true },
+      {
+        label: 'Copy Link',
+        action: 'copy-link',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>`,
+      },
+      {
+        label: 'View Details',
+        action: 'view-details',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>`,
+        disabled: true,
+      },
+    ];
+  }
+
+  function getFolderMenuItems(target: ContextMenuTarget) {
+    return [
+      {
+        label: 'Open',
+        action: 'open',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>`,
+      },
+      { separator: true },
+      {
+        label: 'View Details',
+        action: 'view-details',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>`,
+        disabled: true,
+      },
+    ];
+  }
+
+  function handleMenuAction(action: string, target: ContextMenuTarget) {
+    switch (action) {
+      case 'open':
+        if (target.type === 'file' && target.slug) {
+          document.dispatchEvent(new CustomEvent('desktop:open-post', {
+            detail: { slug: target.slug, title: target.title },
+          }));
+        } else if (target.type === 'folder' && target.series) {
+          document.dispatchEvent(new CustomEvent('desktop:open-folder', {
+            detail: { series: target.series, title: target.title },
+          }));
+        }
+        break;
+
+      case 'open-terminal':
+        if (target.type === 'file' && target.slug) {
+          // Switch to terminal and run cat command
+          document.dispatchEvent(new CustomEvent('view:toggle'));
+          // Wait for view to switch, then dispatch terminal command
+          setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('terminal:run-command', {
+              detail: { command: `cat ${target.slug}` },
+            }));
+          }, 600);
+        }
+        break;
+
+      case 'copy-link':
+        if (target.type === 'file' && target.slug) {
+          const url = `${window.location.origin}/posts/${target.slug}`;
+          navigator.clipboard.writeText(url).then(() => {
+            console.log('Link copied to clipboard:', url);
+          }).catch((err) => {
+            console.error('Failed to copy link:', err);
+          });
+        }
+        break;
+
+      case 'view-details':
+        // Future implementation
+        console.log('View details for:', target);
+        break;
+    }
+  }
+
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupContextMenu);
+  } else {
+    setupContextMenu();
+  }
+
+  // Re-initialize on Astro page loads
+  document.addEventListener('astro:page-load', setupContextMenu);
+</script>
