@@ -786,6 +786,14 @@ const postsData: Post[] = posts.map((post) => ({
         </div>
         <div class="window-post-content hidden"></div>
       </div>
+      <div class="resize-handle resize-handle-n" data-direction="n"></div>
+      <div class="resize-handle resize-handle-s" data-direction="s"></div>
+      <div class="resize-handle resize-handle-e" data-direction="e"></div>
+      <div class="resize-handle resize-handle-w" data-direction="w"></div>
+      <div class="resize-handle resize-handle-ne" data-direction="ne"></div>
+      <div class="resize-handle resize-handle-nw" data-direction="nw"></div>
+      <div class="resize-handle resize-handle-se" data-direction="se"></div>
+      <div class="resize-handle resize-handle-sw" data-direction="sw"></div>
     `;
 
     // Setup window interactions
@@ -818,6 +826,9 @@ const postsData: Post[] = posts.map((post) => ({
 
     // Setup dragging
     setupDragging(windowEl, windowId);
+
+    // Setup resizing
+    setupResizing(windowEl, windowId);
   }
 
   function setupDragging(windowEl: HTMLElement, windowId: string) {
@@ -864,6 +875,94 @@ const postsData: Post[] = posts.map((post) => ({
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+  }
+
+  function setupResizing(windowEl: HTMLElement, windowId: string) {
+    const MIN_WIDTH = 400;
+    const MIN_HEIGHT = 300;
+    const handles = windowEl.querySelectorAll('.resize-handle');
+
+    handles.forEach((handle) => {
+      let isResizing = false;
+      let startX = 0;
+      let startY = 0;
+      let startWidth = 0;
+      let startHeight = 0;
+      let startLeft = 0;
+      let startTop = 0;
+      const direction = handle.getAttribute('data-direction') || '';
+
+      handle.addEventListener('mousedown', (e: Event) => {
+        const mouseEvent = e as MouseEvent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        isResizing = true;
+        startX = mouseEvent.clientX;
+        startY = mouseEvent.clientY;
+
+        const rect = windowEl.getBoundingClientRect();
+        startWidth = rect.width;
+        startHeight = rect.height;
+        startLeft = rect.left;
+        startTop = rect.top;
+      });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isResizing) return;
+
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        let newWidth = startWidth;
+        let newHeight = startHeight;
+        let newLeft = startLeft;
+        let newTop = startTop;
+
+        // Calculate new dimensions based on direction
+        if (direction.includes('e')) {
+          newWidth = Math.max(MIN_WIDTH, startWidth + deltaX);
+        }
+        if (direction.includes('w')) {
+          newWidth = Math.max(MIN_WIDTH, startWidth - deltaX);
+          if (newWidth > MIN_WIDTH) {
+            newLeft = startLeft + deltaX;
+          }
+        }
+        if (direction.includes('s')) {
+          newHeight = Math.max(MIN_HEIGHT, startHeight + deltaY);
+        }
+        if (direction.includes('n')) {
+          newHeight = Math.max(MIN_HEIGHT, startHeight - deltaY);
+          if (newHeight > MIN_HEIGHT) {
+            newTop = startTop + deltaY;
+          }
+        }
+
+        // Ensure window stays within viewport bounds
+        const maxWidth = window.innerWidth - newLeft;
+        const maxHeight = window.innerHeight - newTop;
+        newWidth = Math.min(newWidth, maxWidth);
+        newHeight = Math.min(newHeight, maxHeight);
+
+        // Apply new dimensions
+        windowEl.style.width = `${newWidth}px`;
+        windowEl.style.height = `${newHeight}px`;
+        windowEl.style.left = `${newLeft}px`;
+        windowEl.style.top = `${newTop}px`;
+
+        // Update window manager state
+        windowManager.updatePosition(windowId, { x: newLeft, y: newTop });
+        windowManager.updateSize(windowId, { width: newWidth, height: newHeight });
+      };
+
+      const handleMouseUp = () => {
+        isResizing = false;
+      };
+
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    });
   }
 
   async function loadPostContent(windowEl: HTMLElement, postSlug: string) {
