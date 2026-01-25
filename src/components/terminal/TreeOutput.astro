@@ -1,0 +1,121 @@
+---
+import type { CollectionEntry } from "astro:content";
+import {
+  formatFilename,
+  seriesSlug,
+} from "@/scripts/terminal/renderers/helpers";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+
+// Group posts by series
+const seriesMap = new Map<string, CollectionEntry<"posts">[]>();
+const standalonePost: CollectionEntry<"posts">[] = [];
+
+posts.forEach((post) => {
+  if (post.data.series) {
+    const existing = seriesMap.get(post.data.series) || [];
+    existing.push(post);
+    seriesMap.set(post.data.series, existing);
+  } else {
+    standalonePost.push(post);
+  }
+});
+
+// Sort series alphabetically, posts by date within series
+const sortedSeries = Array.from(seriesMap.entries())
+  .sort((a, b) => a[0].localeCompare(b[0]))
+  .map(
+    ([series, seriesPosts]) =>
+      [
+        series,
+        seriesPosts.sort(
+          (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
+        ),
+      ] as [string, CollectionEntry<"posts">[]],
+  );
+
+// Sort standalone posts by date (newest first)
+const sortedStandalone = standalonePost.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// Count totals
+const totalDirs = seriesMap.size;
+const totalFiles = posts.length;
+---
+
+<div class="term-tree">
+  <div class="term-tree-root text-term-blue font-medium">.</div>
+
+  {/* Series as directories */}
+  {
+    sortedSeries.map(([series, seriesPosts], seriesIdx) => {
+      const isLastSeries =
+        seriesIdx === sortedSeries.length - 1 && sortedStandalone.length === 0;
+      const branchChar = isLastSeries ? "└── " : "├── ";
+      const continueChar = isLastSeries ? "    " : "│   ";
+      const slug = seriesSlug(series);
+
+      return (
+        <div class="term-tree-group">
+          <div>
+            <span class="term-tree-branch">{branchChar}</span>
+            <a
+              href={`/series/${slug}`}
+              class="term-tree-dir hover:text-term-cyan"
+            >
+              {series}/
+            </a>
+          </div>
+          {seriesPosts.map((post, postIdx) => {
+            const isLastPost = postIdx === seriesPosts.length - 1;
+            const postBranch = isLastPost ? "└── " : "├── ";
+            return (
+              <div>
+                <span class="term-tree-branch">
+                  {continueChar}
+                  {postBranch}
+                </span>
+                <a
+                  href={`/posts/${post.slug}`}
+                  class="term-tree-file"
+                  data-command={`cat ${post.slug}`}
+                >
+                  {formatFilename(post.data.title)}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      );
+    })
+  }
+
+  {/* Standalone posts */}
+  {
+    sortedStandalone.map((post, idx) => {
+      const isLast = idx === sortedStandalone.length - 1;
+      const branchChar = isLast ? "└── " : "├── ";
+      return (
+        <div>
+          <span class="term-tree-branch">{branchChar}</span>
+          <a
+            href={`/posts/${post.slug}`}
+            class="term-tree-file"
+            data-command={`cat ${post.slug}`}
+          >
+            {formatFilename(post.data.title)}
+          </a>
+        </div>
+      );
+    })
+  }
+
+  <div class="term-tree-summary text-term-fg-dark mt-2 text-sm">
+    {totalDirs} directories, {totalFiles} files
+  </div>
+</div>

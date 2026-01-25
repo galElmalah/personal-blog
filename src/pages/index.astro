@@ -1,0 +1,159 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
+import Desktop from "@components/desktop/Desktop.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const postCount = posts.length;
+const seriesCount = new Set(posts.filter(p => p.data.series).map(p => p.data.series)).size;
+const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
+---
+
+<BaseLayout title="Home" terminalMode={true}>
+  <!-- Inject posts data for terminal engine -->
+  <TerminalContext currentPath="~" />
+
+  <!-- Terminal View Container -->
+  <div class="terminal-view-container">
+    <TerminalShell>
+    <!-- ASCII Welcome Art - will be animated -->
+    <div id="ascii-welcome" class="ascii-art text-term-cyan mb-6" role="img" aria-label="Welcome to Gal.E Blog">
+      <pre class="text-xs sm:text-sm leading-tight"></pre>
+    </div>
+
+    <!-- Intro text - appears after ASCII -->
+    <div id="intro-section" class="hidden mb-6">
+      <div class="text-term-fg mb-4">
+        <span class="text-term-green">Hey there!</span> I'm <span class="text-term-cyan">Gal Elmalah</span>, 
+        a software team lead at <a href="https://www.wix.com" target="_blank" rel="noopener noreferrer" class="term-link">Wix.com</a>.
+      </div>
+      <div class="text-term-fg-dark mb-4">
+        This is my corner of the internet where I dump thoughts on coding, 
+        leadership, and whatever else catches my attention.
+      </div>
+      
+      <!-- Stats -->
+      <div class="text-term-fg-dark text-sm mb-4">
+        <span class="text-term-yellow">{postCount}</span> posts | 
+        <span class="text-term-yellow">{seriesCount}</span> series |
+        <span class="text-term-yellow">{tagCount}</span> tags
+      </div>
+
+      <!-- Social links -->
+      <div class="mb-4">
+        <div class="text-term-comment text-sm mb-2"># Find me online:</div>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <a href="https://github.com/galelmalah" target="_blank" rel="noopener noreferrer" class="term-link">[GitHub]</a>
+          <a href="https://twitter.com/galelmalah" target="_blank" rel="noopener noreferrer" class="term-link">[Twitter]</a>
+          <a href="https://www.linkedin.com/in/gal-elmalah-71874115a/" target="_blank" rel="noopener noreferrer" class="term-link">[LinkedIn]</a>
+          <a href="https://dev.to/galelmalah" target="_blank" rel="noopener noreferrer" class="term-link">[Dev.to]</a>
+          <a href="/rss.xml" class="term-link">[RSS]</a>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="text-term-fg-dark mb-4 overflow-hidden whitespace-nowrap">
+        ────────────────────────────────────────────────
+      </div>
+
+      <!-- Quick commands hint -->
+      <div class="text-term-comment text-sm mb-4">
+        # Type <span class="text-term-green">help</span> for available commands, 
+        or try: <span class="text-term-green">ls</span>, <span class="text-term-green">grep</span>, <span class="text-term-green">cat</span>
+      </div>
+    </div>
+
+    <!-- Terminal output container -->
+    <div id="terminal-output" class="mb-4"></div>
+
+    <!-- Command input line (always visible after intro) -->
+    <div id="input-section" class="hidden">
+      <div class="flex items-center">
+        <TerminalPrompt />
+        <div class="relative flex-1 ml-2">
+          <input 
+            type="text" 
+            id="command-input"
+            class="term-input w-full"
+            placeholder=""
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Terminal Command Input"
+          />
+        </div>
+      </div>
+      
+      <!-- Mobile command suggestions -->
+      <div id="mobile-suggestions" class="mt-4 flex flex-wrap gap-2 sm:hidden">
+        <button class="term-suggestion" data-cmd="ls">ls</button>
+        <button class="term-suggestion" data-cmd="ls -la">ls -la</button>
+        <button class="term-suggestion" data-cmd="tree">tree</button>
+        <button class="term-suggestion" data-cmd="grep ">grep</button>
+        <button class="term-suggestion" data-cmd="cat ">cat</button>
+        <button class="term-suggestion" data-cmd="help">help</button>
+      </div>
+    </div>
+    </TerminalShell>
+  </div>
+
+  <!-- Desktop View Container (hidden by default) -->
+  <div class="desktop-view-container hidden">
+    <Desktop />
+  </div>
+</BaseLayout>
+
+<style>
+  .ascii-art pre {
+    font-family: 'Fira Code', monospace;
+    line-height: 1.2;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .term-input {
+    background: transparent;
+    border: none;
+    color: var(--term-green);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    caret-color: var(--term-cursor);
+  }
+
+  .term-suggestion {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--term-fg-dark);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--term-green);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .term-suggestion:hover,
+  .term-suggestion:active {
+    border-color: var(--term-cyan);
+    color: var(--term-cyan);
+  }
+</style>
+
+<script>
+  import { initHomePage } from "@/scripts/terminal/home-init";
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomePage);
+  } else {
+    initHomePage();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener('astro:page-load', initHomePage);
+</script>

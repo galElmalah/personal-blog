@@ -1,0 +1,102 @@
+/**
+ * Desktop View Styles
+ * macOS-inspired styling for the desktop environment
+ */
+
+/* Desktop color scheme - matches terminal theme variables */
+:root {
+  --desktop-bg-start: #1a1f2e;
+  --desktop-bg-end: #2d3748;
+  --desktop-icon-bg: rgba(255, 255, 255, 0.05);
+  --desktop-icon-hover: rgba(255, 255, 255, 0.1);
+  --desktop-selection: rgba(59, 130, 246, 0.2);
+  --desktop-window-bg: rgba(30, 35, 50, 0.95);
+  --desktop-blur: blur(20px);
+}
+
+/* Desktop theme variants */
+[data-theme="dracula"] {
+  --desktop-bg-start: #282a36;
+  --desktop-bg-end: #44475a;
+}
+
+[data-theme="monokai"] {
+  --desktop-bg-start: #272822;
+  --desktop-bg-end: #3e3d32;
+}
+
+[data-theme="nord"] {
+  --desktop-bg-start: #2e3440;
+  --desktop-bg-end: #3b4252;
+}
+
+[data-theme="gruvbox"] {
+  --desktop-bg-start: #282828;
+  --desktop-bg-end: #3c3836;
+}
+
+[data-theme="solarized-dark"] {
+  --desktop-bg-start: #002b36;
+  --desktop-bg-end: #073642;
+}
+
+/* Smooth view transitions */
+.view-transition {
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* Desktop container defaults */
+.desktop-view-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Terminal container defaults */
+.terminal-view-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .view-exit,
+  .view-enter {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .desktop-icon:hover .icon-visual {
+    transform: none !important;
+  }
+}
+
+/* Focus management */
+.desktop-icon:focus-visible {
+  outline: 2px solid var(--term-cyan);
+  outline-offset: 4px;
+  border-radius: 0.5rem;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--desktop-selection);
+  color: var(--term-fg);
+}
+
+/* Scrollbar styling for desktop view */
+.desktop-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.desktop-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.desktop-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.desktop-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

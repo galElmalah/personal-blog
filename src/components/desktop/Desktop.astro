@@ -1,0 +1,174 @@
+---
+/**
+ * Desktop.astro - Main desktop container component
+ * Displays blog posts as icons in a grid layout (macOS-inspired)
+ */
+import { getCollection } from "astro:content";
+import DesktopIcon from "./DesktopIcon.astro";
+
+// Get all published posts
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+
+// Sort by date (newest first)
+const sortedPosts = posts.sort((a, b) =>
+  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+---
+
+<div class="desktop-container">
+  <!-- Desktop background -->
+  <div class="desktop-background"></div>
+
+  <!-- Icon grid for posts (no folders in Phase 1) -->
+  <div class="desktop-icons-grid">
+    {sortedPosts.map((post) => (
+      <DesktopIcon
+        title={post.data.title}
+        slug={post.slug}
+        type="file"
+        coverImage={post.data.coverImage}
+        pubDate={post.data.pubDate}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
+
+  <!-- Message for mobile/small screens -->
+  <div class="desktop-mobile-message">
+    <div class="message-content">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+      <h2>Desktop View</h2>
+      <p>Desktop view works best on larger screens (1024px+).</p>
+      <p>Please switch to terminal view or use a desktop browser.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .desktop-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .desktop-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+      var(--desktop-bg-start, #1a1f2e) 0%,
+      var(--desktop-bg-end, #2d3748) 100%
+    );
+    z-index: -1;
+  }
+
+  .desktop-icons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Mobile message - shown on small screens */
+  .desktop-mobile-message {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .message-content {
+    text-align: center;
+    padding: 2rem;
+    color: var(--term-fg);
+  }
+
+  .message-content svg {
+    margin: 0 auto 1rem;
+    color: var(--term-cyan);
+  }
+
+  .message-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--term-cyan);
+  }
+
+  .message-content p {
+    margin-bottom: 0.5rem;
+    color: var(--term-fg-dark);
+  }
+
+  /* Show mobile message on small screens */
+  @media (max-width: 1023px) {
+    .desktop-mobile-message {
+      display: flex;
+    }
+
+    .desktop-icons-grid {
+      display: none;
+    }
+  }
+
+  /* Responsive grid for larger screens */
+  @media (min-width: 1024px) {
+    .desktop-icons-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+      padding: 3rem;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .desktop-icons-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+      padding: 4rem;
+    }
+  }
+
+  /* View transition animations */
+  :global(.view-exit) {
+    animation: fadeOut 500ms ease-in-out forwards;
+  }
+
+  :global(.view-enter) {
+    animation: fadeIn 500ms ease-in-out forwards;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  :global(.hidden) {
+    display: none !important;
+  }
+</style>

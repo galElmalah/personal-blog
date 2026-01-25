@@ -1,0 +1,106 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate, seriesSlug } from "@/scripts/terminal/renderers/helpers";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+  showSeries?: boolean;
+  showDetails?: boolean;
+}
+
+const { posts, showSeries = true, showDetails = true } = Astro.props;
+
+// Group posts by series
+const seriesMap = new Map<string, CollectionEntry<"posts">[]>();
+const standalonePost: CollectionEntry<"posts">[] = [];
+
+posts.forEach((post) => {
+  if (post.data.series && showSeries) {
+    const existing = seriesMap.get(post.data.series) || [];
+    existing.push(post);
+    seriesMap.set(post.data.series, existing);
+  } else {
+    standalonePost.push(post);
+  }
+});
+
+// Sort series by most recent post
+const sortedSeries = Array.from(seriesMap.entries()).sort((a, b) => {
+  const aLatest = Math.max(...a[1].map((p) => p.data.date.valueOf()));
+  const bLatest = Math.max(...b[1].map((p) => p.data.date.valueOf()));
+  return bLatest - aLatest;
+});
+
+// Sort standalone posts by date
+const sortedStandalone = standalonePost.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<div class="term-ls">
+  <div class="term-ls-header text-term-fg-dark text-sm mb-2">
+    total {posts.length}
+  </div>
+
+  {/* Series as directories */}
+  {
+    sortedSeries.map(([series, seriesPosts]) => {
+      const latestDate = new Date(
+        Math.max(...seriesPosts.map((p) => p.data.date.valueOf())),
+      );
+      const slug = seriesSlug(series);
+      return showDetails ? (
+        <div class="term-ls-entry">
+          <span class="term-ls-perms">drwxr-xr-x</span>
+          <a
+            href={`/series/${slug}`}
+            class="term-ls-name term-ls-dir"
+            data-command={`cd ${slug}/`}
+          >
+            {series}/
+          </a>
+          <span class="term-ls-date">{formatDate(latestDate)}</span>
+        </div>
+      ) : (
+        <div>
+          <a
+            href={`/series/${slug}`}
+            class="term-ls-dir hover:text-term-cyan"
+            data-command={`ls series/${slug}`}
+          >
+            {series}/
+          </a>
+        </div>
+      );
+    })
+  }
+
+  {/* Standalone posts as files */}
+  {
+    sortedStandalone.map((post) =>
+      showDetails ? (
+        <div class="term-ls-entry">
+          <span class="term-ls-perms">-rw-r--r--</span>
+          <a
+            href={`/posts/${post.slug}`}
+            class="term-ls-name"
+            data-command={`cat ${post.slug}`}
+          >
+            {post.slug}.md
+          </a>
+          <span class="term-ls-date">{formatDate(post.data.date)}</span>
+        </div>
+      ) : (
+        <div class="term-ls-entry-simple">
+          <a
+            href={`/posts/${post.slug}`}
+            class="text-term-fg hover:text-term-cyan"
+            data-command={`cat ${post.slug}`}
+          >
+            {post.slug}.md
+          </a>
+        </div>
+      ),
+    )
+  }
+</div>

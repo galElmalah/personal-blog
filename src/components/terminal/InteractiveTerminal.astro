@@ -1,0 +1,215 @@
+---
+/**
+ * InteractiveTerminal - Unified interactive terminal component
+ *
+ * This component provides a consistent interactive terminal experience across all pages.
+ * It initializes the TerminalEngine with posts data from TerminalContext and handles
+ * all command input, tab completion, and command history.
+ *
+ * Usage: Include after TerminalContext and any initial SSR content within TerminalShell
+ */
+import TerminalPrompt from "./TerminalPrompt.astro";
+
+interface Props {
+  /** The current path to display in the prompt (e.g., '~/blog/posts') */
+  path?: string;
+  /** Whether to run initial 'ls' command on load (default: false for pages with SSR content) */
+  runInitialLs?: boolean;
+  /** Whether to show mobile command suggestions */
+  showMobileSuggestions?: boolean;
+}
+
+const {
+  path = "~",
+  runInitialLs = false,
+  showMobileSuggestions = true,
+} = Astro.props;
+---
+
+<!-- Terminal output container for dynamic command output -->
+<div id="terminal-output" class="terminal-output"></div>
+
+<!-- Command input line -->
+<div id="input-section" class="term-input-line">
+  <div class="flex items-center w-full">
+    <TerminalPrompt path={path} />
+    <div class="relative flex-1 ml-2">
+      <input
+        type="text"
+        id="command-input"
+        class="term-input w-full"
+        data-terminal-input
+        data-context={path.split("/").pop() || ""}
+        autocomplete="off"
+        spellcheck="false"
+        placeholder=""
+      />
+    </div>
+  </div>
+
+  {
+    showMobileSuggestions && (
+      <div id="mobile-suggestions" class="mt-4 flex flex-wrap gap-2 sm:hidden">
+        <button class="term-suggestion" data-cmd="ls">
+          ls
+        </button>
+        <button class="term-suggestion" data-cmd="ls -la">
+          ls -la
+        </button>
+        <button class="term-suggestion" data-cmd="tree">
+          tree
+        </button>
+        <button class="term-suggestion" data-cmd="grep ">
+          grep
+        </button>
+        <button class="term-suggestion" data-cmd="cat ">
+          cat
+        </button>
+        <button class="term-suggestion" data-cmd="help">
+          help
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  /* Hide empty output container to avoid extra spacing */
+  .terminal-output:empty {
+    display: none;
+  }
+
+  .term-input {
+    background: transparent;
+    border: none;
+    color: var(--term-green);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    caret-color: var(--term-cursor);
+  }
+
+  .term-input::placeholder {
+    color: var(--term-fg-dark);
+  }
+
+  .term-suggestion {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--term-fg-dark);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--term-green);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .term-suggestion:hover,
+  .term-suggestion:active {
+    border-color: var(--term-cyan);
+    color: var(--term-cyan);
+  }
+</style>
+
+<script define:vars={{ path, runInitialLs }}>
+  // Store configuration for the module script
+  window.__TERMINAL_CONFIG__ = {
+    path: path,
+    runInitialLs: runInitialLs,
+  };
+</script>
+
+<script>
+  // Import the modular terminal engine
+  import { TerminalEngine } from "@/scripts/terminal/engine";
+
+  /**
+   * Initialize the interactive terminal
+   */
+  function initInteractiveTerminal() {
+    // Get configuration
+    const config = (window as any).__TERMINAL_CONFIG__ || {
+      path: "~",
+      runInitialLs: false,
+    };
+    const postsData = (window as any).__TERMINAL_POSTS__ || [];
+
+    // Get DOM elements
+    const commandInput = document.getElementById(
+      "command-input",
+    ) as HTMLInputElement;
+    const terminalOutput = document.getElementById("terminal-output");
+
+    if (!commandInput || !terminalOutput) {
+      console.warn("Terminal elements not found");
+      return;
+    }
+
+    // Check if already initialized
+    if ((window as any).__TERMINAL_ENGINE_INITIALIZED__) {
+      return;
+    }
+
+    // Create terminal instance
+    const terminal = new TerminalEngine();
+
+    // Store terminal instance globally for access from other scripts
+    (window as any).__TERMINAL_ENGINE__ = terminal;
+    (window as any).__TERMINAL_ENGINE_INITIALIZED__ = true;
+
+    // Initialize terminal engine
+    terminal.init({
+      posts: postsData,
+      outputContainer: terminalOutput,
+      inputElement: commandInput,
+      promptPath: config.path,
+      skipInitialLs: !config.runInitialLs,
+    });
+
+    // Mobile suggestion buttons
+    document.querySelectorAll(".term-suggestion").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const cmd = (btn as HTMLElement).dataset.cmd;
+        if (cmd && commandInput) {
+          commandInput.value = cmd;
+          commandInput.focus();
+          // Execute immediately if command doesn't need arguments
+          if (!cmd.endsWith(" ")) {
+            terminal.executeCommand(cmd);
+            commandInput.value = "";
+          }
+        }
+      });
+    });
+
+    // Click anywhere in terminal to focus input
+    document.querySelector(".term-shell")?.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (
+        !target.closest("a") &&
+        !target.closest("button") &&
+        !target.closest("input")
+      ) {
+        commandInput?.focus();
+      }
+    });
+
+    // Focus input after a short delay
+    setTimeout(() => commandInput?.focus(), 100);
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initInteractiveTerminal);
+  } else {
+    initInteractiveTerminal();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener("astro:page-load", () => {
+    // Reset initialization flag for new page
+    (window as any).__TERMINAL_ENGINE_INITIALIZED__ = false;
+    initInteractiveTerminal();
+  });
+</script>

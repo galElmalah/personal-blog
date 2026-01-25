@@ -1,0 +1,24 @@
+---
+interface Props {
+  user?: string;
+  host?: string;
+  path?: string;
+  branch?: string;
+}
+
+const {
+  user = "gal",
+  host = "blog",
+  path = "~",
+  branch = "main",
+} = Astro.props;
+---
+
+<span class="term-prompt">
+  <span class="term-prompt-user">{user}</span>
+  <span class="term-prompt-at">@</span>
+  <span class="term-prompt-host">{host}</span>
+  <span class="term-prompt-path ml-1">{path}</span>
+  {branch && <span class="term-prompt-git ml-1">({branch})</span>}
+  <span class="term-prompt-symbol">$</span>
+</span>

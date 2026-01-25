@@ -1,0 +1,30 @@
+---
+interface Props {
+  user: string;
+  id: string;
+  file?: string;
+}
+
+const { user, id, file } = Astro.props;
+const src = file
+  ? `https://gist.github.com/${user}/${id}.js?file=${file}`
+  : `https://gist.github.com/${user}/${id}.js`;
+---
+
+<div class="gist-embed my-4">
+  <script src={src}></script>
+</div>
+
+<style is:global>
+  .gist-embed .gist {
+    max-width: 100%;
+  }
+  .gist-embed .gist .gist-file {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .gist-embed .gist .gist-data {
+    max-height: 500px;
+    overflow: auto;
+  }
+</style>

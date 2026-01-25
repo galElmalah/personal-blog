@@ -1,0 +1,39 @@
+---
+/**
+ * TerminalContext - Provides posts data globally for the terminal engine
+ *
+ * This component fetches posts at build time and injects them into the page
+ * as a global `window.__TERMINAL_POSTS__` variable, allowing the TerminalEngine
+ * to access post data on any page.
+ *
+ * Usage: Include this component in any page that needs terminal functionality
+ */
+import { getCollection } from "astro:content";
+
+interface Props {
+  /** The current path to display in the terminal prompt */
+  currentPath?: string;
+}
+
+const { currentPath = "~" } = Astro.props;
+
+// Fetch all non-draft posts
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+
+// Prepare posts data for client-side terminal
+const postsData = posts.map((p) => ({
+  slug: p.slug,
+  title: p.data.title,
+  description: p.data.description || "",
+  date: p.data.date.toISOString(),
+  tags: p.data.tags,
+  series: p.data.series || null,
+  body: p.body.slice(0, 500),
+}));
+---
+
+<script define:vars={{ postsData, currentPath }}>
+  // Store posts data globally for the terminal engine
+  window.__TERMINAL_POSTS__ = postsData;
+  window.__TERMINAL_PATH__ = currentPath;
+</script>

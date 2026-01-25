@@ -1,0 +1,155 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import CommandLine from "@components/terminal/CommandLine.astro";
+import TerminalInput from "@components/terminal/TerminalInput.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const sortedPosts = posts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// Group posts by year
+const postsByYear = new Map<number, typeof posts>();
+sortedPosts.forEach((post) => {
+  const year = new Date(post.data.date).getFullYear();
+  if (!postsByYear.has(year)) {
+    postsByYear.set(year, []);
+  }
+  postsByYear.get(year)!.push(post);
+});
+
+// Sort years descending
+const years = [...postsByYear.keys()].sort((a, b) => b - a);
+
+// Format date like ls -la
+function formatDate(date: Date): string {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const day = date.getDate().toString().padStart(2, " ");
+  const month = months[date.getMonth()];
+  return `${month} ${day}`;
+}
+
+// Format filename from title
+function formatFilename(title: string): string {
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .slice(0, 40) + ".md"
+  );
+}
+---
+
+<BaseLayout title="Archive" terminalMode={true}>
+  <TerminalShell>
+    <CommandLine
+      command="ls"
+      args="-lt --group-directories-first posts/"
+      path="~/blog"
+    >
+      <div class="term-archive">
+        <div class="text-term-fg-dark text-sm mb-4">
+          total {sortedPosts.length} posts
+        </div>
+
+        {
+          years.map((year) => {
+            const yearPosts = postsByYear.get(year)!;
+
+            return (
+              <div class="mb-6">
+                <div class="term-archive-year flex items-center gap-2 mb-3">
+                  <span class="text-term-cyan font-bold">{year}/</span>
+                  <span class="text-term-fg-dark text-sm">
+                    ({yearPosts.length} posts)
+                  </span>
+                </div>
+
+                <div class="pl-4 border-l border-term-fg-dark/30 space-y-1">
+                  {yearPosts.map((post) => (
+                    <div class="term-ls-entry flex items-center gap-2 font-mono text-sm">
+                      <span class="text-term-fg-dark w-12">
+                        {formatDate(post.data.date)}
+                      </span>
+                      <a
+                        href={`/posts/${post.slug}`}
+                        class="text-term-fg hover:text-term-cyan transition-colors truncate"
+                      >
+                        {formatFilename(post.data.title)}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </CommandLine>
+
+    <!-- Timeline view -->
+    <div class="mt-8 border-t border-term-fg-dark/30 pt-6">
+      <div class="text-term-comment text-sm mb-4"># Timeline visualization</div>
+
+      {
+        years.map((year) => {
+          const yearPosts = postsByYear.get(year)!;
+
+          return (
+            <div class="mb-6">
+              <div class="text-term-yellow font-mono text-lg mb-3">{year}</div>
+
+              <div class="relative pl-6">
+                {/* Vertical line */}
+                <div class="absolute left-2 top-0 bottom-0 w-px bg-term-fg-dark/30" />
+
+                {yearPosts.map((post, index) => (
+                  <div class="relative mb-4 last:mb-0">
+                    {/* Dot */}
+                    <div class="absolute left-[-1rem] top-1.5 w-2 h-2 rounded-full bg-term-cyan" />
+
+                    <a href={`/posts/${post.slug}`} class="block group">
+                      <div class="text-term-fg-dark text-xs mb-1">
+                        {new Date(post.data.date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </div>
+                      <div class="text-term-fg group-hover:text-term-cyan transition-colors">
+                        {post.data.title}
+                      </div>
+                      {post.data.series && (
+                        <div class="text-term-purple text-xs mt-1">
+                          {post.data.series}
+                        </div>
+                      )}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <!-- Active prompt with typeable input -->
+    <TerminalInput path="~/blog/archives" />
+  </TerminalShell>
+</BaseLayout>

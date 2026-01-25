@@ -1,0 +1,321 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const searchData = posts.map((post) => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description || "",
+  tags: post.data.tags,
+  series: post.data.series || "",
+  date: post.data.date.toISOString(),
+}));
+---
+
+<BaseLayout title="Search" terminalMode={true}>
+  <TerminalShell>
+    <div class="text-term-comment text-sm mb-4">
+      # Search posts using fuzzy matching
+    </div>
+
+    <!-- Command input area -->
+    <div class="term-command-line mb-6">
+      <div class="term-input-line flex items-center">
+        <TerminalPrompt path="~/blog" />
+        <span class="term-command ml-2">find</span>
+        <span class="term-command-arg ml-1">posts/ -name "</span>
+        <div class="relative flex-1 min-w-0">
+          <input
+            type="text"
+            id="search-input"
+            class="term-search-input w-full"
+            placeholder="*"
+            autofocus
+          />
+          <span id="search-cursor" class="term-cursor absolute" style="left: 0;"
+          ></span>
+        </div>
+        <span class="term-command-arg">"</span>
+      </div>
+    </div>
+
+    <!-- Results area -->
+    <div id="search-results" class="font-mono">
+      <div class="text-term-fg-dark text-sm">
+        Type to search {posts.length} posts...
+      </div>
+    </div>
+  </TerminalShell>
+</BaseLayout>
+
+<style>
+  .term-search-input {
+    background: transparent;
+    border: none;
+    color: var(--term-green);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    caret-color: transparent; /* Hide native caret */
+  }
+
+  .term-search-input::placeholder {
+    color: var(--term-fg-dark);
+    opacity: 0.5;
+  }
+
+  #search-cursor {
+    pointer-events: none;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
+
+<!-- Embed search data for the client-side script -->
+<script is:inline define:vars={{ searchData }}>
+  window.__SEARCH_DATA__ = searchData;
+</script>
+
+<script>
+  import Fuse from "fuse.js";
+  
+  const searchData = window.__SEARCH_DATA__;
+
+  const searchCursor = document.getElementById("search-cursor");
+  const searchInputEl = document.getElementById("search-input");
+
+  // Update cursor position based on input text
+  function updateSearchCursorPosition() {
+    if (!searchInputEl || !searchCursor) return;
+
+    const measureSpan = document.createElement("span");
+    measureSpan.style.font = getComputedStyle(searchInputEl).font;
+    measureSpan.style.visibility = "hidden";
+    measureSpan.style.position = "absolute";
+    measureSpan.style.whiteSpace = "pre";
+    measureSpan.textContent = searchInputEl.value || "*";
+    document.body.appendChild(measureSpan);
+
+    const textWidth = measureSpan.offsetWidth;
+    document.body.removeChild(measureSpan);
+
+    // If empty, position after placeholder width
+    if (searchInputEl.value === "") {
+      searchCursor.style.left = `${textWidth}px`;
+    } else {
+      searchCursor.style.left = `${textWidth}px`;
+    }
+  }
+
+  // Setup cursor events
+  if (searchInputEl && searchCursor) {
+    searchInputEl.addEventListener("input", updateSearchCursorPosition);
+    searchInputEl.addEventListener("focus", () => {
+      searchCursor.style.display = "inline-block";
+      updateSearchCursorPosition();
+    });
+    searchInputEl.addEventListener("blur", () => {
+      // Re-focus after a short delay to keep input selected
+      setTimeout(() => {
+        if (
+          document.activeElement?.tagName !== "A" &&
+          document.activeElement?.tagName !== "INPUT"
+        ) {
+          searchInputEl.focus();
+          searchCursor.style.display = "inline-block";
+        } else {
+          searchCursor.style.display = "none";
+        }
+      }, 10);
+    });
+
+    // Click anywhere on terminal to focus input
+    const terminalShell = document.getElementById("terminal-shell");
+    if (terminalShell) {
+      terminalShell.addEventListener("click", (e) => {
+        // Don't steal focus from links
+        if (e.target && e.target.tagName !== "A") {
+          searchInputEl.focus();
+        }
+      });
+    }
+
+    // Auto-focus on page load
+    window.addEventListener("load", () => {
+      searchInputEl.focus();
+      updateSearchCursorPosition();
+    });
+
+    // Initialize cursor position
+    updateSearchCursorPosition();
+  }
+
+  const fuse = new Fuse(searchData, {
+    keys: [
+      { name: "title", weight: 2 },
+      { name: "description", weight: 1.5 },
+      { name: "tags", weight: 1 },
+      { name: "series", weight: 1 },
+    ],
+    threshold: 0.4,
+    includeScore: true,
+    minMatchCharLength: 2,
+  });
+
+  const searchInput = document.getElementById("search-input");
+  const searchResults = document.getElementById("search-results");
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const day = date.getDate().toString().padStart(2, " ");
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${month} ${day} ${year}`;
+  }
+
+  function formatFilename(title) {
+    return (
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .slice(0, 45) + ".md"
+    );
+  }
+
+  function renderResults(results, query) {
+    if (results.length === 0) {
+      searchResults.innerHTML = `
+        <div class="text-term-red">
+          find: no matches found for pattern '${query}'
+        </div>
+      `;
+      return;
+    }
+
+    const html = `
+      <div class="text-term-fg-dark text-sm mb-4">
+        ${results.length} file${results.length !== 1 ? "s" : ""} matching pattern '${query}'
+      </div>
+      
+      <div class="space-y-1 mb-6">
+        ${results
+          .map(
+            ({ item }) => `
+          <div class="term-find-result">
+            <span class="text-term-purple">./posts/</span>
+            <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue transition-colors">
+              ${formatFilename(item.title)}
+            </a>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+      
+      <div class="border-t border-term-fg-dark/30 pt-4 mt-4">
+        <div class="text-term-comment text-sm mb-4"># Detailed results</div>
+        
+        ${results
+          .map(
+            ({ item, score }) => `
+          <div class="border border-term-fg-dark/30 rounded p-4 mb-3 bg-term-bg-alt/30">
+            <div class="flex items-center justify-between mb-2">
+              <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue font-medium transition-colors">
+                ${item.title}
+              </a>
+              <span class="text-term-fg-dark text-xs">score: ${(1 - score).toFixed(2)}</span>
+            </div>
+            ${item.description ? `<p class="text-term-fg-dark text-sm mb-2">${item.description}</p>` : ""}
+            <div class="flex flex-wrap items-center gap-3 text-xs text-term-fg-dark">
+              <span class="text-term-yellow">${formatDate(item.date)}</span>
+              ${item.series ? `<span>|</span><span class="text-term-purple">${item.series}</span>` : ""}
+            </div>
+            ${
+              item.tags.length > 0
+                ? `
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${item.tags.map((tag) => `<span class="text-term-green text-xs">#${tag}</span>`).join("")}
+              </div>
+            `
+                : ""
+            }
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+    `;
+
+    searchResults.innerHTML = html;
+  }
+
+  function showAllPosts() {
+    const html = `
+      <div class="text-term-fg-dark text-sm mb-4">
+        Showing all ${searchData.length} posts (type to filter)
+      </div>
+      
+      <div class="space-y-1">
+        ${searchData
+          .sort(
+            (a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf(),
+          )
+          .map(
+            (item) => `
+            <div class="term-find-result">
+              <span class="text-term-fg-dark">${formatDate(item.date)}</span>
+              <span class="text-term-purple ml-2">./posts/</span>
+              <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue transition-colors">
+                ${formatFilename(item.title)}
+              </a>
+            </div>
+          `,
+          )
+          .join("")}
+      </div>
+    `;
+
+    searchResults.innerHTML = html;
+  }
+
+  searchInput?.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+
+    if (query.length < 2) {
+      if (query.length === 0) {
+        showAllPosts();
+      } else {
+        searchResults.innerHTML = `
+          <div class="text-term-fg-dark text-sm">
+            Type at least 2 characters to search...
+          </div>
+        `;
+      }
+      return;
+    }
+
+    const results = fuse.search(query);
+    renderResults(results, query);
+  });
+
+  // Show all posts on initial load
+  showAllPosts();
+</script>

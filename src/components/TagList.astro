@@ -1,0 +1,57 @@
+---
+interface Props {
+  tags: string[];
+  size?: "small" | "normal";
+}
+
+const { tags, size = "small" } = Astro.props;
+
+// Map tag names to their colors
+const tagColors: Record<string, { bg: string; text: string }> = {
+  "advent-of-code": { bg: "bg-tag-advent-of-code", text: "text-white" },
+  tips: { bg: "bg-tag-tips", text: "text-white" },
+  "clean-code": { bg: "bg-tag-clean-code", text: "text-white" },
+  go: { bg: "bg-tag-go", text: "text-white" },
+  javascript: { bg: "bg-tag-javascript", text: "text-black" },
+  algorithms: { bg: "bg-tag-algorithms", text: "text-white" },
+  html: { bg: "bg-tag-html", text: "text-white" },
+  typescript: { bg: "bg-tag-typescript", text: "text-white" },
+  tutorial: { bg: "bg-tag-tutorial", text: "text-white" },
+  goals: { bg: "bg-tag-goals", text: "text-black" },
+  "coding-questions": { bg: "bg-tag-coding-questions", text: "text-white" },
+  productivity: { bg: "bg-tag-productivity", text: "text-white" },
+  "book-review": { bg: "bg-tag-book-review", text: "text-white" },
+  leadership: { bg: "bg-tag-leadership", text: "text-white" },
+};
+
+function getTagClasses(tag: string): string {
+  const slug = tag.toLowerCase().replace(/\s+/g, "-");
+  const colors = tagColors[slug];
+  if (colors) {
+    return `${colors.bg} ${colors.text}`;
+  }
+  return "bg-gray-200 text-gray-700";
+}
+---
+
+<ul class="flex flex-wrap gap-2 list-none p-0 m-0">
+  {
+    tags.map((tag) => {
+      const slug = tag.toLowerCase().replace(/\s+/g, "-");
+      return (
+        <li>
+          <a
+            href={`/tags/${slug}`}
+            class:list={[
+              "inline-block rounded px-2 py-1 font-medium transition-all hover:opacity-80",
+              size === "small" ? "text-xs" : "text-sm",
+              getTagClasses(tag),
+            ]}
+          >
+            #{tag}
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

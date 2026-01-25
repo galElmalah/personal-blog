@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
+import CommandLine from "@components/terminal/CommandLine.astro";
+import LsOutput from "@components/terminal/LsOutput.astro";
+import InteractiveTerminal from "@components/terminal/InteractiveTerminal.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const sortedPosts = posts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title="All Posts" terminalMode={true}>
+  <!-- Inject posts data for terminal engine -->
+  <TerminalContext currentPath="~/posts" />
+
+  <TerminalShell>
+    <!-- SSR initial content showing ls output -->
+    <CommandLine command="ls" args="-la posts/" path="~">
+      <LsOutput posts={sortedPosts} showSeries={false} />
+    </CommandLine>
+
+    <!-- Interactive terminal with full command support -->
+    <InteractiveTerminal path="~/posts" runInitialLs={false} />
+  </TerminalShell>
+</BaseLayout>

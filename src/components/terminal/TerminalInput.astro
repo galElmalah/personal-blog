@@ -1,0 +1,22 @@
+---
+/**
+ * TerminalInput - Legacy wrapper component
+ *
+ * @deprecated Use InteractiveTerminal instead for full terminal functionality.
+ * This component is kept for backward compatibility but now delegates to
+ * InteractiveTerminal for consistent behavior across all pages.
+ */
+import InteractiveTerminal from "./InteractiveTerminal.astro";
+
+interface Props {
+  path?: string;
+}
+
+const { path = "~" } = Astro.props;
+---
+
+<InteractiveTerminal
+  path={path}
+  runInitialLs={false}
+  showMobileSuggestions={true}
+/>

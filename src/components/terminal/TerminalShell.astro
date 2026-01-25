@@ -1,0 +1,51 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["term-shell", className]} id="terminal-shell">
+  <div class="term-shell-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  /* Optional scanline effect - can be toggled */
+  .term-shell.with-scanlines::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    z-index: 1000;
+  }
+
+  /* Subtle glow effect on content */
+  .term-shell::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(26, 27, 38, 0.3) 100%
+    );
+    z-index: 999;
+  }
+</style>

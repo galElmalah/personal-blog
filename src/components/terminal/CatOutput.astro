@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "@/scripts/terminal/renderers/helpers";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  showFullContent?: boolean;
+}
+
+const { post, showFullContent = false } = Astro.props;
+
+// Get description or fallback
+const description = post.data.description || "No description available.";
+---
+
+<div class="term-cat">
+  <div class="term-cat-header mb-3">
+    <span class="text-term-fg-dark">---</span>
+  </div>
+
+  <a
+    href={`/posts/${post.slug}`}
+    class="term-cat-title block hover:text-term-blue transition-colors"
+  >
+    {post.data.title}
+  </a>
+
+  <div class="term-cat-meta">
+    <span class="text-term-yellow">{formatDate(post.data.date)}</span>
+    {
+      post.data.series && (
+        <>
+          <span class="text-term-fg-dark mx-2">|</span>
+          <span class="text-term-purple">{post.data.series}</span>
+        </>
+      )
+    }
+  </div>
+
+  <p class="term-cat-description">
+    {description}
+  </p>
+
+  {
+    post.data.tags && post.data.tags.length > 0 && (
+      <div class="term-cat-tags">
+        {post.data.tags.map((tag) => (
+          <a
+            href={`/tags/${tag.toLowerCase()}`}
+            class="term-cat-tag hover:text-term-cyan transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+
+  <div class="mt-4">
+    <a
+      href={`/posts/${post.slug}`}
+      class="term-link text-sm"
+      data-command={`cd ${post.slug}`}
+    >
+      [Read full post →]
+    </a>
+  </div>
+
+  <div class="term-cat-footer mt-3">
+    <span class="text-term-fg-dark">---</span>
+  </div>
+</div>

@@ -1,0 +1,146 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import CommandLine from "@components/terminal/CommandLine.astro";
+import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
+import TerminalInput from "@components/terminal/TerminalInput.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+
+  // Get all unique series
+  const seriesSet = new Set<string>();
+  posts.forEach((post) => {
+    if (post.data.series) {
+      seriesSet.add(post.data.series);
+    }
+  });
+
+  return [...seriesSet].map((series) => ({
+    params: { series: series.toLowerCase().replace(/\s+/g, "-") },
+    props: {
+      series,
+      posts: posts
+        .filter((post) => post.data.series === series)
+        .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()), // Chronological order
+    },
+  }));
+}
+
+const { series, posts } = Astro.props;
+
+// Format date like ls -la
+function formatDate(date: Date): string {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const day = date.getDate().toString().padStart(2, " ");
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${month} ${day} ${year}`;
+}
+
+// Format filename from title
+function formatFilename(title: string): string {
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .slice(0, 45) + ".md"
+  );
+}
+
+const seriesSlug = series.toLowerCase().replace(/\s+/g, "-");
+---
+
+<BaseLayout title={`Series: ${series}`} terminalMode={true}>
+  <TerminalShell>
+    <!-- Back navigation -->
+    <div class="mb-4 flex items-center">
+      <TerminalPrompt path="~/blog" />
+      <a href="/series" class="term-link ml-2">cd series/</a>
+    </div>
+
+    <CommandLine
+      command="ls"
+      args={`-la ${seriesSlug}/`}
+      path={`~/blog/series`}
+    >
+      <div class="term-ls">
+        <div class="term-ls-header text-term-fg-dark text-sm mb-2">
+          total {posts.length}
+        </div>
+
+        <div class="text-term-comment text-sm mb-3">
+          # {series} - {posts.length} post{posts.length !== 1 ? "s" : ""} in chronological
+          order
+        </div>
+
+        {
+          posts.map((post, index) => (
+            <div class="term-ls-entry">
+              <span class="term-ls-perms">-rw-r--r--</span>
+              <span class="text-term-yellow w-4 text-right mr-2">
+                {index + 1}.
+              </span>
+              <a
+                href={`/posts/${post.slug}`}
+                class="term-ls-name hover:text-term-cyan transition-colors"
+              >
+                {formatFilename(post.data.title)}
+              </a>
+              <span class="term-ls-date">{formatDate(post.data.date)}</span>
+            </div>
+          ))
+        }
+      </div>
+    </CommandLine>
+
+    <!-- Post previews -->
+    <div class="mt-8">
+      <div class="text-term-comment text-sm mb-4"># Previews</div>
+
+      {
+        posts.map((post, index) => (
+          <div class="border border-term-fg-dark/30 rounded p-4 mb-4 bg-term-bg-alt/30">
+            <div class="flex items-start gap-3">
+              <span class="text-term-yellow font-mono">{index + 1}.</span>
+              <div class="flex-1">
+                <a
+                  href={`/posts/${post.slug}`}
+                  class="text-term-cyan hover:text-term-blue font-medium transition-colors block mb-1"
+                >
+                  {post.data.title}
+                </a>
+                {post.data.description && (
+                  <p class="text-term-fg-dark text-sm mb-2">
+                    {post.data.description}
+                  </p>
+                )}
+                <div class="text-term-fg-dark text-xs">
+                  {formatDate(post.data.date)}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Active prompt with typeable input -->
+    <TerminalInput path={`~/blog/series/${seriesSlug}`} />
+  </TerminalShell>
+</BaseLayout>

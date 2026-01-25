@@ -1,0 +1,88 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
+import CommandLine from "@components/terminal/CommandLine.astro";
+import InteractiveTerminal from "@components/terminal/InteractiveTerminal.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+
+// Get all unique tags with counts
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
+    const count = tagCounts.get(tag) || 0;
+    tagCounts.set(tag, count + 1);
+  });
+});
+
+// Sort tags by count (descending)
+const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+// Total matches
+const totalMatches = sortedTags.reduce((acc, [_, count]) => acc + count, 0);
+---
+
+<BaseLayout title="Tags" terminalMode={true}>
+  <!-- Inject posts data for terminal engine -->
+  <TerminalContext currentPath="~/tags" />
+  
+  <TerminalShell>
+    <!-- SSR initial content showing grep-style tag output -->
+    <CommandLine command="grep" args='-r "tags:" posts/ | sort | uniq -c | sort -rn' path="~">
+      <div class="term-grep">
+        <div class="text-term-fg-dark text-sm mb-4">
+          Found {sortedTags.length} unique tags across {totalMatches} matches
+        </div>
+        
+        <div class="space-y-1 font-mono">
+          {sortedTags.map(([tag, count]) => {
+            const slug = tag.toLowerCase().replace(/\s+/g, "-");
+            const countStr = count.toString().padStart(3, ' ');
+            
+            return (
+              <div class="term-grep-line flex items-center">
+                <span class="text-term-yellow w-8 text-right mr-4">{countStr}</span>
+                <a 
+                  href={`/tags/${slug}`}
+                  class="text-term-green hover:text-term-cyan transition-colors"
+                >
+                  {tag}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </CommandLine>
+
+    <!-- Alternative visual representation -->
+    <div class="mt-8 border-t border-term-fg-dark/30 pt-6">
+      <div class="text-term-comment text-sm mb-4"># Visual tag cloud</div>
+      <div class="flex flex-wrap gap-2">
+        {sortedTags.map(([tag, count]) => {
+          const slug = tag.toLowerCase().replace(/\s+/g, "-");
+          // Scale size based on count (min 0.8, max 1.4)
+          const maxCount = Math.max(...sortedTags.map(([_, c]) => c));
+          const scale = 0.8 + (count / maxCount) * 0.6;
+          
+          return (
+            <a 
+              href={`/tags/${slug}`}
+              class="inline-block px-3 py-1 border border-term-fg-dark/50 rounded hover:border-term-cyan hover:text-term-cyan transition-colors"
+              style={`font-size: ${scale}rem;`}
+            >
+              <span class="text-term-green">#</span>
+              <span class="text-term-fg">{tag}</span>
+              <span class="text-term-fg-dark text-xs ml-1">({count})</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+    
+    <!-- Interactive terminal with full command support -->
+    <InteractiveTerminal path="~/tags" runInitialLs={false} />
+  </TerminalShell>
+</BaseLayout>

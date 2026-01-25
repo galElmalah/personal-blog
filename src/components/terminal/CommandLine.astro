@@ -1,0 +1,24 @@
+---
+import TerminalPrompt from "./TerminalPrompt.astro";
+
+interface Props {
+  command: string;
+  args?: string;
+  path?: string;
+  showCursor?: boolean;
+}
+
+const { command, args = "", path = "~", showCursor = false } = Astro.props;
+---
+
+<div class="term-command-line">
+  <div class="term-input-line">
+    <TerminalPrompt path={path} />
+    <span class="term-command">{command}</span>
+    {args && <span class="term-command-arg ml-1">{args}</span>}
+    {showCursor && <span class="term-cursor" />}
+  </div>
+  <div class="term-output">
+    <slot />
+  </div>
+</div>

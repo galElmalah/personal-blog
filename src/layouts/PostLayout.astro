@@ -1,0 +1,307 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
+import TerminalInput from "@components/terminal/TerminalInput.astro";
+import SeriesNav from "@components/SeriesNav.astro";
+import TableOfContents from "@components/TableOfContents.astro";
+import { getCollection } from "astro:content";
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+    date: Date;
+    author: string;
+    tags: string[];
+    series?: string;
+    cover?: string;
+    coverAlt?: string;
+    showToc?: boolean;
+    draft?: boolean;
+  };
+  headings?: { depth: number; slug: string; text: string }[];
+  readingTime?: string;
+}
+
+const { frontmatter, headings = [], readingTime } = Astro.props;
+
+// Get series posts if this post is part of a series
+let seriesPosts: any[] = [];
+if (frontmatter.series) {
+  const allPosts = await getCollection("posts");
+  seriesPosts = allPosts
+    .filter((post) => post.data.series === frontmatter.series)
+    .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+}
+
+const formattedDate = new Date(frontmatter.date).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+// Generate filename from title
+function formatFilename(title: string): string {
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .slice(0, 50) + ".md"
+  );
+}
+
+const filename = formatFilename(frontmatter.title);
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  image={frontmatter.cover}
+  terminalMode={true}
+>
+  <TerminalShell>
+    <!-- Breadcrumb as terminal path -->
+    <div class="text-term-fg-dark text-sm mb-4 font-mono">
+      <a href="/" class="text-term-blue hover:text-term-cyan transition-colors"
+        >~</a
+      >
+      <span class="text-term-fg-dark">/</span>
+      <a
+        href="/posts"
+        class="text-term-blue hover:text-term-cyan transition-colors">posts</a
+      >
+      <span class="text-term-fg-dark">/</span>
+      <span class="text-term-fg">{filename}</span>
+    </div>
+
+    <!-- Command line -->
+    <div class="term-command-line mb-6">
+      <div class="term-input-line flex items-center">
+        <TerminalPrompt path="~/blog/posts" />
+        <span class="term-command ml-2">cat</span>
+        <span class="term-command-arg ml-1">{filename}</span>
+      </div>
+    </div>
+
+    <!-- Post header as file metadata -->
+    <div
+      class="border border-term-fg-dark/30 rounded p-4 mb-6 bg-term-bg-alt/50"
+    >
+      <div class="text-term-comment text-sm mb-2">---</div>
+
+      <h1
+        class="text-2xl md:text-3xl font-bold text-term-fg mb-3 leading-tight"
+      >
+        {frontmatter.title}
+        {
+          frontmatter.draft && (
+            <span class="text-term-yellow text-sm ml-2">[draft]</span>
+          )
+        }
+      </h1>
+
+      {
+        frontmatter.description && (
+          <p class="text-term-fg-dark mb-3">{frontmatter.description}</p>
+        )
+      }
+
+      <!-- Meta info -->
+      <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm font-mono">
+        <div>
+          <span class="text-term-purple">author:</span>
+          <span class="text-term-fg ml-1">{frontmatter.author}</span>
+        </div>
+        <div>
+          <span class="text-term-purple">date:</span>
+          <span class="text-term-yellow ml-1">{formattedDate}</span>
+        </div>
+        {
+          readingTime && (
+            <div>
+              <span class="text-term-purple">reading_time:</span>
+              <span class="text-term-fg ml-1">{readingTime}</span>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Tags -->
+      {
+        frontmatter.tags.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="text-term-purple text-sm">tags:</span>
+            {frontmatter.tags.map((tag) => (
+              <a
+                href={`/tags/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                class="text-term-cyan hover:text-term-blue text-sm transition-colors"
+              >
+                [{tag}]
+              </a>
+            ))}
+          </div>
+        )
+      }
+
+      <div class="text-term-comment text-sm mt-2">---</div>
+    </div>
+
+    <!-- Cover Image -->
+    {
+      frontmatter.cover && (
+        <div class="mb-6 rounded overflow-hidden border border-term-fg-dark/30">
+          <img
+            src={frontmatter.cover}
+            alt={frontmatter.coverAlt || frontmatter.title}
+            class="w-full h-auto"
+          />
+        </div>
+      )
+    }
+
+    <!-- Table of Contents -->
+    {
+      frontmatter.showToc && headings.length > 0 && (
+        <div class="mb-6 border border-term-fg-dark/30 rounded p-4 bg-term-bg-alt/50">
+          <div class="text-term-comment text-sm mb-2"># Table of Contents</div>
+          <TableOfContents headings={headings} />
+        </div>
+      )
+    }
+
+    <!-- Series Navigation -->
+    {
+      frontmatter.series && seriesPosts.length > 0 && (
+        <div class="mb-6 border border-term-fg-dark/30 rounded p-4 bg-term-bg-alt/50">
+          <div class="text-term-comment text-sm mb-2">
+            # Series: {frontmatter.series}
+          </div>
+          <SeriesNav
+            seriesName={frontmatter.series}
+            posts={seriesPosts}
+            currentSlug={Astro.url.pathname.split("/").pop() || ""}
+          />
+        </div>
+      )
+    }
+
+    <!-- Content -->
+    <div class="term-prose">
+      <slot />
+    </div>
+
+    <!-- Series Navigation (bottom) -->
+    {
+      frontmatter.series && seriesPosts.length > 0 && (
+        <div class="mt-8 border border-term-fg-dark/30 rounded p-4 bg-term-bg-alt/50">
+          <div class="text-term-comment text-sm mb-2"># Continue in series</div>
+          <SeriesNav
+            seriesName={frontmatter.series}
+            posts={seriesPosts}
+            currentSlug={Astro.url.pathname.split("/").pop() || ""}
+          />
+        </div>
+      )
+    }
+
+    <!-- Active prompt with typeable input -->
+    <TerminalInput path="~/blog/posts" />
+  </TerminalShell>
+</BaseLayout>
+
+<style>
+  .term-prose {
+    @apply text-term-fg leading-relaxed;
+  }
+
+  .term-prose :global(h1),
+  .term-prose :global(h2),
+  .term-prose :global(h3),
+  .term-prose :global(h4),
+  .term-prose :global(h5),
+  .term-prose :global(h6) {
+    @apply text-term-cyan font-bold mt-8 mb-4 scroll-mt-20;
+  }
+
+  .term-prose :global(h1) {
+    @apply text-2xl;
+  }
+  .term-prose :global(h2) {
+    @apply text-xl;
+  }
+  .term-prose :global(h3) {
+    @apply text-lg;
+  }
+
+  .term-prose :global(p) {
+    @apply mb-4;
+  }
+
+  .term-prose :global(a) {
+    @apply text-term-blue hover:text-term-cyan underline transition-colors;
+  }
+
+  .term-prose :global(strong) {
+    @apply text-term-yellow font-semibold;
+  }
+
+  .term-prose :global(em) {
+    @apply text-term-purple italic;
+  }
+
+  .term-prose :global(code) {
+    @apply font-mono text-term-green bg-term-bg-alt px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .term-prose :global(pre) {
+    @apply bg-term-bg-alt border border-term-fg-dark/30 rounded p-4 my-4 overflow-x-auto;
+  }
+
+  .term-prose :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+
+  .term-prose :global(blockquote) {
+    @apply border-l-4 border-term-purple pl-4 my-4 text-term-fg-dark italic;
+  }
+
+  .term-prose :global(ul),
+  .term-prose :global(ol) {
+    @apply my-4 pl-6;
+  }
+
+  .term-prose :global(li) {
+    @apply mb-2;
+  }
+
+  .term-prose :global(ul li::marker) {
+    @apply text-term-green;
+  }
+
+  .term-prose :global(ol li::marker) {
+    @apply text-term-yellow;
+  }
+
+  .term-prose :global(hr) {
+    @apply border-term-fg-dark/30 my-8;
+  }
+
+  .term-prose :global(img) {
+    @apply rounded border border-term-fg-dark/30 my-4;
+  }
+
+  .term-prose :global(table) {
+    @apply w-full my-4 border-collapse;
+  }
+
+  .term-prose :global(th),
+  .term-prose :global(td) {
+    @apply border border-term-fg-dark/30 px-3 py-2 text-left;
+  }
+
+  .term-prose :global(th) {
+    @apply bg-term-bg-alt text-term-cyan;
+  }
+</style>

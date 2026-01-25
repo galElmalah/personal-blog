@@ -1,1 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Astro
+.astro/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Vercel
 .vercel
+
+# Hugo (legacy - can be removed after migration is complete)
+public/
+resources/
+.hugo_build.lock
