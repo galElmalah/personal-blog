@@ -11,9 +11,11 @@ interface Props {
   coverImage?: string;
   pubDate?: Date;
   tags?: string[];
+  postCount?: number; // For folders - number of posts in series
+  series?: string; // For folders - series name
 }
 
-const { title, slug, type, coverImage, pubDate, tags } = Astro.props;
+const { title, slug, type, coverImage, pubDate, tags, postCount, series } = Astro.props;
 
 // Truncate title if too long
 const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
@@ -58,6 +60,13 @@ const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
   <div class="icon-label">
     {displayTitle}
   </div>
+
+  <!-- Folder metadata (post count) -->
+  {type === 'folder' && postCount && (
+    <div class="folder-metadata">
+      {postCount} {postCount === 1 ? 'post' : 'posts'}
+    </div>
+  )}
 
   <!-- Metadata badges (tags as colored dots) -->
   {tags && tags.length > 0 && (
@@ -151,6 +160,15 @@ const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
     font-family: 'Fira Code', monospace;
   }
 
+  /* Folder metadata */
+  .folder-metadata {
+    font-size: 0.625rem;
+    color: var(--term-fg-dark);
+    text-align: center;
+    margin-top: 0.25rem;
+    font-family: 'Fira Code', monospace;
+  }
+
   /* Metadata badges */
   .icon-metadata {
     display: flex;
@@ -187,7 +205,7 @@ const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
     const icons = document.querySelectorAll('.desktop-icon');
 
     icons.forEach((icon) => {
-      // Double-click handler - open window for posts
+      // Double-click handler - open window for posts or folders
       icon.addEventListener('dblclick', () => {
         const type = icon.getAttribute('data-type');
         const slug = icon.getAttribute(type === 'file' ? 'data-post' : 'data-folder');
@@ -203,8 +221,13 @@ const displayTitle = title.length > 20 ? title.substring(0, 17) + '...' : title;
           });
           document.dispatchEvent(event);
         } else if (type === 'folder' && slug) {
-          // TODO: Open folder view in Phase 3
-          console.log('Opening folder:', slug);
+          // Dispatch custom event to open folder
+          const title = icon.querySelector('.icon-label')?.textContent?.trim() || 'Untitled';
+          const event = new CustomEvent('desktop:open-folder', {
+            detail: { series: slug, title },
+            bubbles: true,
+          });
+          document.dispatchEvent(event);
         }
       });
 

@@ -2,17 +2,24 @@
 /**
  * Desktop.astro - Main desktop container component
  * Displays blog posts as icons in a grid layout (macOS-inspired)
+ * Phase 3: Supports folders (series) and file system navigation
  */
 import { getCollection } from "astro:content";
 import DesktopIcon from "./DesktopIcon.astro";
+import type { Post } from "@/scripts/desktop/file-system";
 
 // Get all published posts
 const posts = await getCollection("posts", ({ data }) => !data.draft);
 
-// Sort by date (newest first)
-const sortedPosts = posts.sort((a, b) =>
-  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
+// Convert to Post format for file system
+const postsData: Post[] = posts.map((post) => ({
+  slug: post.slug,
+  title: post.data.title,
+  series: post.data.series,
+  pubDate: new Date(post.data.pubDate),
+  tags: post.data.tags,
+  coverImage: post.data.cover,
+}));
 ---
 
 <div class="desktop-container">
@@ -22,19 +29,20 @@ const sortedPosts = posts.sort((a, b) =>
   <!-- Windows container (dynamically populated) -->
   <div id="desktop-windows-container"></div>
 
-  <!-- Icon grid for posts (no folders in Phase 1) -->
-  <div class="desktop-icons-grid">
-    {sortedPosts.map((post) => (
-      <DesktopIcon
-        title={post.data.title}
-        slug={post.slug}
-        type="file"
-        coverImage={post.data.coverImage}
-        pubDate={post.data.pubDate}
-        tags={post.data.tags}
-      />
-    ))}
+  <!-- Icon grid for files and folders (dynamically rendered by script) -->
+  <div class="desktop-icons-grid" id="desktop-icons-container">
+    <!-- Icons will be rendered dynamically by the script -->
   </div>
+
+  <!-- Folder view container (shown when opening a folder) -->
+  <div id="desktop-folder-container" class="hidden">
+    <!-- Folder view will be rendered dynamically by the script -->
+  </div>
+
+  <!-- Hidden posts data for script to use -->
+  <script type="application/json" id="posts-data">
+    {JSON.stringify(postsData)}
+  </script>
 
   <!-- Message for mobile/small screens -->
   <div class="desktop-mobile-message">
@@ -186,14 +194,150 @@ const sortedPosts = posts.sort((a, b) =>
   #desktop-windows-container > * {
     pointer-events: auto;
   }
+
+  /* Folder view container */
+  #desktop-folder-container {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+  }
+
+  /* Folder view styles */
+  :global(.folder-view) {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      var(--desktop-bg-start, #1a1f2e) 0%,
+      var(--desktop-bg-end, #2d3748) 100%
+    );
+    overflow-y: auto;
+    animation: folderSlideIn 0.3s ease-out forwards;
+  }
+
+  @keyframes folderSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  :global(.folder-header) {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 20;
+  }
+
+  :global(.back-button) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--term-fg);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.back-button:hover) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--term-cyan);
+    color: var(--term-cyan);
+  }
+
+  :global(.back-button:active) {
+    transform: scale(0.98);
+  }
+
+  :global(.folder-title) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    color: var(--term-yellow);
+    font-family: 'Fira Code', monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  :global(.folder-title svg) {
+    color: var(--term-yellow);
+    flex-shrink: 0;
+  }
+
+  :global(.folder-info) {
+    color: var(--term-fg-dark);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+  }
+
+  :global(.folder-contents) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+    gap: 2rem;
+    padding: 2rem 3rem;
+  }
+
+  @media (max-width: 1023px) {
+    :global(.folder-contents) {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      padding: 2rem;
+    }
+
+    :global(.folder-header) {
+      padding: 1rem;
+    }
+
+    :global(.folder-title) {
+      font-size: 1rem;
+    }
+  }
 </style>
 
 <script>
   import { windowManager } from '@/scripts/desktop/window-manager';
   import type { WindowState } from '@/scripts/desktop/window-manager';
+  import { buildFileSystem, getItemsForPath, getParentPath, isRootPath, getBreadcrumb } from '@/scripts/desktop/file-system';
+  import type { Post, FileSystem } from '@/scripts/desktop/file-system';
+
+  // Desktop state
+  let currentPath = '~';
+  let fileSystem: FileSystem;
 
   // Listen for window open events from icons
   function setupDesktopWindowManager() {
+    // Load posts data from script tag
+    const postsDataEl = document.getElementById('posts-data');
+    if (!postsDataEl) {
+      console.error('Posts data not found');
+      return;
+    }
+
+    try {
+      const posts: Post[] = JSON.parse(postsDataEl.textContent || '[]');
+      fileSystem = buildFileSystem(posts);
+
+      // Initial render
+      renderDesktop();
+    } catch (error) {
+      console.error('Failed to parse posts data:', error);
+      return;
+    }
+
     // Subscribe to window manager state changes
     windowManager.subscribe((state) => {
       renderWindows(state.windows);
@@ -204,6 +348,255 @@ const sortedPosts = posts.sort((a, b) =>
       const { slug, title } = event.detail;
       openPostWindow(slug, title);
     }) as EventListener);
+
+    // Listen for folder open events
+    document.addEventListener('desktop:open-folder', ((event: CustomEvent) => {
+      const { series, title } = event.detail;
+      openFolder(series);
+    }) as EventListener);
+
+    // Listen for navigate back events
+    document.addEventListener('desktop:navigate-back', (() => {
+      navigateBack();
+    }) as EventListener);
+  }
+
+  function renderDesktop() {
+    const items = getItemsForPath(currentPath, fileSystem);
+    const iconsContainer = document.getElementById('desktop-icons-container');
+    const folderContainer = document.getElementById('desktop-folder-container');
+
+    if (!iconsContainer || !folderContainer) return;
+
+    if (isRootPath(currentPath)) {
+      // Show icons grid, hide folder view
+      iconsContainer.classList.remove('hidden');
+      folderContainer.classList.add('hidden');
+      renderIcons(items);
+    } else {
+      // Show folder view, hide icons grid
+      iconsContainer.classList.add('hidden');
+      folderContainer.classList.remove('hidden');
+      renderFolderView();
+    }
+  }
+
+  function renderIcons(items: any[]) {
+    const container = document.getElementById('desktop-icons-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    items.forEach((item) => {
+      const iconEl = document.createElement('div');
+      iconEl.className = 'desktop-icon';
+      iconEl.setAttribute('data-type', item.type);
+      iconEl.setAttribute('role', 'button');
+      iconEl.setAttribute('tabindex', '0');
+      iconEl.setAttribute('aria-label', `${item.type === 'file' ? 'Post' : 'Folder'}: ${item.name}`);
+
+      if (item.type === 'file') {
+        iconEl.setAttribute('data-post', item.slug || '');
+      } else {
+        iconEl.setAttribute('data-folder', item.series || '');
+      }
+
+      const displayTitle = item.name.length > 20 ? item.name.substring(0, 17) + '...' : item.name;
+
+      iconEl.innerHTML = `
+        <div class="icon-visual">
+          ${item.type === 'file' ? `
+            <div class="file-icon">
+              ${item.coverImage ? `
+                <img src="${item.coverImage}" alt="" class="icon-preview" />
+              ` : `
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              `}
+              <div class="file-extension">.md</div>
+            </div>
+          ` : `
+            <div class="folder-icon">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+          `}
+        </div>
+        <div class="icon-label">${displayTitle}</div>
+        ${item.type === 'folder' && item.postCount ? `
+          <div class="folder-metadata">${item.postCount} ${item.postCount === 1 ? 'post' : 'posts'}</div>
+        ` : ''}
+        ${item.tags && item.tags.length > 0 ? `
+          <div class="icon-metadata">
+            ${item.tags.slice(0, 3).map((tag: string, idx: number) => `
+              <span class="tag-dot" title="${tag}"></span>
+            `).join('')}
+          </div>
+        ` : ''}
+      `;
+
+      container.appendChild(iconEl);
+    });
+
+    // Re-setup icon interactions after rendering
+    setupIconInteractions();
+  }
+
+  function renderFolderView() {
+    const container = document.getElementById('desktop-folder-container');
+    if (!container) return;
+
+    // Extract series name from path
+    const match = currentPath.match(/^~\/series\/(.+)$/);
+    if (!match) return;
+
+    const seriesName = decodeURIComponent(match[1]);
+    const folder = fileSystem.folders.find((f) => f.series === seriesName);
+
+    if (!folder || !folder.posts) return;
+
+    container.innerHTML = `
+      <div class="folder-view">
+        <div class="folder-header">
+          <button class="back-button" aria-label="Back to desktop">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back</span>
+          </button>
+
+          <div class="folder-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>${folder.name}</span>
+          </div>
+
+          <div class="folder-info">
+            ${folder.posts.length} ${folder.posts.length === 1 ? 'post' : 'posts'}
+          </div>
+        </div>
+
+        <div class="folder-contents" id="folder-contents-grid">
+          <!-- Posts will be rendered here -->
+        </div>
+      </div>
+    `;
+
+    // Render posts in folder
+    const postsContainer = container.querySelector('#folder-contents-grid');
+    if (postsContainer) {
+      folder.posts.forEach((post) => {
+        const iconEl = document.createElement('div');
+        iconEl.className = 'desktop-icon';
+        iconEl.setAttribute('data-type', 'file');
+        iconEl.setAttribute('data-post', post.slug);
+        iconEl.setAttribute('role', 'button');
+        iconEl.setAttribute('tabindex', '0');
+        iconEl.setAttribute('aria-label', `Post: ${post.title}`);
+
+        const displayTitle = post.title.length > 20 ? post.title.substring(0, 17) + '...' : post.title;
+
+        iconEl.innerHTML = `
+          <div class="icon-visual">
+            <div class="file-icon">
+              ${post.coverImage ? `
+                <img src="${post.coverImage}" alt="" class="icon-preview" />
+              ` : `
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              `}
+              <div class="file-extension">.md</div>
+            </div>
+          </div>
+          <div class="icon-label">${displayTitle}</div>
+        `;
+
+        postsContainer.appendChild(iconEl);
+      });
+    }
+
+    // Setup back button
+    const backButton = container.querySelector('.back-button');
+    if (backButton) {
+      backButton.addEventListener('click', () => {
+        navigateBack();
+      });
+    }
+
+    // Setup icon interactions in folder
+    setupIconInteractions();
+  }
+
+  function setupIconInteractions() {
+    const icons = document.querySelectorAll('.desktop-icon');
+
+    icons.forEach((icon) => {
+      // Remove old listeners by cloning
+      const newIcon = icon.cloneNode(true) as HTMLElement;
+      icon.parentNode?.replaceChild(newIcon, icon);
+
+      // Double-click handler
+      newIcon.addEventListener('dblclick', () => {
+        const type = newIcon.getAttribute('data-type');
+        const slug = newIcon.getAttribute(type === 'file' ? 'data-post' : 'data-folder');
+
+        if (type === 'file' && slug) {
+          const title = newIcon.querySelector('.icon-label')?.textContent?.trim() || 'Untitled';
+          const event = new CustomEvent('desktop:open-post', {
+            detail: { slug, title },
+            bubbles: true,
+          });
+          document.dispatchEvent(event);
+        } else if (type === 'folder' && slug) {
+          const event = new CustomEvent('desktop:open-folder', {
+            detail: { series: slug, title: newIcon.querySelector('.icon-label')?.textContent?.trim() },
+            bubbles: true,
+          });
+          document.dispatchEvent(event);
+        }
+      });
+
+      // Single-click to select
+      newIcon.addEventListener('click', (e) => {
+        if (!e.ctrlKey && !e.metaKey) {
+          document.querySelectorAll('.desktop-icon.selected').forEach((selected) => {
+            selected.classList.remove('selected');
+          });
+        }
+        newIcon.classList.toggle('selected');
+      });
+
+      // Keyboard support
+      newIcon.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          newIcon.dispatchEvent(new Event('dblclick'));
+        }
+      });
+    });
+  }
+
+  function openFolder(series: string) {
+    currentPath = `~/series/${encodeURIComponent(series)}`;
+    renderDesktop();
+  }
+
+  function navigateBack() {
+    currentPath = getParentPath(currentPath);
+    renderDesktop();
   }
 
   function openPostWindow(slug: string, title: string) {

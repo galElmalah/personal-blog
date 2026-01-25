@@ -1,0 +1,201 @@
+---
+/**
+ * FolderView.astro - Displays contents of a series folder
+ * Rendered when user double-clicks a folder
+ */
+import DesktopIcon from './DesktopIcon.astro';
+
+interface Props {
+  folderName: string;
+  posts: Array<{
+    slug: string;
+    title: string;
+    coverImage?: string;
+    pubDate: Date;
+    tags?: string[];
+  }>;
+}
+
+const { folderName, posts } = Astro.props;
+---
+
+<div class="folder-view">
+  <!-- Folder header with back button -->
+  <div class="folder-header">
+    <button class="back-button" aria-label="Back to desktop">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back</span>
+    </button>
+
+    <div class="folder-title">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>{folderName}</span>
+    </div>
+
+    <div class="folder-info">
+      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    </div>
+  </div>
+
+  <!-- Folder contents (posts as icons) -->
+  <div class="folder-contents">
+    {posts.map((post) => (
+      <DesktopIcon
+        title={post.title}
+        slug={post.slug}
+        type="file"
+        coverImage={post.coverImage}
+        pubDate={post.pubDate}
+        tags={post.tags}
+      />
+    ))}
+  </div>
+</div>
+
+<style>
+  .folder-view {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      var(--desktop-bg-start, #1a1f2e) 0%,
+      var(--desktop-bg-end, #2d3748) 100%
+    );
+    z-index: 10;
+    overflow-y: auto;
+  }
+
+  /* Folder header */
+  .folder-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 20;
+  }
+
+  .back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--term-fg);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--term-cyan);
+    color: var(--term-cyan);
+  }
+
+  .back-button:active {
+    transform: scale(0.98);
+  }
+
+  .back-button svg {
+    color: currentColor;
+  }
+
+  .folder-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    color: var(--term-yellow);
+    font-family: 'Fira Code', monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .folder-title svg {
+    color: var(--term-yellow);
+    flex-shrink: 0;
+  }
+
+  .folder-info {
+    color: var(--term-fg-dark);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+  }
+
+  /* Folder contents grid */
+  .folder-contents {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+    gap: 2rem;
+    padding: 2rem 3rem;
+  }
+
+  @media (max-width: 1023px) {
+    .folder-contents {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      padding: 2rem;
+    }
+
+    .folder-header {
+      padding: 1rem;
+    }
+
+    .folder-title {
+      font-size: 1rem;
+    }
+  }
+
+  /* Animation for folder opening */
+  .folder-view {
+    animation: folderSlideIn 0.3s ease-out forwards;
+  }
+
+  @keyframes folderSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  function setupFolderNavigation() {
+    const backButton = document.querySelector('.folder-view .back-button');
+
+    if (backButton) {
+      backButton.addEventListener('click', () => {
+        // Dispatch event to go back to desktop root
+        const event = new CustomEvent('desktop:navigate-back', {
+          bubbles: true,
+        });
+        document.dispatchEvent(event);
+      });
+    }
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFolderNavigation);
+  } else {
+    setupFolderNavigation();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener('astro:page-load', setupFolderNavigation);
+</script>
