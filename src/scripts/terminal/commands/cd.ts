@@ -4,7 +4,16 @@
 
 import type { Command, CommandContext, CommandResult } from "../types";
 import { escapeHtml } from "../renderers/helpers";
-import { getParentDir } from "./utils";
+import { resolvePath } from "./utils";
+
+// Map of navigable directories to their routes
+const DIRECTORIES: Record<string, string> = {
+  posts: "/posts",
+  series: "/series",
+  tags: "/tags",
+  archives: "/archives",
+  search: "/search",
+};
 
 export const cdCommand: Command = {
   name: "cd",
@@ -12,64 +21,35 @@ export const cdCommand: Command = {
   usage: "cd <path>",
   execute(ctx: CommandContext): CommandResult {
     const path = ctx.args[0] || "~";
-    const cleanPath = path.replace(/\/$/, "").toLowerCase();
+    const cleanInput = path.replace(/\/$/, "");
 
     // Home directory
-    if (
-      cleanPath === "~" ||
-      cleanPath === "" ||
-      cleanPath === "/"
-    ) {
-      return { html: "", newPath: "~" };
+    if (cleanInput === "~" || cleanInput === "" || cleanInput === "/") {
+      return { html: "", newPath: "~", navigate: "/" };
     }
 
-    // Parent directory
-    if (cleanPath === "..") {
-      const currentDir = ctx.currentPath.replace(/^~\/?/, "");
-      const parentDir = getParentDir(currentDir);
-      
-      // If we're at root (~), stay there
-      if (ctx.currentPath === "~") {
-        return { html: "", newPath: "~" };
-      }
-      
-      // If parent is empty, go to root (~)
-      if (parentDir === "") {
-        return { html: "", newPath: "~", navigate: "/" };
-      }
-      
-      // Otherwise go to parent
-      return { html: "", newPath: `~/${parentDir}`, navigate: `/${parentDir}` };
+    // Resolve the path relative to current directory
+    const resolved = resolvePath(cleanInput, ctx.currentPath);
+    const cleanPath = resolved.replace(/\/$/, "").toLowerCase();
+
+    // Root directory
+    if (cleanPath === "") {
+      return { html: "", newPath: "~", navigate: "/" };
     }
 
-    // Posts page
-    if (cleanPath === "posts" || cleanPath === "./posts") {
+    // Check top-level directories
+    if (cleanPath in DIRECTORIES) {
       return {
-        html: '<span class="text-term-fg-dark">Navigating to /posts...</span>',
-        navigate: "/posts",
+        html: `<span class="text-term-fg-dark">Navigating to ${DIRECTORIES[cleanPath]}...</span>`,
+        navigate: DIRECTORIES[cleanPath],
+        newPath: `~/${cleanPath}`,
       };
     }
 
-    // Series page
-    if (cleanPath === "series" || cleanPath === "./series") {
-      return {
-        html: '<span class="text-term-fg-dark">Navigating to /series...</span>',
-        navigate: "/series",
-      };
-    }
-
-    // Tags page
-    if (cleanPath === "tags" || cleanPath === "./tags") {
-      return {
-        html: '<span class="text-term-fg-dark">Navigating to /tags...</span>',
-        navigate: "/tags",
-      };
-    }
-
-    // Check for post slug
+    // Check for post slug (direct or prefixed with posts/)
     let slug = cleanPath;
     if (slug.startsWith("posts/")) {
-      slug = slug.replace("posts/", "");
+      slug = slug.slice(6);
     }
 
     const post = ctx.posts.find(
@@ -82,16 +62,35 @@ export const cdCommand: Command = {
       };
     }
 
-    // Check for series
-    const seriesName = cleanPath.replace("series/", "");
+    // Check for series (direct or prefixed with series/)
+    let seriesSlug = cleanPath;
+    if (seriesSlug.startsWith("series/")) {
+      seriesSlug = seriesSlug.slice(7);
+    }
     const series = ctx
       .getSeriesNames()
-      .find((s) => s.toLowerCase().replace(/\s+/g, "-") === seriesName);
+      .find((s) => s.toLowerCase().replace(/\s+/g, "-") === seriesSlug);
     if (series) {
       return {
         html: `<span class="text-term-fg-dark">Navigating to series: ${escapeHtml(series)}...</span>`,
-        navigate: `/series/${seriesName}`,
+        navigate: `/series/${seriesSlug}`,
+        newPath: `~/series/${seriesSlug}`,
       };
+    }
+
+    // Check for tag (prefixed with tags/)
+    if (cleanPath.startsWith("tags/")) {
+      const tagSlug = cleanPath.slice(5);
+      const tag = ctx.getAllTags().find(
+        (t) => t.toLowerCase().replace(/\s+/g, "-") === tagSlug,
+      );
+      if (tag) {
+        return {
+          html: `<span class="text-term-fg-dark">Navigating to tag: ${escapeHtml(tag)}...</span>`,
+          navigate: `/tags/${tagSlug}`,
+          newPath: `~/tags/${tagSlug}`,
+        };
+      }
     }
 
     return {
@@ -103,7 +102,7 @@ export const cdCommand: Command = {
   autocomplete(ctx: CommandContext, partial: string): string[] {
     const candidates: string[] = [];
     const lowerPartial = partial.toLowerCase();
-    const directories = ['posts', 'series', 'tags'];
+    const directories = ['posts', 'series', 'tags', 'archives', 'search'];
 
     // Helper to get matching series
     const getSeriesMatches = (prefix: string) => {

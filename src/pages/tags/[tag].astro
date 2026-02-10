@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
 import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
 import TerminalInput from "@components/terminal/TerminalInput.astro";
@@ -33,6 +34,7 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
+const tagSlug = tag.toLowerCase().replace(/\s+/g, "-");
 
 // Format date like ls -la
 function formatDate(date: Date): string {
@@ -68,15 +70,16 @@ function formatFilename(title: string): string {
 }
 ---
 
-<BaseLayout title={`Posts tagged "${tag}"`} terminalMode={true}>
+<TerminalLayout title={`Posts tagged "${tag}"`}>
+  <TerminalContext currentPath={`~/tags/${tagSlug}`} />
   <TerminalShell>
     <!-- Back navigation -->
     <div class="mb-4 flex items-center">
-      <TerminalPrompt path="~/blog" />
+      <TerminalPrompt path="~" />
       <a href="/tags" class="term-link ml-2">cd tags/</a>
     </div>
 
-    <CommandLine command="grep" args={`-l "${tag}" posts/*.md`} path="~/blog">
+    <CommandLine command="grep" args={`-l "${tag}" posts/*.md`} path={`~/tags/${tagSlug}`}>
       <div class="term-grep">
         <div class="text-term-fg-dark text-sm mb-2">
           {posts.length} file{posts.length !== 1 ? "s" : ""} matching tag: <span
@@ -175,6 +178,6 @@ function formatFilename(title: string): string {
     </div>
 
     <!-- Active prompt with typeable input -->
-    <TerminalInput path="~/blog/tags" />
+    <TerminalInput path={`~/tags/${tagSlug}`} />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

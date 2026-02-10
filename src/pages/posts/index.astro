@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
 import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
@@ -13,7 +13,7 @@ const sortedPosts = posts.sort(
 );
 ---
 
-<BaseLayout title="All Posts" terminalMode={true}>
+<TerminalLayout title="All Posts">
   <!-- Inject posts data for terminal engine -->
   <TerminalContext currentPath="~/posts" />
 
@@ -26,4 +26,4 @@ const sortedPosts = posts.sort(
     <!-- Interactive terminal with full command support -->
     <InteractiveTerminal path="~/posts" runInitialLs={false} />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

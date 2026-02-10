@@ -5,12 +5,18 @@
 
 export interface WindowState {
   id: string;
-  postSlug: string;
+  postSlug?: string;        // Optional for folder windows
+  folderSeries?: string;     // For folder windows
+  windowType: 'post' | 'folder';
   title: string;
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
   isMaximized: boolean;
+  preMaximizeState?: {
+    position: { x: number; y: number };
+    size: { width: number; height: number };
+  };
 }
 
 export interface WindowManagerState {
@@ -40,7 +46,7 @@ class WindowManager {
    */
   openWindow(postSlug: string, title: string): WindowState | null {
     // Check if window already exists
-    const existing = this.state.windows.find((w) => w.postSlug === postSlug);
+    const existing = this.state.windows.find((w) => w.windowType === 'post' && w.postSlug === postSlug);
     if (existing) {
       // Bring to front instead of opening duplicate
       this.bringToFront(existing.id);
@@ -69,6 +75,57 @@ class WindowManager {
     const windowState: WindowState = {
       id: `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       postSlug,
+      windowType: 'post',
+      title,
+      position,
+      size: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT },
+      zIndex: this.state.nextZIndex++,
+      isMaximized: false,
+    };
+
+    this.state.windows.push(windowState);
+    this.notifyListeners();
+
+    return windowState;
+  }
+
+  /**
+   * Open a new window for a folder
+   */
+  openFolderWindow(series: string, title: string): WindowState | null {
+    // Check if folder window already exists
+    const existing = this.state.windows.find(
+      (w) => w.windowType === 'folder' && w.folderSeries === series
+    );
+    if (existing) {
+      // Bring to front instead of opening duplicate
+      this.bringToFront(existing.id);
+      return existing;
+    }
+
+    // Check max windows limit
+    if (this.state.windows.length >= this.state.maxWindows) {
+      // Close the oldest window (lowest z-index)
+      const oldest = this.state.windows.reduce((min, w) =>
+        w.zIndex < min.zIndex ? w : min
+      );
+      this.closeWindow(oldest.id);
+    }
+
+    // Calculate position (cascade from top-left with offset)
+    const windowCount = this.state.windows.length;
+    const baseX = 100;
+    const baseY = 100;
+    const position = {
+      x: baseX + windowCount * WINDOW_OFFSET,
+      y: baseY + windowCount * WINDOW_OFFSET,
+    };
+
+    // Create window state
+    const windowState: WindowState = {
+      id: `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      folderSeries: series,
+      windowType: 'folder',
       title,
       position,
       size: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT },
@@ -143,6 +200,20 @@ class WindowManager {
 
     window.isMaximized = !window.isMaximized;
     this.notifyListeners();
+  }
+
+  /**
+   * Store pre-maximize state for restore functionality
+   */
+  setPreMaximizeState(
+    id: string,
+    position: { x: number; y: number },
+    size: { width: number; height: number }
+  ): void {
+    const window = this.state.windows.find((w) => w.id === id);
+    if (!window) return;
+
+    window.preMaximizeState = { position, size };
   }
 
   /**

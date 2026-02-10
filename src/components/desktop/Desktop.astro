@@ -8,23 +8,32 @@ import { getCollection } from "astro:content";
 import DesktopIcon from "./DesktopIcon.astro";
 import Dock from "./Dock.astro";
 import ContextMenu from "./ContextMenu.astro";
+import MenuBar from "./MenuBar.astro";
 import type { Post } from "@/scripts/desktop/file-system";
 
 // Get all published posts
 const posts = await getCollection("posts", ({ data }) => !data.draft);
 
 // Convert to Post format for file system
-const postsData: Post[] = posts.map((post) => ({
+const postsData = posts.map((post) => ({
   slug: post.slug,
   title: post.data.title,
   series: post.data.series,
-  pubDate: new Date(post.data.pubDate),
+  pubDate: post.data.date ? post.data.date.toISOString() : new Date().toISOString(),
   tags: post.data.tags,
   coverImage: post.data.cover,
 }));
 ---
 
+<!-- IBM Plex Sans Font Import for Desktop View -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
 <div class="desktop-container">
+  <!-- macOS Menu Bar -->
+  <MenuBar />
+
   <!-- Desktop background -->
   <div class="desktop-background"></div>
 
@@ -42,9 +51,7 @@ const postsData: Post[] = posts.map((post) => ({
   </div>
 
   <!-- Hidden posts data for script to use -->
-  <script type="application/json" id="posts-data">
-    {JSON.stringify(postsData)}
-  </script>
+  <script type="application/json" id="posts-data" set:html={JSON.stringify(postsData)}></script>
 
   <!-- Message for mobile/small screens -->
   <div class="desktop-mobile-message">
@@ -81,18 +88,27 @@ const postsData: Post[] = posts.map((post) => ({
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg,
-      var(--desktop-bg-start, #1a1f2e) 0%,
-      var(--desktop-bg-end, #2d3748) 100%
-    );
+    /* macOS wallpaper image */
+    background: url('/images/desktop/wallpaper.jpg') center/cover no-repeat;
     z-index: -1;
   }
 
+  .desktop-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Very subtle vignette */
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
+  }
+
   .desktop-icons-grid {
+    position: relative;
+    z-index: 1; /* Below windows */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 2rem;
-    padding: 2rem;
+    padding: 72px 48px 120px 48px;
     max-width: 100%;
     margin: 0 auto;
   }
@@ -102,7 +118,7 @@ const postsData: Post[] = posts.map((post) => ({
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -111,23 +127,23 @@ const postsData: Post[] = posts.map((post) => ({
   .message-content {
     text-align: center;
     padding: 2rem;
-    color: var(--term-fg);
+    color: #1d1d1f;
   }
 
   .message-content svg {
     margin: 0 auto 1rem;
-    color: var(--term-cyan);
+    color: #007AFF;
   }
 
   .message-content h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: var(--term-cyan);
+    color: #1d1d1f;
   }
 
   .message-content p {
     margin-bottom: 0.5rem;
-    color: var(--term-fg-dark);
+    color: #86868b;
   }
 
   /* Show mobile message on small screens */
@@ -214,10 +230,9 @@ const postsData: Post[] = posts.map((post) => ({
   :global(.folder-view) {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,
-      var(--desktop-bg-start, #1a1f2e) 0%,
-      var(--desktop-bg-end, #2d3748) 100%
-    );
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     overflow-y: auto;
     animation: folderSlideIn 0.3s ease-out forwards;
   }
@@ -240,9 +255,10 @@ const postsData: Post[] = posts.map((post) => ({
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 2rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     z-index: 20;
   }
 
@@ -251,20 +267,21 @@ const postsData: Post[] = posts.map((post) => ({
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
-    color: var(--term-fg);
-    font-family: 'Fira Code', monospace;
+    color: #1d1d1f;
+    font-family: var(--font-primary);
     font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
   :global(.back-button:hover) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--term-cyan);
-    color: var(--term-cyan);
+    background: rgba(0, 122, 255, 0.1);
+    border-color: rgba(0, 122, 255, 0.3);
+    color: #007AFF;
   }
 
   :global(.back-button:active) {
@@ -276,20 +293,20 @@ const postsData: Post[] = posts.map((post) => ({
     align-items: center;
     gap: 0.75rem;
     flex: 1;
-    color: var(--term-yellow);
-    font-family: 'Fira Code', monospace;
+    color: #1d1d1f;
+    font-family: var(--font-primary);
     font-size: 1.25rem;
     font-weight: 600;
   }
 
   :global(.folder-title svg) {
-    color: var(--term-yellow);
+    color: #007AFF;
     flex-shrink: 0;
   }
 
   :global(.folder-info) {
-    color: var(--term-fg-dark);
-    font-family: 'Fira Code', monospace;
+    color: #86868b;
+    font-family: var(--font-primary);
     font-size: 0.875rem;
   }
 
@@ -314,6 +331,93 @@ const postsData: Post[] = posts.map((post) => ({
       font-size: 1rem;
     }
   }
+
+  /* Folder grid inside windows */
+  :global(.window-folder-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  /* File icon styles for folder windows */
+  :global(.window-folder-grid .file-icon) {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+
+  :global(.window-folder-grid .file-body) {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+    border: 1.5px solid var(--desktop-border-medium);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  :global(.window-folder-grid .file-corner) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 12px 12px 0;
+    border-color: transparent var(--desktop-accent-primary) transparent transparent;
+    border-radius: 0 0.5rem 0 0;
+  }
+
+  :global(.window-folder-grid .icon-preview) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :global(.window-folder-grid .file-lines) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 0.75rem;
+    width: 100%;
+  }
+
+  :global(.window-folder-grid .file-lines .line) {
+    height: 2px;
+    background: var(--desktop-border-medium);
+    border-radius: 1px;
+  }
+
+  :global(.window-folder-grid .file-lines .line:nth-child(1)) {
+    width: 80%;
+  }
+
+  :global(.window-folder-grid .file-lines .line:nth-child(2)) {
+    width: 60%;
+  }
+
+  :global(.window-folder-grid .file-lines .line:nth-child(3)) {
+    width: 70%;
+  }
+
+  :global(.window-folder-grid .file-extension) {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    background: var(--desktop-bg-primary);
+    color: var(--desktop-accent-primary);
+    font-size: 0.625rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--desktop-accent-primary);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 </style>
 
 <script>
@@ -325,6 +429,9 @@ const postsData: Post[] = posts.map((post) => ({
   // Desktop state
   let currentPath = '~';
   let fileSystem: FileSystem;
+
+  // Cleanup registry for window event listeners (prevents memory leaks)
+  const windowCleanup = new Map<string, () => void>();
 
   // Listen for window open events from icons
   function setupDesktopWindowManager() {
@@ -346,9 +453,20 @@ const postsData: Post[] = posts.map((post) => ({
       return;
     }
 
-    // Subscribe to window manager state changes
+    // Subscribe to window manager state changes - only handle add/remove, not position updates
+    let previousWindowIds = new Set<string>();
     windowManager.subscribe((state) => {
-      renderWindows(state.windows);
+      const currentWindowIds = new Set(state.windows.map(w => w.id));
+      
+      // Check if windows were added or removed
+      const added = state.windows.filter(w => !previousWindowIds.has(w.id));
+      const removed = [...previousWindowIds].filter(id => !currentWindowIds.has(id));
+      
+      if (added.length > 0 || removed.length > 0) {
+        // Only re-render if windows were added or removed
+        renderWindows(state.windows);
+        previousWindowIds = currentWindowIds;
+      }
     });
 
     // Listen for custom events to open windows
@@ -373,13 +491,51 @@ const postsData: Post[] = posts.map((post) => ({
       navigateToRoot();
     }) as EventListener);
 
-    // Listen for dock terminal switch event
-    document.addEventListener('view:toggle-to-terminal', (() => {
-      switchToTerminal();
-    }) as EventListener);
+    // Note: Terminal switch is now handled directly by Dock using toggleView()
 
-    // Setup keyboard navigation
+    // Setup keyboard navigation for icons
     setupKeyboardNavigation();
+
+    // Setup keyboard shortcuts for windows (Escape/Cmd+W to close)
+    setupWindowKeyboardShortcuts();
+
+    // Subscribe to z-index changes to sync DOM
+    windowManager.subscribe((state) => {
+      state.windows.forEach(w => {
+        const el = document.querySelector(`[data-window-id="${w.id}"]`) as HTMLElement;
+        if (el && el.style.zIndex !== w.zIndex.toString()) {
+          el.style.zIndex = w.zIndex.toString();
+        }
+      });
+    });
+  }
+
+  function setupWindowKeyboardShortcuts() {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle if desktop view is visible
+      const desktopContainer = document.querySelector('.desktop-view-container');
+      if (desktopContainer?.classList.contains('hidden')) return;
+
+      // Escape or Cmd/Ctrl+W to close focused window
+      if (e.key === 'Escape' || ((e.metaKey || e.ctrlKey) && e.key === 'w')) {
+        const topWindow = getTopWindow();
+        if (topWindow) {
+          e.preventDefault();
+          closeWindowWithAnimation(topWindow.el as HTMLElement, topWindow.id);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+  }
+
+  function getTopWindow(): { el: Element; id: string } | null {
+    const windows = windowManager.getAllWindows();
+    if (windows.length === 0) return null;
+
+    const topState = windows.reduce((a, b) => (a.zIndex > b.zIndex ? a : b));
+    const el = document.querySelector(`[data-window-id="${topState.id}"]`);
+    return el ? { el, id: topState.id } : null;
   }
 
   function renderDesktop() {
@@ -428,24 +584,24 @@ const postsData: Post[] = posts.map((post) => ({
         <div class="icon-visual">
           ${item.type === 'file' ? `
             <div class="file-icon">
-              ${item.coverImage ? `
-                <img src="${item.coverImage}" alt="" class="icon-preview" />
-              ` : `
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                  <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-              `}
+              <div class="file-body">
+                ${item.coverImage ? `
+                  <img src="${item.coverImage}" alt="" class="icon-preview" />
+                ` : `
+                  <div class="file-lines">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                `}
+              </div>
+              <div class="file-corner"></div>
               <div class="file-extension">.md</div>
             </div>
           ` : `
             <div class="folder-icon">
-              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-              </svg>
+              <div class="folder-body"></div>
+              <div class="folder-tab"></div>
             </div>
           `}
         </div>
@@ -528,17 +684,18 @@ const postsData: Post[] = posts.map((post) => ({
         iconEl.innerHTML = `
           <div class="icon-visual">
             <div class="file-icon">
-              ${post.coverImage ? `
-                <img src="${post.coverImage}" alt="" class="icon-preview" />
-              ` : `
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                  <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-              `}
+              <div class="file-body">
+                ${post.coverImage ? `
+                  <img src="${post.coverImage}" alt="" class="icon-preview" />
+                ` : `
+                  <div class="file-lines">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                `}
+              </div>
+              <div class="file-corner"></div>
               <div class="file-extension">.md</div>
             </div>
           </div>
@@ -611,8 +768,11 @@ const postsData: Post[] = posts.map((post) => ({
   }
 
   function openFolder(series: string) {
-    currentPath = `~/series/${encodeURIComponent(series)}`;
-    renderDesktop();
+    const folder = fileSystem.folders.find(f => f.series === series);
+    if (!folder) return;
+
+    windowManager.openFolderWindow(series, folder.name);
+    // Window rendering is handled by the subscription
   }
 
   function navigateBack() {
@@ -623,12 +783,6 @@ const postsData: Post[] = posts.map((post) => ({
   function navigateToRoot() {
     currentPath = '~';
     renderDesktop();
-  }
-
-  function switchToTerminal() {
-    // Dispatch the same event that ViewToggle uses
-    const event = new CustomEvent('view:toggle');
-    document.dispatchEvent(event);
   }
 
   function setupKeyboardNavigation() {
@@ -717,11 +871,8 @@ const postsData: Post[] = posts.map((post) => ({
   }
 
   function openPostWindow(slug: string, title: string) {
-    const windowState = windowManager.openWindow(slug, title);
-    if (!windowState) return;
-
-    // Render the window
-    renderWindows(windowManager.getAllWindows());
+    windowManager.openWindow(slug, title);
+    // Window rendering is handled by the subscription
   }
 
   function renderWindows(windows: WindowState[]) {
@@ -746,7 +897,13 @@ const postsData: Post[] = posts.map((post) => ({
     const div = document.createElement('div');
     div.className = 'desktop-window';
     div.setAttribute('data-window-id', state.id);
-    div.setAttribute('data-post-slug', state.postSlug);
+    div.setAttribute('data-window-type', state.windowType);
+    if (state.postSlug) {
+      div.setAttribute('data-post-slug', state.postSlug);
+    }
+    if (state.folderSeries) {
+      div.setAttribute('data-folder-series', state.folderSeries);
+    }
     div.style.cssText = `
       left: ${state.position.x}px;
       top: ${state.position.y}px;
@@ -782,7 +939,7 @@ const postsData: Post[] = posts.map((post) => ({
       <div class="window-content">
         <div class="window-loading">
           <div class="spinner"></div>
-          <p>Loading post...</p>
+          <p>${state.windowType === 'folder' ? 'Loading folder...' : 'Loading post...'}</p>
         </div>
         <div class="window-post-content hidden"></div>
       </div>
@@ -798,7 +955,13 @@ const postsData: Post[] = posts.map((post) => ({
 
     // Setup window interactions
     setupWindowInteractions(div, state.id);
-    loadPostContent(div, state.postSlug);
+
+    // Load content based on window type
+    if (state.windowType === 'post' && state.postSlug) {
+      loadPostContent(div, state.postSlug);
+    } else if (state.windowType === 'folder' && state.folderSeries) {
+      loadFolderContent(div, state.folderSeries);
+    }
 
     return div;
   }
@@ -813,15 +976,25 @@ const postsData: Post[] = posts.map((post) => ({
     // Close button
     const closeBtn = windowEl.querySelector('[data-action="close"]');
     closeBtn?.addEventListener('click', () => {
-      windowEl.style.animation = 'windowClose 0.2s ease-in forwards';
-      setTimeout(() => {
-        windowManager.closeWindow(windowId);
-      }, 200);
+      closeWindowWithAnimation(windowEl, windowId);
     });
 
-    // Bring to front on click
+    // Maximize button
+    const maximizeBtn = windowEl.querySelector('[data-action="maximize"]');
+    maximizeBtn?.removeAttribute('disabled');
+    maximizeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMaximize(windowEl, windowId);
+    });
+
+    // Bring to front on click and sync z-index
     windowEl.addEventListener('mousedown', () => {
       windowManager.bringToFront(windowId);
+      // Immediately update DOM z-index
+      const state = windowManager.getWindow(windowId);
+      if (state) {
+        windowEl.style.zIndex = state.zIndex.toString();
+      }
     });
 
     // Setup dragging
@@ -829,6 +1002,47 @@ const postsData: Post[] = posts.map((post) => ({
 
     // Setup resizing
     setupResizing(windowEl, windowId);
+  }
+
+  function closeWindowWithAnimation(windowEl: HTMLElement, windowId: string) {
+    // Call cleanup before removing
+    windowCleanup.get(windowId)?.();
+    windowCleanup.delete(windowId);
+
+    windowEl.style.animation = 'windowClose 0.2s ease-in forwards';
+    setTimeout(() => {
+      windowManager.closeWindow(windowId);
+    }, 200);
+  }
+
+  function toggleMaximize(windowEl: HTMLElement, windowId: string) {
+    const state = windowManager.getWindow(windowId);
+    if (!state) return;
+
+    if (state.isMaximized) {
+      // Restore previous position/size
+      const prev = state.preMaximizeState;
+      if (prev) {
+        windowEl.style.left = `${prev.position.x}px`;
+        windowEl.style.top = `${prev.position.y}px`;
+        windowEl.style.width = `${prev.size.width}px`;
+        windowEl.style.height = `${prev.size.height}px`;
+        windowManager.updatePosition(windowId, prev.position);
+        windowManager.updateSize(windowId, prev.size);
+      }
+    } else {
+      // Store current state and maximize
+      windowManager.setPreMaximizeState(windowId, state.position, state.size);
+      const menuBarHeight = 28;
+      const dockHeight = 80;
+      windowEl.style.left = '0';
+      windowEl.style.top = `${menuBarHeight}px`;
+      windowEl.style.width = '100vw';
+      windowEl.style.height = `calc(100vh - ${menuBarHeight}px - ${dockHeight}px)`;
+      windowManager.updatePosition(windowId, { x: 0, y: menuBarHeight });
+      windowManager.updateSize(windowId, { width: window.innerWidth, height: window.innerHeight - menuBarHeight - dockHeight });
+    }
+    windowManager.toggleMaximize(windowId);
   }
 
   function setupDragging(windowEl: HTMLElement, windowId: string) {
@@ -841,9 +1055,13 @@ const postsData: Post[] = posts.map((post) => ({
     let initialX = 0;
     let initialY = 0;
 
-    titlebar.addEventListener('mousedown', (e: Event) => {
+    const handleTitlebarMouseDown = (e: Event) => {
       const mouseEvent = e as MouseEvent;
       if ((mouseEvent.target as HTMLElement).closest('.traffic-light')) return;
+
+      // Check if window is maximized - don't allow drag
+      const state = windowManager.getWindow(windowId);
+      if (state?.isMaximized) return;
 
       isDragging = true;
       startX = mouseEvent.clientX;
@@ -852,7 +1070,9 @@ const postsData: Post[] = posts.map((post) => ({
       const rect = windowEl.getBoundingClientRect();
       initialX = rect.left;
       initialY = rect.top;
-    });
+
+      windowEl.style.cursor = 'grabbing';
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
@@ -861,7 +1081,7 @@ const postsData: Post[] = posts.map((post) => ({
       const deltaY = e.clientY - startY;
 
       const newX = Math.max(0, Math.min(initialX + deltaX, window.innerWidth - windowEl.offsetWidth));
-      const newY = Math.max(0, Math.min(initialY + deltaY, window.innerHeight - windowEl.offsetHeight));
+      const newY = Math.max(28, Math.min(initialY + deltaY, window.innerHeight - windowEl.offsetHeight)); // 28px for menu bar
 
       windowEl.style.left = `${newX}px`;
       windowEl.style.top = `${newY}px`;
@@ -870,17 +1090,36 @@ const postsData: Post[] = posts.map((post) => ({
     };
 
     const handleMouseUp = () => {
-      isDragging = false;
+      if (isDragging) {
+        isDragging = false;
+        windowEl.style.cursor = '';
+      }
     };
 
+    titlebar.addEventListener('mousedown', handleTitlebarMouseDown);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+
+    // Register cleanup function
+    const cleanup = () => {
+      titlebar.removeEventListener('mousedown', handleTitlebarMouseDown);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    // Add to existing cleanup or create new
+    const existingCleanup = windowCleanup.get(windowId);
+    windowCleanup.set(windowId, () => {
+      existingCleanup?.();
+      cleanup();
+    });
   }
 
   function setupResizing(windowEl: HTMLElement, windowId: string) {
     const MIN_WIDTH = 400;
     const MIN_HEIGHT = 300;
     const handles = windowEl.querySelectorAll('.resize-handle');
+    const resizeCleanups: (() => void)[] = [];
 
     handles.forEach((handle) => {
       let isResizing = false;
@@ -892,10 +1131,14 @@ const postsData: Post[] = posts.map((post) => ({
       let startTop = 0;
       const direction = handle.getAttribute('data-direction') || '';
 
-      handle.addEventListener('mousedown', (e: Event) => {
+      const handleHandleMouseDown = (e: Event) => {
         const mouseEvent = e as MouseEvent;
         e.preventDefault();
         e.stopPropagation();
+
+        // Check if window is maximized - don't allow resize
+        const state = windowManager.getWindow(windowId);
+        if (state?.isMaximized) return;
 
         isResizing = true;
         startX = mouseEvent.clientX;
@@ -906,7 +1149,9 @@ const postsData: Post[] = posts.map((post) => ({
         startHeight = rect.height;
         startLeft = rect.left;
         startTop = rect.top;
-      });
+
+        document.body.style.cursor = getComputedStyle(handle as Element).cursor;
+      };
 
       const handleMouseMove = (e: MouseEvent) => {
         if (!isResizing) return;
@@ -957,11 +1202,29 @@ const postsData: Post[] = posts.map((post) => ({
       };
 
       const handleMouseUp = () => {
-        isResizing = false;
+        if (isResizing) {
+          isResizing = false;
+          document.body.style.cursor = '';
+        }
       };
 
+      handle.addEventListener('mousedown', handleHandleMouseDown);
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+
+      // Store cleanup for this handle
+      resizeCleanups.push(() => {
+        handle.removeEventListener('mousedown', handleHandleMouseDown);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      });
+    });
+
+    // Register all resize cleanups
+    const existingCleanup = windowCleanup.get(windowId);
+    windowCleanup.set(windowId, () => {
+      existingCleanup?.();
+      resizeCleanups.forEach(cleanup => cleanup());
     });
   }
 
@@ -986,19 +1249,137 @@ const postsData: Post[] = posts.map((post) => ({
     } catch (error) {
       console.error('Error loading post:', error);
       if (contentEl) {
-        contentEl.innerHTML = '<p style="color: var(--term-red)">Failed to load post content.</p>';
+        contentEl.innerHTML = '<p style="color: #ef4444">Failed to load post content.</p>';
         loadingEl?.classList.add('hidden');
         contentEl.classList.remove('hidden');
       }
     }
   }
 
-  // Initialize
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupDesktopWindowManager);
-  } else {
+  function loadFolderContent(windowEl: HTMLElement, folderSeries: string) {
+    const contentEl = windowEl.querySelector('.window-post-content');
+    const loadingEl = windowEl.querySelector('.window-loading');
+
+    try {
+      const folder = fileSystem.folders.find(f => f.series === folderSeries);
+      if (!folder || !folder.posts) {
+        throw new Error('Folder not found');
+      }
+
+      // Create folder grid content
+      const gridContainer = document.createElement('div');
+      gridContainer.className = 'window-folder-grid';
+
+      folder.posts.forEach((post) => {
+        const iconEl = document.createElement('div');
+        iconEl.className = 'desktop-icon';
+        iconEl.setAttribute('data-type', 'file');
+        iconEl.setAttribute('data-post', post.slug);
+        iconEl.setAttribute('role', 'button');
+        iconEl.setAttribute('tabindex', '0');
+        iconEl.setAttribute('aria-label', `Post: ${post.title}`);
+
+        const displayTitle = post.title.length > 20 ? post.title.substring(0, 17) + '...' : post.title;
+
+        iconEl.innerHTML = `
+          <div class="icon-visual">
+            <div class="file-icon">
+              <div class="file-body">
+                ${post.coverImage ? `
+                  <img src="${post.coverImage}" alt="" class="icon-preview" />
+                ` : `
+                  <div class="file-lines">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                `}
+              </div>
+              <div class="file-corner"></div>
+              <div class="file-extension">.md</div>
+            </div>
+          </div>
+          <div class="icon-label">${escapeHtml(displayTitle)}</div>
+        `;
+
+        gridContainer.appendChild(iconEl);
+      });
+
+      if (contentEl) {
+        contentEl.innerHTML = '';
+        contentEl.appendChild(gridContainer);
+        loadingEl?.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+
+        // Setup icon interactions for posts in folder window
+        setupFolderWindowIconInteractions(contentEl);
+      }
+    } catch (error) {
+      console.error('Error loading folder:', error);
+      if (contentEl) {
+        contentEl.innerHTML = '<p style="color: #ef4444">Failed to load folder content.</p>';
+        loadingEl?.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+      }
+    }
+  }
+
+  function setupFolderWindowIconInteractions(container: Element) {
+    const icons = container.querySelectorAll('.desktop-icon');
+
+    icons.forEach((icon) => {
+      // Double-click to open post
+      icon.addEventListener('dblclick', () => {
+        const slug = icon.getAttribute('data-post');
+        if (slug) {
+          const title = icon.querySelector('.icon-label')?.textContent?.trim() || 'Untitled';
+          openPostWindow(slug, title);
+        }
+      });
+
+      // Single-click to select
+      icon.addEventListener('click', (e: Event) => {
+        const mouseEvent = e as MouseEvent;
+        if (!mouseEvent.ctrlKey && !mouseEvent.metaKey) {
+          container.querySelectorAll('.desktop-icon.selected').forEach((selected) => {
+            selected.classList.remove('selected');
+          });
+        }
+        icon.classList.toggle('selected');
+      });
+
+      // Keyboard support
+      icon.addEventListener('keydown', (e: Event) => {
+        const keyEvent = e as KeyboardEvent;
+        if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+          e.preventDefault();
+          icon.dispatchEvent(new Event('dblclick'));
+        }
+      });
+    });
+  }
+
+  // Track if already initialized to prevent duplicate event listeners
+  let isInitialized = false;
+
+  function initDesktop() {
+    if (isInitialized) {
+      // Already initialized - just re-render desktop
+      if (fileSystem) {
+        renderDesktop();
+      }
+      return;
+    }
+    isInitialized = true;
     setupDesktopWindowManager();
   }
 
-  document.addEventListener('astro:page-load', setupDesktopWindowManager);
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDesktop);
+  } else {
+    initDesktop();
+  }
+
+  document.addEventListener('astro:page-load', initDesktop);
 </script>

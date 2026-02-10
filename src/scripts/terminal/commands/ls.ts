@@ -8,7 +8,7 @@ import type {
   CommandResult,
   PostData,
 } from "../types";
-import { formatDate, seriesSlug } from "../renderers/helpers";
+import { escapeHtml, formatDate, seriesSlug } from "../renderers/helpers";
 import { resolvePath } from "./utils";
 
 /**
@@ -21,11 +21,21 @@ function renderLsRoot(ctx: CommandContext, showDetails: boolean): string {
 
   if (showDetails) {
     return `<div class="term-ls">
-      <div class="text-term-fg-dark text-sm mb-2">total 3</div>
+      <div class="text-term-fg-dark text-sm mb-2">total 5</div>
+      <div class="term-ls-entry">
+        <span class="term-ls-perms">drwxr-xr-x</span>
+        <span class="term-ls-name term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="cd archives">archives/</span>
+        <span class="text-term-fg-dark text-sm">${postCount} files</span>
+      </div>
       <div class="term-ls-entry">
         <span class="term-ls-perms">drwxr-xr-x</span>
         <span class="term-ls-name term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="ls posts/">posts/</span>
         <span class="text-term-fg-dark text-sm">${postCount} files</span>
+      </div>
+      <div class="term-ls-entry">
+        <span class="term-ls-perms">-rwxr-xr-x</span>
+        <span class="term-ls-name term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="cd search">search</span>
+        <span class="text-term-fg-dark text-sm">interactive</span>
       </div>
       <div class="term-ls-entry">
         <span class="term-ls-perms">drwxr-xr-x</span>
@@ -41,7 +51,9 @@ function renderLsRoot(ctx: CommandContext, showDetails: boolean): string {
   }
 
   return `<div class="flex flex-wrap gap-4">
+    <span class="term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="cd archives">archives/</span>
     <span class="term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="ls posts/">posts/</span>
+    <span class="term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="cd search">search</span>
     <span class="term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="ls series/">series/</span>
     <span class="term-ls-dir cursor-pointer hover:text-term-cyan" data-cmd="ls tags/">tags/</span>
   </div>`;
@@ -95,11 +107,11 @@ function renderLsSeries(ctx: CommandContext, showDetails: boolean): string {
     if (showDetails) {
       output += `<div class="term-ls-entry">
         <span class="term-ls-perms">drwxr-xr-x</span>
-        <a href="/series/${slug}" class="term-ls-name term-ls-dir hover:text-term-cyan" data-cmd="ls series/${slug}">${series}/</a>
+        <a href="/series/${slug}" class="term-ls-name term-ls-dir hover:text-term-cyan" data-cmd="ls series/${slug}">${escapeHtml(series)}/</a>
         <span class="text-term-fg-dark text-sm">${count} posts</span>
       </div>`;
     } else {
-      output += `<div><a href="/series/${slug}" class="term-ls-dir hover:text-term-cyan" data-cmd="ls series/${slug}">${series}/</a></div>`;
+      output += `<div><a href="/series/${slug}" class="term-ls-dir hover:text-term-cyan" data-cmd="ls series/${slug}">${escapeHtml(series)}/</a></div>`;
     }
   });
 
@@ -165,10 +177,10 @@ function renderLsTags(ctx: CommandContext, showDetails: boolean): string {
     if (showDetails) {
       output += `<div class="term-ls-entry">
         <span class="text-term-yellow w-8 text-right mr-4">${count.toString().padStart(3, " ")}</span>
-        <a href="/tags/${slug}" class="text-term-green hover:text-term-cyan">#${tag}</a>
+        <a href="/tags/${slug}" class="text-term-green hover:text-term-cyan">#${escapeHtml(tag)}</a>
       </div>`;
     } else {
-      output += `<a href="/tags/${slug}" class="inline-block mr-3 mb-1 text-term-green hover:text-term-cyan">#${tag}</a>`;
+      output += `<a href="/tags/${slug}" class="inline-block mr-3 mb-1 text-term-green hover:text-term-cyan">#${escapeHtml(tag)}</a>`;
     }
   });
 
@@ -232,11 +244,11 @@ export const lsCommand: Command = {
 
     // Flag completion
     if (partial.startsWith("-")) {
-      const flags = ["-l", "-a", "-la", "-al"];
+      const flags = ["-l", "-la"];
       return flags.filter((f) => f.startsWith(lowerPartial));
     }
 
-    const directories = ["posts", "series", "tags"];
+    const directories = ["archives", "posts", "search", "series", "tags"];
 
     // Helper to get matching series
     const getSeriesMatches = (prefix: string) => {

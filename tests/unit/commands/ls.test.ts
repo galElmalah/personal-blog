@@ -20,7 +20,7 @@ describe("ls command", () => {
 
       expect(result.html).toContain("posts/");
       expect(result.html).toContain("drwxr-xr-x");
-      expect(result.html).toContain("total 3");
+      expect(result.html).toContain("total 5");
     });
 
     it("shows file counts in detailed view", () => {
@@ -54,7 +54,7 @@ describe("ls command", () => {
       const ctx = createMockContext({
         args: ["."],
         flags: [],
-        currentPath: "~/blog/posts",
+        currentPath: "~/posts",
       });
       const result = lsCommand.execute(ctx);
 

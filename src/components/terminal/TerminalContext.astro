@@ -28,7 +28,7 @@ const postsData = posts.map((p) => ({
   date: p.data.date.toISOString(),
   tags: p.data.tags,
   series: p.data.series || null,
-  body: p.body.slice(0, 500),
+  body: p.body.slice(0, 2000),
 }));
 ---
 

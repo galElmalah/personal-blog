@@ -1,9 +1,8 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import HomeLayout from "@layouts/HomeLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
 import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
 import TerminalContext from "@components/terminal/TerminalContext.astro";
-import Desktop from "@components/desktop/Desktop.astro";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -12,13 +11,11 @@ const seriesCount = new Set(posts.filter(p => p.data.series).map(p => p.data.ser
 const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
 ---
 
-<BaseLayout title="Home" terminalMode={true}>
+<HomeLayout title="Home">
   <!-- Inject posts data for terminal engine -->
   <TerminalContext currentPath="~" />
 
-  <!-- Terminal View Container -->
-  <div class="terminal-view-container">
-    <TerminalShell>
+  <TerminalShell>
     <!-- ASCII Welcome Art - will be animated -->
     <div id="ascii-welcome" class="ascii-art text-term-cyan mb-6" role="img" aria-label="Welcome to Gal.E Blog">
       <pre class="text-xs sm:text-sm leading-tight"></pre>
@@ -96,14 +93,8 @@ const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
         <button class="term-suggestion" data-cmd="help">help</button>
       </div>
     </div>
-    </TerminalShell>
-  </div>
-
-  <!-- Desktop View Container (hidden by default) -->
-  <div class="desktop-view-container hidden">
-    <Desktop />
-  </div>
-</BaseLayout>
+  </TerminalShell>
+</HomeLayout>
 
 <style>
   .ascii-art pre {

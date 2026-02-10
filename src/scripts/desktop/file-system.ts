@@ -7,7 +7,7 @@ export interface Post {
   slug: string;
   title: string;
   series?: string;
-  pubDate: Date;
+  pubDate: string;
   tags?: string[];
   coverImage?: string;
 }
@@ -19,7 +19,7 @@ export interface FileSystemItem {
   series?: string; // For folders
   posts?: Post[]; // For folders (series)
   coverImage?: string;
-  pubDate?: Date;
+  pubDate?: string;
   tags?: string[];
   postCount?: number; // For folders
 }

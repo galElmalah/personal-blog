@@ -23,7 +23,7 @@ describe('help command', () => {
     };
     commandRegistry.register(testCmd);
 
-    const ctx = { registry: commandRegistry } as CommandContext;
+    const ctx = { registry: commandRegistry, args: [], flags: [] } as unknown as CommandContext;
     const result = helpCommand.execute(ctx);
 
     expect(result.html).toContain('test-cmd [arg]');
@@ -31,7 +31,7 @@ describe('help command', () => {
   });
 
   it('lists help command itself', () => {
-    const ctx = { registry: commandRegistry } as CommandContext;
+    const ctx = { registry: commandRegistry, args: [], flags: [] } as unknown as CommandContext;
     const result = helpCommand.execute(ctx);
 
     expect(result.html).toContain('help');
@@ -45,7 +45,7 @@ describe('help command', () => {
     commandRegistry.register(cmdZ);
     commandRegistry.register(cmdA);
     
-    const ctx = { registry: commandRegistry } as CommandContext;
+    const ctx = { registry: commandRegistry, args: [], flags: [] } as unknown as CommandContext;
     const result = helpCommand.execute(ctx);
     
     const indexA = result.html.indexOf('alpha');

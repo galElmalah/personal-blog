@@ -1,69 +1,164 @@
 ---
 /**
  * Dock.astro - macOS-style dock component
- * Provides quick navigation and actions from the desktop
- * Phase 4: Dock & Interactions
+ * Authentic macOS Sonoma dock with magnification effect
  */
 ---
 
 <div class="dock-container">
   <div class="dock">
+    <!-- Finder Icon -->
     <button
       class="dock-icon"
       data-action="home"
-      aria-label="Home - Return to desktop root"
-      title="Home"
+      aria-label="Finder - Return to desktop root"
+      title="Finder"
     >
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-      </svg>
-      <span class="dock-icon-label">Home</span>
+      <div class="dock-icon-wrapper">
+        <svg viewBox="0 0 48 48" class="app-icon finder-icon">
+          <defs>
+            <linearGradient id="finderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#6FD3FF"/>
+              <stop offset="100%" style="stop-color:#0066CC"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#finderGrad)"/>
+          <!-- Finder face -->
+          <ellipse cx="24" cy="26" rx="14" ry="12" fill="#fff"/>
+          <!-- Eyes -->
+          <circle cx="18" cy="24" r="3" fill="#000"/>
+          <circle cx="30" cy="24" r="3" fill="#000"/>
+          <!-- Smile -->
+          <path d="M16 30 Q24 36 32 30" stroke="#000" stroke-width="2" fill="none"/>
+          <!-- Nose line -->
+          <line x1="24" y1="18" x2="24" y2="28" stroke="#000" stroke-width="2"/>
+        </svg>
+      </div>
+      <span class="dock-icon-label">Finder</span>
     </button>
 
+    <!-- Safari/Browser Icon -->
     <button
       class="dock-icon"
       data-action="posts"
       aria-label="Posts - View all posts"
       title="Posts"
     >
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <line x1="16" y1="13" x2="8" y2="13"></line>
-        <line x1="16" y1="17" x2="8" y2="17"></line>
-        <polyline points="10 9 9 9 8 9"></polyline>
-      </svg>
+      <div class="dock-icon-wrapper">
+        <svg viewBox="0 0 48 48" class="app-icon safari-icon">
+          <defs>
+            <linearGradient id="safariGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#19B3FF"/>
+              <stop offset="100%" style="stop-color:#0066FF"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#safariGrad)"/>
+          <!-- Compass circle -->
+          <circle cx="24" cy="24" r="16" fill="none" stroke="#fff" stroke-width="1.5"/>
+          <!-- Compass needle -->
+          <polygon points="24,8 27,24 24,28 21,24" fill="#FF3B30"/>
+          <polygon points="24,40 21,24 24,20 27,24" fill="#fff"/>
+          <!-- Direction markers -->
+          <text x="24" y="9" fill="#fff" font-size="5" text-anchor="middle" font-weight="bold">N</text>
+        </svg>
+      </div>
       <span class="dock-icon-label">Posts</span>
     </button>
 
+    <!-- Notes/Folder Icon -->
     <button
       class="dock-icon"
       data-action="series"
       aria-label="Series - View all series"
       title="Series"
     >
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-      </svg>
+      <div class="dock-icon-wrapper">
+        <svg viewBox="0 0 48 48" class="app-icon notes-icon">
+          <defs>
+            <linearGradient id="notesGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFE066"/>
+              <stop offset="100%" style="stop-color:#FFA500"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#notesGrad)"/>
+          <!-- Folder body -->
+          <rect x="8" y="16" width="32" height="24" rx="3" fill="#fff"/>
+          <!-- Folder tab -->
+          <path d="M8 16 L8 14 Q8 11 11 11 L18 11 L21 16 Z" fill="#fff"/>
+          <!-- Lines -->
+          <line x1="13" y1="23" x2="35" y2="23" stroke="#DDD" stroke-width="1.5"/>
+          <line x1="13" y1="28" x2="35" y2="28" stroke="#DDD" stroke-width="1.5"/>
+          <line x1="13" y1="33" x2="28" y2="33" stroke="#DDD" stroke-width="1.5"/>
+        </svg>
+      </div>
       <span class="dock-icon-label">Series</span>
     </button>
 
     <div class="dock-separator"></div>
 
+    <!-- Terminal Icon -->
     <button
       class="dock-icon"
       data-action="terminal"
       aria-label="Terminal - Switch to terminal view"
       title="Terminal"
     >
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect>
-        <line x1="7" y1="9" x2="11" y2="13"></line>
-        <line x1="7" y1="13" x2="11" y2="9"></line>
-        <line x1="13" y1="13" x2="17" y2="13"></line>
-      </svg>
+      <div class="dock-icon-wrapper">
+        <svg viewBox="0 0 48 48" class="app-icon terminal-icon">
+          <defs>
+            <linearGradient id="termGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#434343"/>
+              <stop offset="100%" style="stop-color:#1a1a1a"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#termGrad)"/>
+          <!-- Terminal window -->
+          <rect x="6" y="8" width="36" height="32" rx="4" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1"/>
+          <!-- Title bar dots -->
+          <circle cx="11" cy="13" r="2" fill="#FF5F56"/>
+          <circle cx="17" cy="13" r="2" fill="#FFBD2E"/>
+          <circle cx="23" cy="13" r="2" fill="#27C93F"/>
+          <!-- Command prompt -->
+          <text x="10" y="27" fill="#27C93F" font-size="8" font-family="monospace">$</text>
+          <rect x="16" y="22" width="20" height="2" fill="#fff" opacity="0.8"/>
+          <text x="10" y="35" fill="#27C93F" font-size="8" font-family="monospace">$</text>
+          <rect x="16" y="30" width="8" height="8" fill="#27C93F" class="cursor-blink"/>
+        </svg>
+      </div>
       <span class="dock-icon-label">Terminal</span>
+    </button>
+
+    <div class="dock-separator"></div>
+
+    <!-- Trash Icon -->
+    <button
+      class="dock-icon"
+      data-action="none"
+      aria-label="Trash"
+      title="Trash"
+    >
+      <div class="dock-icon-wrapper">
+        <svg viewBox="0 0 48 48" class="app-icon trash-icon">
+          <defs>
+            <linearGradient id="trashGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#8E8E93"/>
+              <stop offset="100%" style="stop-color:#636366"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#trashGrad)"/>
+          <!-- Trash can body -->
+          <path d="M14 16 L16 40 Q16 42 18 42 L30 42 Q32 42 32 40 L34 16 Z" fill="#fff" stroke="#D1D1D6" stroke-width="0.5"/>
+          <!-- Trash can lid -->
+          <rect x="12" y="12" width="24" height="4" rx="1" fill="#fff"/>
+          <!-- Handle -->
+          <rect x="20" y="9" width="8" height="4" rx="1" fill="#fff"/>
+          <!-- Ribs -->
+          <line x1="20" y1="20" x2="19" y2="38" stroke="#D1D1D6" stroke-width="1"/>
+          <line x1="24" y1="20" x2="24" y2="38" stroke="#D1D1D6" stroke-width="1"/>
+          <line x1="28" y1="20" x2="29" y2="38" stroke="#D1D1D6" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="dock-icon-label">Trash</span>
     </button>
   </div>
 </div>
@@ -76,24 +171,23 @@
     right: 0;
     display: flex;
     justify-content: center;
-    padding: 1rem;
+    padding: 8px;
     pointer-events: none;
     z-index: 1000;
   }
 
   .dock {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 1rem;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 0 0.5px rgba(255, 255, 255, 0.1),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    align-items: flex-end;
+    gap: 4px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 18px;
+    box-shadow: 
+      0 0 0 0.5px rgba(0, 0, 0, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.15);
     pointer-events: auto;
   }
 
@@ -102,79 +196,126 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
+    justify-content: flex-end;
     background: transparent;
     border: none;
-    border-radius: 0.75rem;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    color: var(--term-fg);
     padding: 0;
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .dock-icon svg {
-    width: 32px;
-    height: 32px;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  .dock-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .app-icon {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: filter 0.15s ease;
   }
 
   .dock-icon-label {
     position: absolute;
     bottom: 100%;
     left: 50%;
-    transform: translateX(-50%) translateY(-8px);
-    background: rgba(0, 0, 0, 0.9);
-    color: var(--term-fg);
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.375rem;
-    font-size: 0.75rem;
-    font-family: 'Fira Code', monospace;
+    transform: translateX(-50%) translateY(-12px);
+    background: rgba(50, 50, 55, 0.95);
+    color: rgba(255, 255, 255, 0.95);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: var(--font-primary);
+    font-weight: 500;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease;
     z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  .dock-icon:hover {
-    transform: scale(1.2) translateY(-8px);
-    background: rgba(255, 255, 255, 0.05);
+  .dock-icon-label::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(50, 50, 55, 0.95);
+  }
+
+  /* Magnification Effect - using CSS :has() */
+  .dock-icon:hover .dock-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
   }
 
   .dock-icon:hover .dock-icon-label {
     opacity: 1;
   }
 
-  .dock-icon:active {
-    transform: scale(1.1) translateY(-6px);
+  /* Adjacent icons (immediate neighbors) */
+  .dock-icon:has(+ .dock-icon:hover) .dock-icon-wrapper,
+  .dock-icon:hover + .dock-icon .dock-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 4px;
+  }
+
+  /* Two icons away */
+  .dock-icon:has(+ .dock-icon + .dock-icon:hover) .dock-icon-wrapper,
+  .dock-icon:hover + .dock-icon + .dock-icon .dock-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 2px;
+  }
+
+  .dock-icon:active .dock-icon-wrapper {
+    transform: scale(0.92);
   }
 
   .dock-icon:focus-visible {
-    outline: 2px solid var(--term-cyan);
+    outline: 2px solid rgba(10, 132, 255, 0.8);
     outline-offset: 4px;
+    border-radius: 12px;
   }
 
   /* Active indicator (dot below icon) */
-  .dock-icon[data-active="true"]::after {
+  .dock-icon[data-active="true"]::before {
     content: '';
     position: absolute;
-    bottom: 4px;
+    bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
     width: 4px;
     height: 4px;
-    background: var(--term-cyan);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
-    opacity: 0.8;
   }
 
   .dock-separator {
     width: 1px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 0 0.25rem;
+    height: 42px;
+    background: rgba(0, 0, 0, 0.12);
+    margin: 0 4px 3px 4px;
+    align-self: center;
+  }
+
+  /* Blinking cursor animation for terminal icon */
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
   }
 
   /* Hide on mobile */
@@ -186,22 +327,35 @@
 
   /* Accessibility: Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .dock-icon {
+    .dock-icon,
+    .dock-icon-wrapper {
       transition: none;
     }
 
-    .dock-icon:hover {
-      transform: none;
-      background: rgba(255, 255, 255, 0.1);
+    .dock-icon:hover .dock-icon-wrapper {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 4px;
     }
 
-    .dock-icon:active {
-      transform: none;
+    .dock-icon:has(+ .dock-icon:hover) .dock-icon-wrapper,
+    .dock-icon:hover + .dock-icon .dock-icon-wrapper,
+    .dock-icon:has(+ .dock-icon + .dock-icon:hover) .dock-icon-wrapper,
+    .dock-icon:hover + .dock-icon + .dock-icon .dock-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 0;
+    }
+
+    .cursor-blink {
+      animation: none;
     }
   }
 </style>
 
 <script>
+  import { toggleView } from '@/scripts/view-toggle';
+
   function setupDock() {
     const dockIcons = document.querySelectorAll('.dock-icon');
 
@@ -226,11 +380,19 @@
             break;
 
           case 'terminal':
-            // Switch to terminal view
-            document.dispatchEvent(new CustomEvent('view:toggle-to-terminal'));
+            // Switch to terminal view using the view toggle system
+            toggleView();
             break;
         }
       });
+    });
+
+    // Handle keyboard shortcut (Ctrl+Shift+D)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        toggleView();
+      }
     });
 
     // Update active state based on current path

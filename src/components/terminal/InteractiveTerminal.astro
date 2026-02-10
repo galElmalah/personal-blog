@@ -11,7 +11,7 @@
 import TerminalPrompt from "./TerminalPrompt.astro";
 
 interface Props {
-  /** The current path to display in the prompt (e.g., '~/blog/posts') */
+  /** The current path to display in the prompt (e.g., '~/posts') */
   path?: string;
   /** Whether to run initial 'ls' command on load (default: false for pages with SSR content) */
   runInitialLs?: boolean;
@@ -123,11 +123,15 @@ const {
 <script>
   // Import the modular terminal engine
   import { TerminalEngine } from "@/scripts/terminal/engine";
+  import { initTheme } from "@/scripts/terminal/home-init";
 
   /**
    * Initialize the interactive terminal
    */
   function initInteractiveTerminal() {
+    // Ensure theme is applied
+    initTheme();
+
     // Get configuration
     const config = (window as any).__TERMINAL_CONFIG__ || {
       path: "~",

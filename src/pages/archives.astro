@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
 import TerminalInput from "@components/terminal/TerminalInput.astro";
 import { getCollection } from "astro:content";
@@ -56,12 +57,13 @@ function formatFilename(title: string): string {
 }
 ---
 
-<BaseLayout title="Archive" terminalMode={true}>
+<TerminalLayout title="Archive">
+  <TerminalContext currentPath="~/archives" />
   <TerminalShell>
     <CommandLine
       command="ls"
       args="-lt --group-directories-first posts/"
-      path="~/blog"
+      path="~/archives"
     >
       <div class="term-archive">
         <div class="text-term-fg-dark text-sm mb-4">
@@ -150,6 +152,6 @@ function formatFilename(title: string): string {
     </div>
 
     <!-- Active prompt with typeable input -->
-    <TerminalInput path="~/blog/archives" />
+    <TerminalInput path="~/archives" />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

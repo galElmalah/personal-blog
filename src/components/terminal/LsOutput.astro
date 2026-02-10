@@ -55,7 +55,7 @@ const sortedStandalone = standalonePost.sort(
           <a
             href={`/series/${slug}`}
             class="term-ls-name term-ls-dir"
-            data-command={`cd ${slug}/`}
+            data-cmd={`cd ${slug}/`}
           >
             {series}/
           </a>
@@ -66,7 +66,7 @@ const sortedStandalone = standalonePost.sort(
           <a
             href={`/series/${slug}`}
             class="term-ls-dir hover:text-term-cyan"
-            data-command={`ls series/${slug}`}
+            data-cmd={`ls series/${slug}`}
           >
             {series}/
           </a>
@@ -84,7 +84,7 @@ const sortedStandalone = standalonePost.sort(
           <a
             href={`/posts/${post.slug}`}
             class="term-ls-name"
-            data-command={`cat ${post.slug}`}
+            data-cmd={`cat ${post.slug}`}
           >
             {post.slug}.md
           </a>
@@ -95,7 +95,7 @@ const sortedStandalone = standalonePost.sort(
           <a
             href={`/posts/${post.slug}`}
             class="text-term-fg hover:text-term-cyan"
-            data-command={`cat ${post.slug}`}
+            data-cmd={`cat ${post.slug}`}
           >
             {post.slug}.md
           </a>

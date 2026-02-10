@@ -11,15 +11,15 @@ describe("resolvePath", () => {
   });
 
   it("returns current directory for . when in subdirectory", () => {
-    expect(resolvePath(".", "~/blog/posts")).toBe("posts");
+    expect(resolvePath(".", "~/posts")).toBe("posts");
   });
 
   it("handles parent directory navigation", () => {
-    expect(resolvePath("..", "~/blog/posts")).toBe("");
+    expect(resolvePath("..", "~/posts")).toBe("");
   });
 
   it("handles home directory shortcut", () => {
-    expect(resolvePath("~", "~/blog/posts")).toBe("");
+    expect(resolvePath("~", "~/posts")).toBe("");
   });
 
   it("handles relative paths with ./", () => {
@@ -37,8 +37,8 @@ describe("extractDirectory", () => {
     expect(extractDirectory("~/posts")).toBe("posts");
   });
 
-  it("extracts directory from path with ~/blog", () => {
-    expect(extractDirectory("~/blog/posts")).toBe("posts");
+  it("extracts nested path", () => {
+    expect(extractDirectory("~/series/learning-go")).toBe("series/learning-go");
   });
 
   it("returns empty string for home", () => {

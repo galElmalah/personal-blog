@@ -1,0 +1,100 @@
+---
+// ViewToggle.astro - Desktop view's toggle button to switch to terminal view
+// Styled with desktop CSS variables for the desktop environment
+// Can be placed in Dock, MenuBar, or as a floating button
+---
+
+<button
+  id="view-toggle-desktop"
+  data-testid="view-toggle-desktop"
+  class="view-toggle-btn"
+  aria-label="Switch to terminal view"
+  title="Switch to Terminal view"
+>
+  <span class="toggle-icon" aria-hidden="true">
+    <!-- Terminal icon - shows user can switch to terminal -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="4 17 10 11 4 5"></polyline>
+      <line x1="12" y1="19" x2="20" y2="19"></line>
+    </svg>
+  </span>
+  <span class="toggle-label">Terminal</span>
+</button>
+
+<style>
+  .view-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--desktop-border-medium);
+    border-radius: 0.5rem;
+    background: var(--desktop-bg-primary);
+    color: var(--desktop-text-secondary);
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .view-toggle-btn:hover {
+    border-color: var(--desktop-accent-primary);
+    color: var(--desktop-accent-primary);
+    background: var(--desktop-hover-bg);
+  }
+
+  .view-toggle-btn:focus {
+    outline: 2px solid var(--desktop-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .toggle-label {
+      display: none;
+    }
+
+    .view-toggle-btn {
+      padding: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { toggleView } from '@/scripts/view-toggle';
+
+  function setupViewToggle() {
+    const button = document.getElementById('view-toggle-desktop');
+    if (!button) return;
+
+    // Handle click - switch to terminal view
+    button.addEventListener('click', () => {
+      toggleView();
+    });
+
+    // Handle keyboard shortcut (Ctrl+Shift+D)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        toggleView();
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupViewToggle);
+  } else {
+    setupViewToggle();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener('astro:page-load', setupViewToggle);
+</script>

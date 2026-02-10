@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
 import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
 import TerminalInput from "@components/terminal/TerminalInput.astro";
@@ -66,18 +67,19 @@ function formatFilename(title: string): string {
 const seriesSlug = series.toLowerCase().replace(/\s+/g, "-");
 ---
 
-<BaseLayout title={`Series: ${series}`} terminalMode={true}>
+<TerminalLayout title={`Series: ${series}`}>
+  <TerminalContext currentPath={`~/series/${seriesSlug}`} />
   <TerminalShell>
     <!-- Back navigation -->
     <div class="mb-4 flex items-center">
-      <TerminalPrompt path="~/blog" />
+      <TerminalPrompt path="~" />
       <a href="/series" class="term-link ml-2">cd series/</a>
     </div>
 
     <CommandLine
       command="ls"
       args={`-la ${seriesSlug}/`}
-      path={`~/blog/series`}
+      path={`~/series`}
     >
       <div class="term-ls">
         <div class="term-ls-header text-term-fg-dark text-sm mb-2">
@@ -141,6 +143,6 @@ const seriesSlug = series.toLowerCase().replace(/\s+/g, "-");
     </div>
 
     <!-- Active prompt with typeable input -->
-    <TerminalInput path={`~/blog/series/${seriesSlug}`} />
+    <TerminalInput path={`~/series/${seriesSlug}`} />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

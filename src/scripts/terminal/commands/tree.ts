@@ -11,6 +11,8 @@ import type {
 import {
   escapeHtml,
   formatFilename,
+  getAllTags,
+  getTagCounts,
   groupPostsBySeries,
   seriesSlug,
 } from "../renderers/helpers";
@@ -28,7 +30,7 @@ function renderTreeRoot(ctx: CommandContext): string {
   output += '<div class="text-term-blue font-medium">.</div>';
   output += `<div><span class="term-tree-branch">├── </span><span class="term-tree-dir cursor-pointer" data-cmd="tree posts/">posts/</span> <span class="text-term-fg-dark text-sm">(${postCount} files)</span></div>`;
   output += `<div><span class="term-tree-branch">├── </span><span class="term-tree-dir cursor-pointer" data-cmd="tree series/">series/</span> <span class="text-term-fg-dark text-sm">(${seriesNames.length} dirs)</span></div>`;
-  output += `<div><span class="term-tree-branch">└── </span><span class="term-tree-dir">tags/</span> <span class="text-term-fg-dark text-sm">(${tagCount} items)</span></div>`;
+  output += `<div><span class="term-tree-branch">└── </span><span class="term-tree-dir cursor-pointer" data-cmd="tree tags/">tags/</span> <span class="text-term-fg-dark text-sm">(${tagCount} items)</span></div>`;
   output += `<div class="text-term-fg-dark mt-2 text-sm">3 directories, ${postCount} files</div>`;
   output += "</div>";
   return output;
@@ -49,7 +51,7 @@ function renderTreePosts(posts: PostData[]): string {
     const isLast = idx === sorted.length - 1;
     const branch = isLast ? "└── " : "├── ";
     const filename = formatFilename(post.title);
-    output += `<div><span class="term-tree-branch">${branch}</span><a href="/posts/${post.slug}" class="term-tree-file hover:text-term-cyan">${filename}</a></div>`;
+    output += `<div><span class="term-tree-branch">${branch}</span><a href="/posts/${post.slug}" class="term-tree-file hover:text-term-cyan">${escapeHtml(filename)}</a></div>`;
   });
 
   output += `<div class="text-term-fg-dark mt-2 text-sm">0 directories, ${sorted.length} files</div>`;
@@ -75,7 +77,7 @@ function renderTreeSeries(posts: PostData[]): string {
     const continueChar = isLastSeries ? "    " : "│   ";
     const slug = seriesSlug(series);
 
-    output += `<div><span class="term-tree-branch">${branchChar}</span><a href="/series/${slug}" class="term-tree-dir hover:text-term-cyan">${series}/</a></div>`;
+    output += `<div><span class="term-tree-branch">${branchChar}</span><a href="/series/${slug}" class="term-tree-dir hover:text-term-cyan">${escapeHtml(series)}/</a></div>`;
 
     const sortedPosts = [...seriesPosts].sort(
       (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf(),
@@ -84,7 +86,7 @@ function renderTreeSeries(posts: PostData[]): string {
       const isLastPost = postIdx === sortedPosts.length - 1;
       const postBranch = isLastPost ? "└── " : "├── ";
       const filename = formatFilename(post.title);
-      output += `<div><span class="term-tree-branch">${continueChar}${postBranch}</span><a href="/posts/${post.slug}" class="term-tree-file hover:text-term-cyan">${filename}</a></div>`;
+      output += `<div><span class="term-tree-branch">${continueChar}${postBranch}</span><a href="/posts/${post.slug}" class="term-tree-file hover:text-term-cyan">${escapeHtml(filename)}</a></div>`;
     });
   });
 
@@ -93,6 +95,28 @@ function renderTreeSeries(posts: PostData[]): string {
     0,
   );
   output += `<div class="text-term-fg-dark mt-2 text-sm">${seriesMap.size} directories, ${totalFiles} files</div>`;
+  output += "</div>";
+  return output;
+}
+
+/**
+ * Render tags tree view
+ */
+function renderTreeTags(posts: PostData[]): string {
+  const tagCounts = getTagCounts(posts);
+  const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+  let output = '<div class="term-tree">';
+  output += '<div class="text-term-blue font-medium">tags/</div>';
+
+  sortedTags.forEach(([tag, count], idx) => {
+    const isLast = idx === sortedTags.length - 1;
+    const branch = isLast ? "└── " : "├── ";
+    const slug = tag.toLowerCase().replace(/\s+/g, "-");
+    output += `<div><span class="term-tree-branch">${branch}</span><a href="/tags/${slug}" class="text-term-green hover:text-term-cyan">#${escapeHtml(tag)}</a> <span class="text-term-fg-dark text-sm">(${count})</span></div>`;
+  });
+
+  output += `<div class="text-term-fg-dark mt-2 text-sm">0 directories, ${sortedTags.length} tags</div>`;
   output += "</div>";
   return output;
 }
@@ -119,6 +143,10 @@ export const treeCommand: Command = {
 
     if (cleanPath === "series") {
       return { html: renderTreeSeries(ctx.posts) };
+    }
+
+    if (cleanPath === "tags") {
+      return { html: renderTreeTags(ctx.posts) };
     }
 
     return {

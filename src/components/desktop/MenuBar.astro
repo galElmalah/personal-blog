@@ -1,0 +1,225 @@
+---
+/**
+ * MenuBar.astro - macOS-style menu bar
+ * Authentic macOS Sonoma design with system tray icons
+ */
+---
+
+<div class="menu-bar">
+  <div class="menu-bar-left">
+    <!-- Apple Logo -->
+    <button class="menu-item apple-menu" aria-label="Apple menu">
+      <svg width="14" height="17" viewBox="0 0 17 21" fill="currentColor">
+        <path d="M15.5 16.5c-.4.8-.9 1.5-1.5 2.2-.8.9-1.5 1.3-2 1.3-.3 0-.8-.1-1.4-.4-.6-.3-1.1-.4-1.6-.4s-1 .1-1.6.4c-.6.3-1.1.4-1.4.4-.6 0-1.3-.5-2.2-1.4C2.4 17.1 1.4 15.2 1.4 13c0-1.3.4-2.4 1.1-3.2.7-.8 1.6-1.2 2.7-1.2.5 0 1.1.1 1.7.4.6.3 1 .4 1.2.4.2 0 .6-.1 1.3-.4.6-.3 1.2-.4 1.7-.4 1.3 0 2.4.6 3.1 1.7-1.1.7-1.7 1.7-1.7 2.9 0 1.2.5 2.2 1.5 2.8zM12.3 3.5c0 .9-.3 1.7-1 2.5-.8.9-1.7 1.4-2.7 1.3 0-.7.3-1.5.9-2.3.7-.9 1.6-1.4 2.8-1.5z"/>
+      </svg>
+    </button>
+    
+    <!-- Active App Name (Bold) -->
+    <span class="menu-item app-name">Blog</span>
+    
+    <!-- Menu Items -->
+    <button class="menu-item">File</button>
+    <button class="menu-item">Edit</button>
+    <button class="menu-item">View</button>
+    <button class="menu-item">Go</button>
+    <button class="menu-item">Window</button>
+    <button class="menu-item">Help</button>
+  </div>
+
+  <div class="menu-bar-right">
+    <!-- Battery Indicator -->
+    <button class="system-icon" aria-label="Battery" title="Battery: 100%">
+      <svg width="22" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor" stroke-opacity="0.5"/>
+        <rect x="2" y="2" width="17" height="8" rx="1" fill="currentColor" fill-opacity="0.9"/>
+        <path d="M23 4v4a2 2 0 0 0 2-2 2 2 0 0 0-2-2z" fill="currentColor" fill-opacity="0.5"/>
+      </svg>
+    </button>
+
+    <!-- Wi-Fi -->
+    <button class="system-icon" aria-label="Wi-Fi" title="Wi-Fi">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+        <path d="M8 9.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+        <path d="M4.93 7.82a4.5 4.5 0 0 1 6.14 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M2.1 5a7.5 7.5 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M-.5 2.2a10.5 10.5 0 0 1 17 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    
+    <!-- Spotlight Search -->
+    <button class="system-icon" aria-label="Spotlight" title="Spotlight Search">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M11.5 11.5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Control Center -->
+    <button class="system-icon" aria-label="Control Center" title="Control Center">
+      <svg width="14" height="12" viewBox="0 0 16 14" fill="currentColor">
+        <rect x="0" y="0" width="7" height="4" rx="1"/>
+        <rect x="9" y="0" width="7" height="4" rx="1"/>
+        <rect x="0" y="5" width="7" height="4" rx="1"/>
+        <rect x="9" y="5" width="7" height="4" rx="1"/>
+        <rect x="0" y="10" width="7" height="4" rx="1"/>
+        <rect x="9" y="10" width="7" height="4" rx="1"/>
+      </svg>
+    </button>
+
+    <!-- Date and Time -->
+    <div class="time-display">
+      <span id="menu-bar-time"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    padding: 0 12px;
+    z-index: 10000;
+    font-size: 13px;
+    font-family: var(--font-primary);
+  }
+
+  .menu-bar-left,
+  .menu-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .menu-bar-left {
+    gap: 0;
+  }
+
+  .menu-bar-right {
+    gap: 8px;
+  }
+
+  .menu-item {
+    background: transparent;
+    border: none;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 3px 10px;
+    border-radius: 4px;
+    transition: all 0.1s ease;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .menu-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .menu-item:active {
+    background: #007AFF;
+    color: #ffffff;
+  }
+
+  .apple-menu {
+    padding: 3px 8px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+
+  .apple-menu svg {
+    opacity: 0.85;
+  }
+
+  .app-name {
+    font-weight: 600;
+    margin-right: 16px;
+    cursor: default;
+  }
+
+  .app-name:hover {
+    background: transparent;
+  }
+
+  .system-icon {
+    background: transparent;
+    border: none;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    padding: 3px 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
+  }
+
+  .system-icon:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .system-icon:active {
+    background: #007AFF;
+    color: #ffffff;
+  }
+
+  .time-display {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 13px;
+    font-weight: 450;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: default;
+    white-space: nowrap;
+  }
+
+  .time-display:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+</style>
+
+<script>
+  function updateTime() {
+    const now = new Date();
+    
+    // macOS-style time format: "Thu Jan 29  3:45 PM"
+    const weekday = now.toLocaleDateString('en-US', { weekday: 'short' });
+    const month = now.toLocaleDateString('en-US', { month: 'short' });
+    const day = now.getDate();
+    const time = now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
+    const timeString = `${weekday} ${month} ${day}  ${time}`;
+    const timeEl = document.getElementById('menu-bar-time');
+    if (timeEl) {
+      timeEl.textContent = timeString;
+    }
+  }
+
+  function initMenuBar() {
+    updateTime();
+    setInterval(updateTime, 1000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenuBar);
+  } else {
+    initMenuBar();
+  }
+
+  document.addEventListener('astro:page-load', initMenuBar);
+</script>

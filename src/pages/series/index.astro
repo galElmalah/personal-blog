@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
 import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
@@ -44,7 +44,7 @@ function formatFilename(title: string): string {
 }
 ---
 
-<BaseLayout title="Series" terminalMode={true}>
+<TerminalLayout title="Series">
   <!-- Inject posts data for terminal engine -->
   <TerminalContext currentPath="~/series" />
   
@@ -104,4 +104,4 @@ function formatFilename(title: string): string {
     <!-- Interactive terminal with full command support -->
     <InteractiveTerminal path="~/series" runInitialLs={false} />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

@@ -20,13 +20,13 @@ const currentIndex = posts.findIndex((p) => currentSlug.includes(p.slug));
 const totalPosts = posts.length;
 ---
 
-<div class="my-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-  <p class="text-sm text-gray-600">
-    This post is number <strong>{currentIndex + 1}</strong> of {totalPosts} posts
+<div class="my-6 p-4 bg-term-bg-alt/50 rounded-lg border border-term-fg-dark/30">
+  <p class="text-sm text-term-fg-dark">
+    This post is number <strong class="text-term-fg">{currentIndex + 1}</strong> of {totalPosts} posts
     in the series{" "}
     <a
       href={`/series/${seriesName.toLowerCase().replace(/\s+/g, "-")}`}
-      class="text-accent font-semibold hover:underline"
+      class="text-term-cyan font-semibold hover:underline"
     >
       {seriesName}
     </a>.
@@ -34,7 +34,7 @@ const totalPosts = posts.length;
 
   <details class="mt-3">
     <summary
-      class="text-sm font-medium cursor-pointer select-none text-gray-700"
+      class="text-sm font-medium cursor-pointer select-none text-term-fg"
     >
       View all posts in series
     </summary>
@@ -42,14 +42,14 @@ const totalPosts = posts.length;
       {
         posts.map((post, index) => (
           <li
-            class:list={[index === currentIndex && "font-semibold text-accent"]}
+            class:list={[index === currentIndex ? "font-semibold text-term-cyan" : "text-term-fg-dark"]}
           >
             {index === currentIndex ? (
               <span>{post.data.title}</span>
             ) : (
               <a
                 href={`/posts/${post.slug}`}
-                class="text-gray-600 hover:text-accent transition-colors"
+                class="text-term-fg-dark hover:text-term-cyan transition-colors"
               >
                 {post.data.title}
               </a>

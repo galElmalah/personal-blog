@@ -6,13 +6,12 @@ import type { Command, CommandContext, CommandResult } from "../types";
 import { escapeHtml } from "../renderers/helpers";
 
 /**
- * Extract the meaningful directory from a path like "~/blog/posts" -> "posts"
- * or "~/blog/series/aoc" -> "series/aoc"
+ * Extract the meaningful directory from a path like "~/posts" -> "posts"
+ * or "~/series/aoc" -> "series/aoc"
  */
 export function extractDirectory(path: string): string {
   const parts = path
     .replace(/^~\/?/, "")
-    .replace(/^blog\/?/, "")
     .split("/");
   return parts.filter(Boolean).join("/");
 }
@@ -30,10 +29,10 @@ export function getParentDir(dir: string): string {
 /**
  * Resolve a path relative to currentPath
  * Examples:
- *   resolvePath(".", "~/blog/posts") => "posts"
+ *   resolvePath(".", "~/posts") => "posts"
  *   resolvePath(".", "~") => ""
  *   resolvePath("posts", "~") => "posts"
- *   resolvePath("..", "~/blog/posts") => ""
+ *   resolvePath("..", "~/posts") => ""
  *   resolvePath("series/aoc", "~") => "series/aoc"
  */
 export function resolvePath(path: string, currentPath: string): string {

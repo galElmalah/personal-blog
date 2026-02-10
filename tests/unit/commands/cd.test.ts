@@ -7,18 +7,18 @@ describe("cd command", () => {
     it("navigates to home with ~", () => {
       const ctx = createMockContext({
         args: ["~"],
-        currentPath: "~/blog/posts",
+        currentPath: "~/posts",
       });
       const result = cdCommand.execute(ctx);
 
       expect(result.newPath).toBe("~");
-      expect(result.navigate).toBeUndefined();
+      expect(result.navigate).toBe("/");
     });
 
     it("navigates to home with empty path", () => {
       const ctx = createMockContext({
         args: [""],
-        currentPath: "~/blog/posts",
+        currentPath: "~/posts",
       });
       const result = cdCommand.execute(ctx);
 
@@ -26,7 +26,7 @@ describe("cd command", () => {
     });
 
     it("navigates to home with no arguments", () => {
-      const ctx = createMockContext({ args: [], currentPath: "~/blog/posts" });
+      const ctx = createMockContext({ args: [], currentPath: "~/posts" });
       const result = cdCommand.execute(ctx);
 
       expect(result.newPath).toBe("~");
@@ -35,7 +35,7 @@ describe("cd command", () => {
     it("navigates to home with ..", () => {
       const ctx = createMockContext({
         args: [".."],
-        currentPath: "~/blog/posts",
+        currentPath: "~/posts",
       });
       const result = cdCommand.execute(ctx);
 
@@ -45,7 +45,7 @@ describe("cd command", () => {
     it("navigates to home with /", () => {
       const ctx = createMockContext({
         args: ["/"],
-        currentPath: "~/blog/posts",
+        currentPath: "~/posts",
       });
       const result = cdCommand.execute(ctx);
 

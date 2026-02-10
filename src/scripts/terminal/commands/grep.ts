@@ -46,11 +46,13 @@ function renderGrepOutput(
       ${
         post.tags.length > 0
           ? `<div class="text-sm mt-1">${post.tags
-              .map((t) =>
-                t.toLowerCase().includes(pattern.toLowerCase())
-                  ? `<span class="term-grep-match">#${t}</span>`
-                  : `<span class="text-term-green">#${t}</span>`,
-              )
+              .map((t) => {
+                const tagText = caseInsensitive ? t.toLowerCase() : t;
+                const patternText = caseInsensitive ? pattern.toLowerCase() : pattern;
+                return tagText.includes(patternText)
+                  ? `<span class="term-grep-match">#${escapeHtml(t)}</span>`
+                  : `<span class="text-term-green">#${escapeHtml(t)}</span>`;
+              })
               .join(" ")}</div>`
           : ""
       }

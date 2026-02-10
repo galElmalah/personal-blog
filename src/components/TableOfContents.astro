@@ -17,9 +17,9 @@ const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 {
   filteredHeadings.length > 0 && (
-    <nav class="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <nav class="mb-8 p-4 bg-term-bg-alt/50 rounded-lg border border-term-fg-dark/30">
       <details open>
-        <summary class="text-lg font-semibold cursor-pointer select-none">
+        <summary class="text-lg font-semibold cursor-pointer select-none text-term-fg">
           Table of Contents
         </summary>
         <ul class="mt-3 space-y-1 list-none pl-0">
@@ -27,7 +27,7 @@ const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
             <li class:list={[heading.depth === 3 && "ml-4"]}>
               <a
                 href={`#${heading.slug}`}
-                class="text-gray-600 hover:text-accent transition-colors text-sm"
+                class="text-term-fg-dark hover:text-term-cyan transition-colors text-sm"
               >
                 {heading.text}
               </a>

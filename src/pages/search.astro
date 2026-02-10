@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
 import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
 import { getCollection } from "astro:content";
 
@@ -15,7 +16,8 @@ const searchData = posts.map((post) => ({
 }));
 ---
 
-<BaseLayout title="Search" terminalMode={true}>
+<TerminalLayout title="Search">
+  <TerminalContext currentPath="~/search" />
   <TerminalShell>
     <div class="text-term-comment text-sm mb-4">
       # Search posts using fuzzy matching
@@ -24,7 +26,7 @@ const searchData = posts.map((post) => ({
     <!-- Command input area -->
     <div class="term-command-line mb-6">
       <div class="term-input-line flex items-center">
-        <TerminalPrompt path="~/blog" />
+        <TerminalPrompt path="~/search" />
         <span class="term-command ml-2">find</span>
         <span class="term-command-arg ml-1">posts/ -name "</span>
         <div class="relative flex-1 min-w-0">
@@ -49,7 +51,7 @@ const searchData = posts.map((post) => ({
       </div>
     </div>
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>
 
 <style>
   .term-search-input {

@@ -1,0 +1,98 @@
+---
+// ViewToggle.astro - Terminal view's toggle button to switch to desktop view
+// Styled with terminal CSS variables for the terminal environment
+---
+
+<button
+  id="view-toggle"
+  data-testid="view-toggle"
+  class="view-toggle-btn"
+  aria-label="Switch to desktop view"
+  title="Switch to Desktop view"
+>
+  <span class="toggle-icon" aria-hidden="true">
+    <!-- Desktop icon - shows user can switch to desktop -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+      <line x1="8" y1="21" x2="16" y2="21"></line>
+      <line x1="12" y1="17" x2="12" y2="21"></line>
+    </svg>
+  </span>
+  <span class="toggle-label">Desktop</span>
+</button>
+
+<style>
+  .view-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--term-fg-dark);
+    border-radius: 0.375rem;
+    background: transparent;
+    color: var(--term-fg);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .view-toggle-btn:hover {
+    border-color: var(--term-cyan);
+    color: var(--term-cyan);
+  }
+
+  .view-toggle-btn:focus {
+    outline: 2px solid var(--term-cyan);
+    outline-offset: 2px;
+  }
+
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .toggle-label {
+      display: none;
+    }
+
+    .view-toggle-btn {
+      padding: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { toggleView } from '@/scripts/view-toggle';
+
+  function setupViewToggle() {
+    const button = document.getElementById('view-toggle');
+    if (!button) return;
+
+    // Handle click - switch to desktop view
+    button.addEventListener('click', () => {
+      toggleView();
+    });
+
+    // Handle keyboard shortcut (Ctrl+Shift+D)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        toggleView();
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupViewToggle);
+  } else {
+    setupViewToggle();
+  }
+
+  // Support Astro View Transitions
+  document.addEventListener('astro:page-load', setupViewToggle);
+</script>

@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import TerminalLayout from "@layouts/TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
 import TerminalContext from "@components/terminal/TerminalContext.astro";
 import CommandLine from "@components/terminal/CommandLine.astro";
@@ -24,7 +24,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 const totalMatches = sortedTags.reduce((acc, [_, count]) => acc + count, 0);
 ---
 
-<BaseLayout title="Tags" terminalMode={true}>
+<TerminalLayout title="Tags">
   <!-- Inject posts data for terminal engine -->
   <TerminalContext currentPath="~/tags" />
   
@@ -85,4 +85,4 @@ const totalMatches = sortedTags.reduce((acc, [_, count]) => acc + count, 0);
     <!-- Interactive terminal with full command support -->
     <InteractiveTerminal path="~/tags" runInitialLs={false} />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>

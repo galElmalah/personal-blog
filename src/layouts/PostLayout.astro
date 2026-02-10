@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
+import TerminalLayout from "./TerminalLayout.astro";
 import TerminalShell from "@components/terminal/TerminalShell.astro";
+import TerminalContext from "@components/terminal/TerminalContext.astro";
 import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
 import TerminalInput from "@components/terminal/TerminalInput.astro";
 import SeriesNav from "@components/SeriesNav.astro";
@@ -55,12 +56,12 @@ function formatFilename(title: string): string {
 const filename = formatFilename(frontmatter.title);
 ---
 
-<BaseLayout
+<TerminalLayout
   title={frontmatter.title}
   description={frontmatter.description}
   image={frontmatter.cover}
-  terminalMode={true}
 >
+  <TerminalContext currentPath="~/posts" />
   <TerminalShell>
     <!-- Breadcrumb as terminal path -->
     <div class="text-term-fg-dark text-sm mb-4 font-mono">
@@ -79,7 +80,7 @@ const filename = formatFilename(frontmatter.title);
     <!-- Command line -->
     <div class="term-command-line mb-6">
       <div class="term-input-line flex items-center">
-        <TerminalPrompt path="~/blog/posts" />
+        <TerminalPrompt path="~/posts" />
         <span class="term-command ml-2">cat</span>
         <span class="term-command-arg ml-1">{filename}</span>
       </div>
@@ -207,9 +208,9 @@ const filename = formatFilename(frontmatter.title);
     }
 
     <!-- Active prompt with typeable input -->
-    <TerminalInput path="~/blog/posts" />
+    <TerminalInput path="~/posts" />
   </TerminalShell>
-</BaseLayout>
+</TerminalLayout>
 
 <style>
   .term-prose {

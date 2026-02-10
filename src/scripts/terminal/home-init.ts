@@ -27,9 +27,15 @@ export function initHomePage() {
   // Get posts data from TerminalContext global
   const postsData = (window as any).__TERMINAL_POSTS__ || [];
   
+  // Check if already initialized
+  if ((window as any).__TERMINAL_ENGINE_INITIALIZED__) {
+    return;
+  }
+
   // Create terminal instance and store globally
   const terminal = new TerminalEngine();
   (window as any).__TERMINAL_ENGINE__ = terminal;
+  (window as any).__TERMINAL_ENGINE_INITIALIZED__ = true;
 
   // DOM Elements
   const preElement = document.querySelector('#ascii-welcome pre');
