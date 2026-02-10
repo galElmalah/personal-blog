@@ -25,7 +25,6 @@ Thumbs.db
 # Vercel
 .vercel
 
-# Hugo (legacy - can be removed after migration is complete)
-public/
+# Hugo (legacy)
 resources/
 .hugo_build.lock
