@@ -13,6 +13,7 @@ const posts = defineCollection({
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
     draft: z.boolean().default(false),
+    pinned: z.boolean().default(false),
     showToc: z.boolean().default(true),
     showRelatedContent: z.boolean().default(false),
   }),

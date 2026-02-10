@@ -9,6 +9,7 @@ const posts = await getCollection("posts", ({ data }) => !data.draft);
 const postCount = posts.length;
 const seriesCount = new Set(posts.filter(p => p.data.series).map(p => p.data.series)).size;
 const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
+const pinnedPosts = posts.filter(p => p.data.pinned);
 ---
 
 <HomeLayout title="Home">
@@ -24,8 +25,7 @@ const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
     <!-- Intro text - appears after ASCII -->
     <div id="intro-section" class="hidden mb-6">
       <div class="text-term-fg mb-4">
-        <span class="text-term-green">Hey there!</span> I'm <span class="text-term-cyan">Gal Elmalah</span>, 
-        a software team lead at <a href="https://www.wix.com" target="_blank" rel="noopener noreferrer" class="term-link">Wix.com</a>.
+        <span class="text-term-green">Hey there!</span> I'm <span class="text-term-cyan">Gal Elmalah</span>.
       </div>
       <div class="text-term-fg-dark mb-4">
         This is my corner of the internet where I dump thoughts on coding, 
@@ -50,6 +50,20 @@ const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
         </div>
       </div>
 
+      <!-- Pinned posts -->
+      {pinnedPosts.length > 0 && (
+        <div class="mb-4">
+          <div class="text-term-comment text-sm mb-2"># Pinned:</div>
+          {pinnedPosts.map(post => (
+            <div class="mb-1">
+              <a href={`/posts/${post.slug}`} class="text-term-blue hover:text-term-cyan transition-colors text-sm">
+                {post.data.title}
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+
       <!-- Divider -->
       <div class="text-term-fg-dark mb-4 overflow-hidden whitespace-nowrap">
         ────────────────────────────────────────────────
@@ -57,7 +71,7 @@ const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
 
       <!-- Quick commands hint -->
       <div class="text-term-comment text-sm mb-4">
-        # Type <span class="text-term-green">help</span> for available commands, 
+        # Type <span class="text-term-green">help</span> for available commands,
         or try: <span class="text-term-green">ls</span>, <span class="text-term-green">grep</span>, <span class="text-term-green">cat</span>
       </div>
     </div>

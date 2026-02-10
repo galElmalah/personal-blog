@@ -8,6 +8,7 @@ tags:
   - "Book Review"
   - "Productivity"
 draft: false
+pinned: true
 showToc: true
 cover: "/images/posts/the-five-dysfunction-of-a-team/cover.jpg"
 coverAlt: '"The Five Dysfunction of a Team" book cover with a personal note'
