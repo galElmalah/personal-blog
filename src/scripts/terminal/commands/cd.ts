@@ -23,6 +23,15 @@ export const cdCommand: Command = {
     const path = ctx.args[0] || "~";
     const cleanInput = path.replace(/\/$/, "");
 
+    // On a post detail page, "cd .." should go back like the browser back button
+    if (cleanInput === ".." && typeof window !== "undefined") {
+      const pathname = window.location.pathname;
+      // Match /posts/<slug> (but not /posts or /posts/)
+      if (/^\/posts\/[^/]+/.test(pathname)) {
+        return { html: "", goBack: true };
+      }
+    }
+
     // Home directory
     if (cleanInput === "~" || cleanInput === "" || cleanInput === "/") {
       return { html: "", newPath: "~", navigate: "/" };

@@ -268,9 +268,12 @@ const filename = formatFilename(frontmatter.title);
     @apply border-l-4 border-term-purple pl-4 my-4 text-term-fg-dark italic;
   }
 
-  .term-prose :global(ul),
+  .term-prose :global(ul) {
+    @apply my-4 pl-6 list-disc;
+  }
+
   .term-prose :global(ol) {
-    @apply my-4 pl-6;
+    @apply my-4 pl-6 list-decimal;
   }
 
   .term-prose :global(li) {
@@ -283,6 +286,19 @@ const filename = formatFilename(frontmatter.title);
 
   .term-prose :global(ol li::marker) {
     @apply text-term-yellow;
+  }
+
+  .term-prose :global(.heading-anchor) {
+    @apply text-inherit no-underline;
+  }
+
+  .term-prose :global(.heading-anchor::before) {
+    content: '#';
+    @apply text-term-fg-dark opacity-0 transition-opacity mr-1;
+  }
+
+  .term-prose :global(.heading-anchor:hover::before) {
+    @apply opacity-100;
   }
 
   .term-prose :global(hr) {

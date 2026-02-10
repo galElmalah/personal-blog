@@ -187,7 +187,12 @@ const {
       });
     });
 
-    // Click anywhere in terminal to focus input
+    // Auto-focus the input on non-post pages so it's ready to type
+    if (!/^\/posts\/[^/]+/.test(window.location.pathname)) {
+      commandInput.focus();
+    }
+
+    // Click anywhere in terminal to focus input (preventScroll to avoid jumping to bottom)
     document.querySelector(".term-shell")?.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (
@@ -195,12 +200,21 @@ const {
         !target.closest("button") &&
         !target.closest("input")
       ) {
-        commandInput?.focus();
+        commandInput?.focus({ preventScroll: true });
       }
     });
 
-    // Focus input after a short delay
-    setTimeout(() => commandInput?.focus(), 100);
+    // Restore hash scroll after init — layout shifts during JS init can disrupt
+    // the browser's native hash scroll, so we re-scroll after everything settles
+    if (window.location.hash) {
+      setTimeout(() => {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+          target.scrollIntoView();
+        }
+      }, 150);
+    }
+
   }
 
   // Initialize on DOM ready

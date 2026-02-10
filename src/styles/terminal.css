@@ -118,7 +118,7 @@
     color: var(--term-fg);
     min-height: calc(100vh - 48px); /* Account for fixed header */
     width: 100%;
-    padding: 1.5rem;
+    padding: 0.75rem 1rem;
     font-size: 14px;
     line-height: 1.6;
     overflow-x: hidden;
@@ -127,9 +127,9 @@
 
   .term-shell-content {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    max-width: none;
+    margin: 0;
+    padding: 0 0.5rem;
   }
 
   /* Prompt styles */
@@ -427,9 +427,14 @@
 
   /* Command line display */
   .term-command-line {
+    margin-bottom: 0.25rem;
+  }
+
+  .term-command-line .term-input-line {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: row;
+    align-items: baseline;
+    margin-top: 0;
   }
 
   /* Find result entry */
@@ -492,12 +497,12 @@
     }
 
     .term-shell {
-      padding: 1rem;
+      padding: 0.5rem 0.75rem;
       font-size: 13px;
     }
 
     .term-shell-content {
-      padding: 0 0.5rem;
+      padding: 0;
     }
 
     .ascii-art pre {

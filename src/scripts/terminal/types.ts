@@ -61,6 +61,8 @@ export interface CommandResult {
   newPath?: string;
   /** URL to navigate to (for cd command) */
   navigate?: string;
+  /** Whether to go back in browser history */
+  goBack?: boolean;
   /** Whether this result represents an error */
   error?: boolean;
   /** Whether to clear the terminal before showing output */

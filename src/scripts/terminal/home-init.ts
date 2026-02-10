@@ -72,10 +72,9 @@ export function initHomePage() {
             inputElement: commandInput,
             promptPath: '~'
           });
+          commandInput.focus();
         }
-        
-        // Focus input
-        setTimeout(() => commandInput?.focus(), 100);
+
       }
     }
     
@@ -99,11 +98,11 @@ export function initHomePage() {
     });
   });
 
-  // Click anywhere in terminal to focus input
+  // Click anywhere in terminal to focus input (preventScroll to avoid jumping to bottom)
   document.querySelector('.term-shell')?.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     if (!target.closest('a') && !target.closest('button') && !target.closest('input')) {
-      commandInput?.focus();
+      commandInput?.focus({ preventScroll: true });
     }
   });
 }

@@ -342,14 +342,12 @@ export class TerminalEngine {
     const trimmed = input.trim();
     if (!trimmed) return;
 
-    // Show command in output
-    this.appendCommandLine(trimmed);
-
     // Parse command
     const { command, args, flags } = parseCommand(trimmed);
 
     // Special case: history command needs access to engine state
     if (command === 'history') {
+      this.appendCommandLine(trimmed);
       this.appendOutput(renderHistory(this.state.commandHistory));
       this.scrollToBottom();
       return;
@@ -357,7 +355,7 @@ export class TerminalEngine {
 
     // Look up and execute command
     const cmd = this.registry.get(command);
-    
+
     let result: CommandResult;
     if (cmd) {
       const ctx = this.createContext(args, flags);
@@ -369,6 +367,19 @@ export class TerminalEngine {
       };
     }
 
+    // Navigate immediately without any DOM changes to avoid scroll flash
+    if (result.goBack) {
+      history.back();
+      return;
+    }
+    if (result.navigate) {
+      window.location.href = result.navigate;
+      return;
+    }
+
+    // Show command in output (after navigation check to avoid scroll flash)
+    this.appendCommandLine(trimmed);
+
     // Handle result
     if (result.clear) {
       this.clearOutput();
@@ -377,10 +388,6 @@ export class TerminalEngine {
 
     if (result.newPath) {
       this.state.currentPath = result.newPath;
-    }
-
-    if (result.navigate) {
-      window.location.href = result.navigate;
     }
 
     if (result.html) {
@@ -423,11 +430,21 @@ export class TerminalEngine {
     // Add click handlers for interactive elements
     outputDiv.querySelectorAll('[data-cmd]').forEach(el => {
       el.addEventListener('click', (e) => {
+        const htmlEl = el as HTMLElement;
+        const cmd = htmlEl.dataset.cmd;
+
+        // If element is a link with href, let the browser navigate naturally
+        if (el.tagName === 'A' && (el as HTMLAnchorElement).href) {
+          return;
+        }
+
+        // For non-link elements (directories, commands), execute the command
         e.preventDefault();
-        const cmd = (el as HTMLElement).dataset.cmd;
-        if (cmd && this.inputElement) {
-          this.inputElement.value = cmd;
-          this.inputElement.focus();
+        if (cmd) {
+          this.executeCommand(cmd);
+          if (this.inputElement) {
+            this.inputElement.value = '';
+          }
         }
       });
     });
@@ -463,7 +480,6 @@ export class TerminalEngine {
         shell.scrollTop = shell.scrollHeight;
       }
     }
-    window.scrollTo(0, document.body.scrollHeight);
   }
 }
 
