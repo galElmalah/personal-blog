@@ -1,0 +1,43 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "~/gal.e" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - list [ref=e5]:
+        - listitem [ref=e6]:
+          - link "posts" [ref=e7] [cursor=pointer]:
+            - /url: /posts
+        - listitem [ref=e8]:
+          - link "series" [ref=e9] [cursor=pointer]:
+            - /url: /series
+        - listitem [ref=e10]:
+          - link "tags" [ref=e11] [cursor=pointer]:
+            - /url: /tags
+        - listitem [ref=e12]:
+          - link "archive" [ref=e13] [cursor=pointer]:
+            - /url: /archives
+        - listitem [ref=e14]:
+          - link "search" [ref=e15] [cursor=pointer]:
+            - /url: /search
+        - listitem [ref=e16]:
+          - button "Toggle between terminal and desktop view" [active] [ref=e17] [cursor=pointer]:
+            - img [ref=e65]
+            - generic [ref=e21]: Terminal
+  - main [ref=e22]:
+    - generic [ref=e71]:
+      - button "Home - Return to desktop root" [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - generic: Home
+      - button "Posts - View all posts" [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - generic: Posts
+      - button "Series - View all series" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+        - generic: Series
+      - button "Terminal - Switch to terminal view" [ref=e84] [cursor=pointer]:
+        - img [ref=e85]
+        - generic: Terminal
+  - contentinfo [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]: © 2026 Gal Elmalah
+      - generic [ref=e31]: "# exit 0"

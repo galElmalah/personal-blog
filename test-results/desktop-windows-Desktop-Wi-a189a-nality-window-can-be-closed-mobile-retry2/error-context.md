@@ -1,0 +1,45 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - button "Apple menu" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - generic [ref=e10]: Blog
+        - button "File" [ref=e11] [cursor=pointer]
+        - button "Edit" [ref=e12] [cursor=pointer]
+        - button "View" [ref=e13] [cursor=pointer]
+        - button "Go" [ref=e14] [cursor=pointer]
+        - button "Window" [ref=e15] [cursor=pointer]
+        - button "Help" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - button "Battery" [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+        - button "Wi-Fi" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+        - button "Spotlight" [ref=e29] [cursor=pointer]:
+          - img [ref=e30]
+        - button "Control Center" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+        - generic [ref=e41]: Thu Jan 29 7:41 PM
+    - generic [ref=e44]:
+      - img [ref=e45]
+      - heading "Desktop View" [level=2] [ref=e47]
+      - paragraph [ref=e48]: Desktop view works best on larger screens (1024px+).
+      - paragraph [ref=e49]: Please switch to terminal view or use a desktop browser.
+  - generic [ref=e52]:
+    - button "Menu" [ref=e53]:
+      - img [ref=e55]
+      - generic: Menu
+    - button "Inspect" [ref=e59]:
+      - img [ref=e61]
+      - generic: Inspect
+    - button "Audit" [ref=e63]:
+      - img [ref=e65]
+      - generic: Audit
+    - button "Settings" [ref=e68]:
+      - img [ref=e70]
+      - generic: Settings
+```

@@ -1,0 +1,2 @@
+[      90ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4325/@vite/client:0
+[     230ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4325/@id/__x00__astro:toolbar:internal:0

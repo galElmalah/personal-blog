@@ -1,0 +1,2 @@
+[      72ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/components/terminal/InteractiveTerminal.astro?astro&type=script&index=0&lang.ts:0
+[      72ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/layouts/TerminalLayout.astro?astro&type=script&index=0&lang.ts:0

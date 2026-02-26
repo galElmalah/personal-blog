@@ -1,0 +1,10 @@
+[     283ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[     489ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0
+[    2121ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[    2212ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0
+[   10145ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[   10232ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0
+[   10538ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[   10625ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0
+[   12073ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[   12153ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0

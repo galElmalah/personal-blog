@@ -1,0 +1,9 @@
+[    8415ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://www.googletagmanager.com/gtag/js?id=G-ZYH05RT2G1:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@vite/client:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/@fs/Users/gale/Desktop/Projects/personal-blog/node_modules/astro/dist/runtime/client/dev-toolbar/entrypoint.js?v=d34ded05:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/node_modules/@astrojs/tailwind/base.css:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/styles/terminal.css:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/components/terminal/TerminalShell.astro?astro&type=style&index=0&lang.css:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/components/terminal/InteractiveTerminal.astro?astro&type=style&index=0&lang.css:0
+[    8416ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/components/terminal/InteractiveTerminal.astro?astro&type=script&index=0&lang.ts:0
+[    8417ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:4321/src/layouts/TerminalLayout.astro?astro&type=script&index=0&lang.ts:0
