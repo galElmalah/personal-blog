@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "What, Why and Who?"
 cover: "/images/posts/learning-go-intro/cover.png"
 coverAlt: "go lang icon"

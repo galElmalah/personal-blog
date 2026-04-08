@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "Advent of Code day 7 solution"
 cover: "/images/posts/advent-of-code-2022-day-7/aoc.jpg"
 coverAlt: "computer terminal"

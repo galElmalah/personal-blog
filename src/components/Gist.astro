@@ -11,9 +11,22 @@ const src = file
   : `https://gist.github.com/${user}/${id}.js`;
 ---
 
-<div class="gist-embed my-4">
-  <script src={src}></script>
-</div>
+<div class="gist-embed my-4" data-gist-src={src}></div>
+
+<script is:inline>
+  const currentScript = document.currentScript;
+  const container = currentScript?.previousElementSibling;
+
+  if (container instanceof HTMLElement) {
+    const gistSrc = container.dataset.gistSrc;
+
+    if (gistSrc && !container.querySelector("script")) {
+      const script = document.createElement("script");
+      script.src = gistSrc;
+      container.appendChild(script);
+    }
+  }
+</script>
 
 <style is:global>
   .gist-embed .gist {

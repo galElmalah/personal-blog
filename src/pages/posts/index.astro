@@ -1,29 +1,47 @@
 ---
-import TerminalLayout from "@layouts/TerminalLayout.astro";
-import TerminalShell from "@components/terminal/TerminalShell.astro";
-import TerminalContext from "@components/terminal/TerminalContext.astro";
-import CommandLine from "@components/terminal/CommandLine.astro";
-import LsOutput from "@components/terminal/LsOutput.astro";
-import InteractiveTerminal from "@components/terminal/InteractiveTerminal.astro";
 import { getCollection } from "astro:content";
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import getSortedPosts from "@/utils/getSortedPosts";
 
-const posts = await getCollection("posts", ({ data }) => !data.draft);
-const sortedPosts = posts.sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+const posts = await getCollection("blog");
+const sortedPosts = getSortedPosts(posts).filter(
+  ({ data }) => data.type !== "thought"
 );
+
+const postsByYear = Object.entries(
+  getPostsByGroupCondition(
+    sortedPosts,
+    post => post.data.pubDatetime.getFullYear()
+  )
+).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
 ---
 
-<TerminalLayout title="All Posts">
-  <!-- Inject posts data for terminal engine -->
-  <TerminalContext currentPath="~/posts" />
-
-  <TerminalShell>
-    <!-- SSR initial content showing ls output -->
-    <CommandLine command="ls" args="-la posts/" path="~">
-      <LsOutput posts={sortedPosts} showSeries={false} />
-    </CommandLine>
-
-    <!-- Interactive terminal with full command support -->
-    <InteractiveTerminal path="~/posts" runInitialLs={false} />
-  </TerminalShell>
-</TerminalLayout>
+<Layout title="Posts">
+  <Header />
+  <Main
+    pageTitle="Posts"
+    pageDesc="All posts in one list, grouped by year."
+  >
+    <div class="space-y-12">
+      {postsByYear.map(([year, yearPosts]) => (
+        <section class="border-t border-border pt-6 first:border-t-0 first:pt-0">
+          <div class="mb-4 flex items-baseline gap-2">
+            <h2 class="text-2xl font-bold">{year}</h2>
+            <span class="text-sm opacity-70">{yearPosts.length}</span>
+          </div>
+          <ul>
+            {yearPosts.map(post => (
+              <Card {...post} />
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </Main>
+  <Footer />
+</Layout>

@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "Advent of Code day 10 solution"
 cover: "/images/posts/advent-of-code-2022-day-10/aoc.jpg"
 coverAlt: "trees"
@@ -176,9 +175,7 @@ Not everything here is obvious so let's go over the tricky lines one by one:
 
 **`d := util.Abs(col - x)`** - our delta from the center of the sprite, if its smaller than 2 (remember that x is the center of the sprite) we draw a _lit_ pixel, otherwise we draw a _dark_ pixel
 
-#### With my input I got the following output, what about you?
-
-![solution output](/images/posts/advent-of-code-2022-day-10/output.png)
+#### With my input I got a six-line CRT pattern that clearly spells out the answer.
 
 ---
 

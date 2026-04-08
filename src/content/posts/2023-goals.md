@@ -42,7 +42,7 @@ I can start solving specific sections at first, for example, start by solving al
 
 ### Dive deeper into Go
 
-I started [learning go](https://www.galelmalah.com/series/learning-go/) while doing Advent of Code.  
+I started [learning go](/posts/learning-go-intro/) while doing Advent of Code.  
 I enjoyed the language and I'll dive deeper into its main features. I also have a couple of side projects and blog posts in mind.
 
 #### Impact

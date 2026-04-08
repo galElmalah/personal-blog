@@ -5,9 +5,8 @@ author: "Gal Elmalah"
 tags:
   - "Data Structures"
   - "Go"
-draft: true
+draft: false
 showToc: true
-series: "Learning Go"
 description: "Implement a doubly linked list in Go"
 cover: "/images/posts/data-structres-doubly-linked-list/cover.jpg"
 coverAlt: "<alt text>"

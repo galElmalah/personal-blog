@@ -1,4 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="4" fill="#1a1a2e"/>
-  <text x="4" y="22" font-family="monospace" font-size="16" fill="#4ade80">&gt;_</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="GE monogram">
+  <rect width="64" height="64" rx="14" fill="#fbf7f0" />
+  <rect
+    x="1.5"
+    y="1.5"
+    width="61"
+    height="61"
+    rx="12.5"
+    fill="none"
+    stroke="#26211d"
+    stroke-opacity="0.14"
+  />
+  <text
+    x="32"
+    y="39"
+    text-anchor="middle"
+    font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+    font-size="28"
+    font-style="italic"
+    font-weight="600"
+    letter-spacing="0.06em"
+    fill="#26211d"
+  >
+    GE
+  </text>
 </svg>

@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "Advent of Code day 5 solution"
 cover: "/images/posts/advent-of-code-2022-day-5/aoc.jpg"
 coverAlt: "crane"

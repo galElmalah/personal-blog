@@ -5,9 +5,8 @@ author: "Gal Elmalah"
 tags:
   - "Coding Questions"
   - "Go"
-draft: true
+draft: false
 showToc: true
-series: "Learning Go"
 description: "Advent of Code day 13 solution"
 cover: "/images/posts/coding-questions-merging-intervals/cover.jpg"
 coverAlt: "<alt text>"

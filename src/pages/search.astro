@@ -1,323 +1,141 @@
 ---
-import TerminalLayout from "@layouts/TerminalLayout.astro";
-import TerminalShell from "@components/terminal/TerminalShell.astro";
-import TerminalContext from "@components/terminal/TerminalContext.astro";
-import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
-import { getCollection } from "astro:content";
+import "@pagefind/default-ui/css/ui.css";
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
 
-const posts = await getCollection("posts", ({ data }) => !data.draft);
-const searchData = posts.map((post) => ({
-  slug: post.slug,
-  title: post.data.title,
-  description: post.data.description || "",
-  tags: post.data.tags,
-  series: post.data.series || "",
-  date: post.data.date.toISOString(),
-}));
+const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 ---
 
-<TerminalLayout title="Search">
-  <TerminalContext currentPath="~/search" />
-  <TerminalShell>
-    <div class="text-term-comment text-sm mb-4">
-      # Search posts using fuzzy matching
-    </div>
-
-    <!-- Command input area -->
-    <div class="term-command-line mb-6">
-      <div class="term-input-line flex items-center">
-        <TerminalPrompt path="~/search" />
-        <span class="term-command ml-2">find</span>
-        <span class="term-command-arg ml-1">posts/ -name "</span>
-        <div class="relative flex-1 min-w-0">
-          <input
-            type="text"
-            id="search-input"
-            class="term-search-input w-full"
-            placeholder="*"
-            autofocus
-          />
-          <span id="search-cursor" class="term-cursor absolute" style="left: 0;"
-          ></span>
-        </div>
-        <span class="term-command-arg">"</span>
-      </div>
-    </div>
-
-    <!-- Results area -->
-    <div id="search-results" class="font-mono">
-      <div class="text-term-fg-dark text-sm">
-        Type to search {posts.length} posts...
-      </div>
-    </div>
-  </TerminalShell>
-</TerminalLayout>
-
-<style>
-  .term-search-input {
-    background: transparent;
-    border: none;
-    color: var(--term-green);
-    font-family: inherit;
-    font-size: inherit;
-    outline: none;
-    caret-color: transparent; /* Hide native caret */
-  }
-
-  .term-search-input::placeholder {
-    color: var(--term-fg-dark);
-    opacity: 0.5;
-  }
-
-  #search-cursor {
-    pointer-events: none;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-</style>
-
-<!-- Embed search data for the client-side script -->
-<script is:inline define:vars={{ searchData }}>
-  window.__SEARCH_DATA__ = searchData;
-</script>
+<Layout title={`Search | ${SITE.title}`}>
+  <Header />
+  <Main pageTitle="Search" pageDesc="Search posts and notes.">
+    <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>
+  </Main>
+  <Footer />
+</Layout>
 
 <script>
-  import Fuse from "fuse.js";
-  
-  const searchData = window.__SEARCH_DATA__;
+  function initSearch() {
+    const pageFindSearch: HTMLElement | null =
+      document.querySelector("#pagefind-search");
 
-  const searchCursor = document.getElementById("search-cursor");
-  const searchInputEl = document.getElementById("search-input");
+    if (!pageFindSearch) return;
 
-  // Update cursor position based on input text
-  function updateSearchCursorPosition() {
-    if (!searchInputEl || !searchCursor) return;
+    const params = new URLSearchParams(window.location.search);
 
-    const measureSpan = document.createElement("span");
-    measureSpan.style.font = getComputedStyle(searchInputEl).font;
-    measureSpan.style.visibility = "hidden";
-    measureSpan.style.position = "absolute";
-    measureSpan.style.whiteSpace = "pre";
-    measureSpan.textContent = searchInputEl.value || "*";
-    document.body.appendChild(measureSpan);
+    const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
 
-    const textWidth = measureSpan.offsetWidth;
-    document.body.removeChild(measureSpan);
+    onIdle(async () => {
+      // @ts-expect-error — Missing types for @pagefind/default-ui package.
+      const { PagefindUI } = await import("@pagefind/default-ui");
 
-    // If empty, position after placeholder width
-    if (searchInputEl.value === "") {
-      searchCursor.style.left = `${textWidth}px`;
-    } else {
-      searchCursor.style.left = `${textWidth}px`;
-    }
-  }
-
-  // Setup cursor events
-  if (searchInputEl && searchCursor) {
-    searchInputEl.addEventListener("input", updateSearchCursorPosition);
-    searchInputEl.addEventListener("focus", () => {
-      searchCursor.style.display = "inline-block";
-      updateSearchCursorPosition();
-    });
-    searchInputEl.addEventListener("blur", () => {
-      // Re-focus after a short delay to keep input selected
-      setTimeout(() => {
-        if (
-          document.activeElement?.tagName !== "A" &&
-          document.activeElement?.tagName !== "INPUT"
-        ) {
-          searchInputEl.focus();
-          searchCursor.style.display = "inline-block";
-        } else {
-          searchCursor.style.display = "none";
-        }
-      }, 10);
-    });
-
-    // Click anywhere on terminal to focus input
-    const terminalShell = document.getElementById("terminal-shell");
-    if (terminalShell) {
-      terminalShell.addEventListener("click", (e) => {
-        // Don't steal focus from links
-        if (e.target && e.target.tagName !== "A") {
-          searchInputEl.focus();
-        }
-      });
-    }
-
-    // Auto-focus on page load
-    window.addEventListener("load", () => {
-      searchInputEl.focus();
-      updateSearchCursorPosition();
-    });
-
-    // Initialize cursor position
-    updateSearchCursorPosition();
-  }
-
-  const fuse = new Fuse(searchData, {
-    keys: [
-      { name: "title", weight: 2 },
-      { name: "description", weight: 1.5 },
-      { name: "tags", weight: 1 },
-      { name: "series", weight: 1 },
-    ],
-    threshold: 0.4,
-    includeScore: true,
-    minMatchCharLength: 2,
-  });
-
-  const searchInput = document.getElementById("search-input");
-  const searchResults = document.getElementById("search-results");
-
-  function formatDate(dateStr) {
-    const date = new Date(dateStr);
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const day = date.getDate().toString().padStart(2, " ");
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${month} ${day} ${year}`;
-  }
-
-  function formatFilename(title) {
-    return (
-      title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .slice(0, 45) + ".md"
-    );
-  }
-
-  function renderResults(results, query) {
-    if (results.length === 0) {
-      searchResults.innerHTML = `
-        <div class="text-term-red">
-          find: no matches found for pattern '${query}'
-        </div>
-      `;
-      return;
-    }
-
-    const html = `
-      <div class="text-term-fg-dark text-sm mb-4">
-        ${results.length} file${results.length !== 1 ? "s" : ""} matching pattern '${query}'
-      </div>
-      
-      <div class="space-y-1 mb-6">
-        ${results
-          .map(
-            ({ item }) => `
-          <div class="term-find-result">
-            <span class="text-term-purple">./posts/</span>
-            <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue transition-colors">
-              ${formatFilename(item.title)}
-            </a>
-          </div>
-        `,
-          )
-          .join("")}
-      </div>
-      
-      <div class="border-t border-term-fg-dark/30 pt-4 mt-4">
-        <div class="text-term-comment text-sm mb-4"># Detailed results</div>
-        
-        ${results
-          .map(
-            ({ item, score }) => `
-          <div class="border border-term-fg-dark/30 rounded p-4 mb-3 bg-term-bg-alt/30">
-            <div class="flex items-center justify-between mb-2">
-              <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue font-medium transition-colors">
-                ${item.title}
-              </a>
-              <span class="text-term-fg-dark text-xs">score: ${(1 - score).toFixed(2)}</span>
+      // Display warning in dev mode
+      if (import.meta.env.DEV) {
+        pageFindSearch.innerHTML = `
+            <div class="bg-muted/75 rounded p-4 space-y-4 mb-4">
+              <p><strong>DEV mode Warning! </strong>You need to build the project at least once to see the search results during development.</p>
+              <code class="block bg-black text-white px-2 py-1 rounded">npm run build</code>
             </div>
-            ${item.description ? `<p class="text-term-fg-dark text-sm mb-2">${item.description}</p>` : ""}
-            <div class="flex flex-wrap items-center gap-3 text-xs text-term-fg-dark">
-              <span class="text-term-yellow">${formatDate(item.date)}</span>
-              ${item.series ? `<span>|</span><span class="text-term-purple">${item.series}</span>` : ""}
-            </div>
-            ${
-              item.tags.length > 0
-                ? `
-              <div class="flex flex-wrap gap-2 mt-2">
-                ${item.tags.map((tag) => `<span class="text-term-green text-xs">#${tag}</span>`).join("")}
-              </div>
-            `
-                : ""
-            }
-          </div>
-        `,
-          )
-          .join("")}
-      </div>
-    `;
-
-    searchResults.innerHTML = html;
-  }
-
-  function showAllPosts() {
-    const html = `
-      <div class="text-term-fg-dark text-sm mb-4">
-        Showing all ${searchData.length} posts (type to filter)
-      </div>
-      
-      <div class="space-y-1">
-        ${searchData
-          .sort(
-            (a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf(),
-          )
-          .map(
-            (item) => `
-            <div class="term-find-result">
-              <span class="text-term-fg-dark">${formatDate(item.date)}</span>
-              <span class="text-term-purple ml-2">./posts/</span>
-              <a href="/posts/${item.slug}" class="text-term-cyan hover:text-term-blue transition-colors">
-                ${formatFilename(item.title)}
-              </a>
-            </div>
-          `,
-          )
-          .join("")}
-      </div>
-    `;
-
-    searchResults.innerHTML = html;
-  }
-
-  searchInput?.addEventListener("input", (e) => {
-    const query = e.target.value.trim();
-
-    if (query.length < 2) {
-      if (query.length === 0) {
-        showAllPosts();
-      } else {
-        searchResults.innerHTML = `
-          <div class="text-term-fg-dark text-sm">
-            Type at least 2 characters to search...
-          </div>
-        `;
+          `;
       }
-      return;
+
+      // Init pagefind ui
+      const search = new PagefindUI({
+        element: "#pagefind-search",
+        showImages: false,
+        showSubResults: true,
+        processTerm: function (term: string) {
+          params.set("q", term); // Update the `q` parameter in the URL
+          history.replaceState(history.state, "", "?" + params.toString()); // Push the new URL without reloading
+
+          const backUrl = pageFindSearch?.dataset?.backurl;
+          sessionStorage.setItem("backUrl", backUrl + "?" + params.toString());
+
+          return term;
+        },
+      });
+
+      // If search param exists (eg: search?q=astro), trigger search
+      const query = params.get("q");
+      if (query) {
+        search.triggerSearch(query);
+      }
+
+      // Reset search param if search input is cleared
+      const searchInput = document.querySelector(".pagefind-ui__search-input");
+      const clearButton = document.querySelector(".pagefind-ui__search-clear");
+      searchInput?.addEventListener("input", resetSearchParam);
+      clearButton?.addEventListener("click", resetSearchParam);
+
+      function resetSearchParam(e: Event) {
+        if ((e.target as HTMLInputElement)?.value.trim() === "") {
+          history.replaceState(history.state, "", window.location.pathname);
+        }
+      }
+    });
+  }
+
+  document.addEventListener("astro:after-swap", () => {
+    const pagefindSearch = document.querySelector("#pagefind-search");
+
+    // if pagefind search form already exists, don't initialize search component
+    if (pagefindSearch && pagefindSearch.querySelector("form")) return;
+
+    initSearch();
+  });
+  initSearch();
+</script>
+
+<style is:global>
+  #pagefind-search {
+    --pagefind-ui-font: var(--font-app);
+    --pagefind-ui-text: var(--foreground);
+    --pagefind-ui-background: var(--background);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-tag: var(--background);
+    --pagefind-ui-border-radius: 0.375rem;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+
+    form::before {
+      background-color: var(--foreground);
     }
 
-    const results = fuse.search(query);
-    renderResults(results, query);
-  });
+    input {
+      font-weight: 400;
+      border: 1px solid var(--border);
+    }
 
-  // Show all posts on initial load
-  showAllPosts();
-</script>
+    input:focus-visible {
+      outline: 1px solid var(--accent);
+    }
+
+    .pagefind-ui__result-title a {
+      color: var(--accent);
+      outline-offset: 1px;
+      outline-color: var(--accent);
+      text-decoration-style: dashed;
+      text-underline-offset: 4px;
+    }
+
+    .pagefind-ui__result-title a:focus-visible,
+    .pagefind-ui__search-clear:focus-visible {
+      text-decoration-line: none;
+      outline-width: 2px;
+      outline-style: dashed;
+    }
+
+    .pagefind-ui__result:last-of-type {
+      border-bottom: 0;
+    }
+
+    .pagefind-ui__result-nested .pagefind-ui__result-link:before {
+      font-family: system-ui;
+    }
+  }
+</style>

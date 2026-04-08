@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "Introduction to my journey learning Go"
 cover: "/images/posts/advent-of-code-2022-day-3/legolas.jpg"
 coverAlt: "legolas from lord of the rings meme"

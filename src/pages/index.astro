@@ -1,163 +1,152 @@
 ---
-import HomeLayout from "@layouts/HomeLayout.astro";
-import TerminalShell from "@components/terminal/TerminalShell.astro";
-import TerminalPrompt from "@components/terminal/TerminalPrompt.astro";
-import TerminalContext from "@components/terminal/TerminalContext.astro";
 import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Socials from "@/components/Socials.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { getPath } from "@/utils/getPath";
+import IconRss from "@/assets/icons/IconRss.svg";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { SITE } from "@/config";
+import { SOCIALS } from "@/constants";
 
-const posts = await getCollection("posts", ({ data }) => !data.draft);
-const postCount = posts.length;
-const seriesCount = new Set(posts.filter(p => p.data.series).map(p => p.data.series)).size;
-const tagCount = new Set(posts.flatMap(p => p.data.tags)).size;
-const pinnedPosts = posts.filter(p => p.data.pinned);
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+const thoughts = sortedPosts.filter(({ data }) => data.type === "thought");
+const blogPosts = sortedPosts.filter(({ data }) => data.type !== "thought");
+const featuredPosts = blogPosts.filter(({ data }) => data.featured);
+const recentPosts = blogPosts.filter(({ data }) => !data.featured);
 ---
 
-<HomeLayout title="Home">
-  <!-- Inject posts data for terminal engine -->
-  <TerminalContext currentPath="~" />
+<Layout>
+  <Header />
+  <main id="main-content" data-layout="index" class="app-layout">
+    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
+      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
+        Gal Elmalah
+      </h1>
+      <a
+        target="_blank"
+        href="/rss.xml"
+        class="inline-block"
+        aria-label="rss feed"
+        title="RSS Feed"
+      >
+        <IconRss
+          width={20}
+          height={20}
+          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
+        />
+        <span class="sr-only">RSS Feed</span>
+      </a>
 
-  <TerminalShell>
-    <!-- ASCII Welcome Art - will be animated -->
-    <div id="ascii-welcome" class="ascii-art text-term-cyan mb-6" role="img" aria-label="Welcome to Gal.E Blog">
-      <pre class="text-xs sm:text-sm leading-tight"></pre>
-    </div>
+      <p>
+        Writing on engineering, systems, leadership, and the work behind the
+        work.
+      </p>
+      <p class="mt-2">
+        Long-form posts, shorter notes, and practical lessons from building and
+        shipping software.
+      </p>
+      {
+        // only display if at least one social link is enabled
+        SOCIALS.length > 0 && (
+          <div class="mt-4 flex max-sm:flex-col sm:items-center">
+            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
 
-    <!-- Intro text - appears after ASCII -->
-    <div id="intro-section" class="hidden mb-6">
-      <div class="text-term-fg mb-4">
-        <span class="text-term-green">Hey there!</span> I'm <span class="text-term-cyan">Gal Elmalah</span>.
-      </div>
-      <div class="text-term-fg-dark mb-4">
-        This is my corner of the internet where I dump thoughts on coding, 
-        leadership, and whatever else catches my attention.
-      </div>
-      
-      <!-- Stats -->
-      <div class="text-term-fg-dark text-sm mb-4">
-        <span class="text-term-yellow">{postCount}</span> posts | 
-        <span class="text-term-yellow">{seriesCount}</span> series |
-        <span class="text-term-yellow">{tagCount}</span> tags
-      </div>
+    {
+      featuredPosts.length > 0 && (
+        <section
+          id="featured"
+          class:list={[
+            "pt-12 pb-6",
+            { "border-b border-border": recentPosts.length > 0 },
+          ]}
+        >
+          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+          <ul>
+            {featuredPosts.map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
-      <!-- Social links -->
-      <div class="mb-4">
-        <div class="text-term-comment text-sm mb-2"># Find me online:</div>
-        <div class="flex flex-wrap gap-4 text-sm">
-          <a href="https://github.com/galelmalah" target="_blank" rel="noopener noreferrer" class="term-link">[GitHub]</a>
-          <a href="https://twitter.com/galelmalah" target="_blank" rel="noopener noreferrer" class="term-link">[Twitter]</a>
-          <a href="https://www.linkedin.com/in/gal-elmalah-71874115a/" target="_blank" rel="noopener noreferrer" class="term-link">[LinkedIn]</a>
-          <a href="/rss.xml" class="term-link">[RSS]</a>
-        </div>
-      </div>
+    <section class="grid gap-10 pt-12 pb-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+      {
+        recentPosts.length > 0 && (
+          <div id="recent-posts">
+            <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
+            <ul>
+              {recentPosts.map(
+                (data, index) =>
+                  index < SITE.postPerIndex && <Card variant="h3" {...data} />
+              )}
+            </ul>
+          </div>
+        )
+      }
 
-      <!-- Pinned posts -->
-      {pinnedPosts.length > 0 && (
-        <div class="mb-4">
-          <div class="text-term-comment text-sm mb-2"># Pinned:</div>
-          {pinnedPosts.map(post => (
-            <div class="mb-1">
-              <a href={`/posts/${post.slug}`} class="text-term-blue hover:text-term-cyan transition-colors text-sm">
-                {post.data.title}
-              </a>
+      {
+        thoughts.length > 0 && (
+          <aside class="lg:sticky lg:top-6">
+            <div class="rounded-xl border border-border bg-muted/20 p-4">
+              <div class="mb-4 flex items-center justify-between gap-3 border-b border-border pb-3">
+                <h2 class="text-lg font-semibold tracking-wide">Thoughts</h2>
+                <span class="text-xs opacity-70">{thoughts.length}</span>
+              </div>
+
+              <div class="max-h-96 space-y-3 overflow-y-auto pe-1">
+                {thoughts.map(({ id, data, filePath }) => (
+                  <a
+                    href={getPath(id, filePath)}
+                    class="block rounded-lg border border-transparent px-3 py-2 transition-colors hover:border-border hover:bg-background/70"
+                  >
+                    <div class="mb-1 flex items-center justify-between gap-3 text-[0.7rem] uppercase tracking-[0.18em] opacity-60">
+                      <span>{data.thoughtId ?? "Thought"}</span>
+                      <time datetime={data.pubDatetime.toISOString()}>
+                        {data.pubDatetime.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </time>
+                    </div>
+                    <p class="text-sm leading-6">{data.title}</p>
+                  </a>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          </aside>
+        )
+      }
+    </section>
 
-      <!-- Divider -->
-      <div class="text-term-fg-dark mb-4 overflow-hidden whitespace-nowrap">
-        ────────────────────────────────────────────────
-      </div>
-
-      <!-- Quick commands hint -->
-      <div class="text-term-comment text-sm mb-4">
-        # Type <span class="text-term-green">help</span> for available commands,
-        or try: <span class="text-term-green">ls</span>, <span class="text-term-green">grep</span>, <span class="text-term-green">cat</span>
-      </div>
+    <div class="my-8 text-center">
+      <LinkButton href="/posts/">
+        All Posts
+        <IconArrowRight class="inline-block rtl:-rotate-180" />
+      </LinkButton>
     </div>
-
-    <!-- Terminal output container -->
-    <div id="terminal-output" class="mb-4"></div>
-
-    <!-- Command input line (always visible after intro) -->
-    <div id="input-section" class="hidden">
-      <div class="flex items-center">
-        <TerminalPrompt />
-        <div class="relative flex-1 ml-2">
-          <input 
-            type="text" 
-            id="command-input"
-            class="term-input w-full"
-            placeholder=""
-            autocomplete="off"
-            spellcheck="false"
-            aria-label="Terminal Command Input"
-          />
-        </div>
-      </div>
-      
-      <!-- Mobile command suggestions -->
-      <div id="mobile-suggestions" class="mt-4 flex flex-wrap gap-2 sm:hidden">
-        <button class="term-suggestion" data-cmd="ls">ls</button>
-        <button class="term-suggestion" data-cmd="ls -la">ls -la</button>
-        <button class="term-suggestion" data-cmd="tree">tree</button>
-        <button class="term-suggestion" data-cmd="grep ">grep</button>
-        <button class="term-suggestion" data-cmd="cat ">cat</button>
-        <button class="term-suggestion" data-cmd="help">help</button>
-      </div>
-    </div>
-  </TerminalShell>
-</HomeLayout>
-
-<style>
-  .ascii-art pre {
-    font-family: 'Fira Code', monospace;
-    line-height: 1.2;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  .term-input {
-    background: transparent;
-    border: none;
-    color: var(--term-green);
-    font-family: inherit;
-    font-size: inherit;
-    outline: none;
-    caret-color: var(--term-cursor);
-  }
-
-  .term-suggestion {
-    padding: 0.25rem 0.75rem;
-    border: 1px solid var(--term-fg-dark);
-    border-radius: 0.25rem;
-    background: transparent;
-    color: var(--term-green);
-    font-family: inherit;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .term-suggestion:hover,
-  .term-suggestion:active {
-    border-color: var(--term-cyan);
-    color: var(--term-cyan);
-  }
-</style>
+  </main>
+  <Footer />
+</Layout>
 
 <script>
-  import { initHomePage } from "@/scripts/terminal/home-init";
-
-  // Initialize on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHomePage);
-  } else {
-    initHomePage();
-  }
-
-  // Support Astro View Transitions
-  document.addEventListener('astro:page-load', initHomePage);
+  document.addEventListener("astro:page-load", () => {
+    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset?.layout;
+    if (indexLayout) {
+      sessionStorage.setItem("backUrl", "/");
+    }
+  });
 </script>

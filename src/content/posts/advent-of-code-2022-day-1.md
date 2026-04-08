@@ -8,7 +8,6 @@ tags:
   - "Coding Questions"
 draft: false
 showToc: true
-series: "Learning Go"
 description: "Advent of Code day 1 solution"
 cover: "/images/posts/advent-of-code-2022-day-1/cover.jpg"
 coverAlt: "donuts"

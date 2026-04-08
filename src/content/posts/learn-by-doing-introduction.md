@@ -4,7 +4,6 @@ date: "2023-01-02T06:28:32.071Z"
 author: "Gal Elmalah"
 draft: false
 showToc: true
-series: "Learn by Doing"
 ---
 
 When learning a new concept, it's easy to get stuck in the planning phase and convince ourselves that watching a YouTube series or reading various articles and books will be enough to get us to where we want to be. While planning ahead and researching a topic is important, it's not as effective as actually practicing and doing the work.

@@ -1,6 +1,6 @@
 # Personal Blog
 
-A personal blog built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+A personal blog built with [Astro](https://astro.build/) using the [AstroPaper](https://github.com/satnaing/astro-paper) theme, deployed as a static site on Cloudflare.
 
 ## Development
 
@@ -20,28 +20,13 @@ npm run preview
 
 The development server runs at `http://localhost:4321`.
 
-## Project Structure
-
-```
-src/
-├── components/     # Reusable Astro components
-├── content/        # Blog posts (Markdown/MDX)
-├── layouts/        # Page layouts
-├── pages/          # Route pages
-└── styles/         # Global CSS
-```
-
 ## Features
 
-- Blog posts with tags and series
-- Search functionality (Fuse.js)
-- RSS feed
-- Disqus comments
-- Google Analytics
-- Table of contents
-- Reading time
-- Responsive design
-- Terminal-style homepage animation
+- AstroPaper layout and typography
+- Markdown and MDX posts from `src/content/posts/`
+- Static search with Pagefind
+- RSS feed and sitemap
+- Static `dist/` output for Cloudflare deployment
 
 ## Adding New Posts
 
@@ -55,11 +40,8 @@ author: "Gal Elmalah"
 tags:
   - "Tag1"
   - "Tag2"
-series: "Optional Series Name"
 description: "Optional description"
 cover: "/images/posts/post-slug/cover.jpg"
-coverAlt: "Cover image description"
-showToc: true
 draft: false
 ---
 ```
