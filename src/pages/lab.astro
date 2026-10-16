@@ -1,0 +1,62 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Main from "@/layouts/Main.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+---
+
+<Layout
+  title="Lab | Gal Elmalah"
+  description="Side projects, experiments, and things built just because I could."
+  canonicalURL="https://galelmalah.dev/lab"
+>
+  <Header />
+  <Main
+    pageTitle="Lab"
+    pageDesc="Side projects, experiments, and occasional shenanigans."
+  >
+    <p class="mb-8 max-w-prose leading-7">
+      Sometimes “wouldn’t it be cool if…” is reason enough to build something.
+      This is where those ideas end up.
+    </p>
+
+    <article class="mb-12 overflow-hidden rounded-xl border border-border">
+      <a
+        href="https://orbit.galelmalah.dev"
+        class="group block focus-outline"
+        aria-label="Explore Read in Orbit"
+      >
+        <img
+          src="/images/lab/read-in-orbit.webp"
+          alt="Book covers floating in a violet galaxy in Read in Orbit"
+          width="1200"
+          height="630"
+          class="aspect-[1200/630] w-full object-cover"
+          decoding="async"
+        />
+        <div class="p-5 sm:p-7">
+          <p
+            class="mb-2 text-xs font-medium uppercase tracking-widest text-accent"
+          >
+            Books · WebGL · Experiment 01
+          </p>
+          <h2 class="text-2xl font-semibold group-hover:text-accent">
+            Read in Orbit
+          </h2>
+          <p class="mt-3 max-w-prose leading-7">
+            Your Goodreads shelves, turned into a 3D library in a galaxy. Drift
+            through the covers, step inside your collection, and open a book to
+            see where it takes you. Built with AI, mostly because I could.
+          </p>
+          <span
+            class="mt-5 inline-flex items-center gap-2 font-medium text-accent"
+          >
+            Enter the library <IconArrowRight aria-hidden="true" />
+          </span>
+        </div>
+      </a>
+    </article>
+  </Main>
+  <Footer />
+</Layout>
