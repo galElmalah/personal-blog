@@ -8,7 +8,7 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
   class:list={[
     "fixed end-4 bottom-8 z-50",
     "md:sticky md:end-auto md:float-end md:me-1",
-    "translate-y-14 opacity-0 transition duration-500",
+    "invisible",
   ]}
 >
   <button
@@ -32,7 +32,7 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
   </button>
 </div>
 
-<script is:inline data-astro-rerun>
+<script is:inline>
   /** Scrolls the document to the top when
    * the "Back to Top" button is clicked. */
   function backToTop() {
@@ -59,16 +59,13 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
 
       progressIndicator.style.setProperty(
         "background-image",
-        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`,
       );
 
       const isVisible = scrollTop / scrollTotal > 0.3;
 
       if (isVisible !== lastVisible) {
-        btnContainer.classList.toggle("opacity-100", isVisible);
-        btnContainer.classList.toggle("translate-y-0", isVisible);
-        btnContainer.classList.toggle("opacity-0", !isVisible);
-        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        btnContainer.classList.toggle("invisible", !isVisible);
         lastVisible = isVisible;
       }
     }

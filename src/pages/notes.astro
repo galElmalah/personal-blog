@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Main from "@/layouts/Main.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { getPath } from "@/utils/getPath";
+
+const notes = getSortedPosts(await getCollection("blog")).filter(
+  ({ data }) => data.type === "thought",
+);
+const entries = await Promise.all(
+  notes.map(async (note) => ({
+    note,
+    ...(await render(note)),
+  })),
+);
+---
+
+<Layout
+  title="Notes | Gal Elmalah"
+  description="Short observations on engineering, systems, and the work behind the work."
+>
+  <Header />
+  <Main pageTitle="Notes" pageDesc="Small observations. Ideas worth keeping.">
+    <div class="notebook">
+      {
+        entries.map(({ note, Content }, index) => (
+          <article id={note.id} class="notebook-entry">
+            <div class="note-margin">
+              <span aria-label={`Note ${notes.length - index}`}>
+                {String(notes.length - index).padStart(2, "0")}
+              </span>
+              <time datetime={note.data.pubDatetime.toISOString()}>
+                {note.data.pubDatetime.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  timeZone: note.data.timezone,
+                })}
+              </time>
+            </div>
+            <div>
+              <h2>
+                <a href={getPath(note.id, note.filePath)}>{note.data.title}</a>
+              </h2>
+              <div class="app-prose note-body">
+                <Content />
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Main>
+  <Footer />
+</Layout>

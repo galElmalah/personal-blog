@@ -4,6 +4,32 @@
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
     @apply prose;
+    font-size: 1rem;
+    line-height: 1.8;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+    }
+    h3 {
+      font-size: 1.125rem;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    pre,
+    code {
+      font-family: var(--font-mono);
+    }
+    pre {
+      font-size: 0.8125rem;
+    }
 
     h1,
     h2,
@@ -14,7 +40,7 @@
     }
 
     h3 {
-      @apply italic;
+      font-style: normal;
     }
 
     p,
@@ -52,6 +78,10 @@
     }
 
     table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+
       th,
       td {
         @apply border border-border p-2;

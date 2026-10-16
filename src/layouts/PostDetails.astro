@@ -64,7 +64,6 @@ const layoutProps = {
   modDatetime,
   canonicalURL,
   ogImage,
-  scrollSmooth: true,
 };
 
 /* ========== Prev/Next Posts ========== */
@@ -75,7 +74,7 @@ const allPosts = posts.map(({ data: { title }, id, filePath }) => ({
   filePath,
 }));
 
-const currentPostIndex = allPosts.findIndex(a => a.id === post.id);
+const currentPostIndex = allPosts.findIndex((a) => a.id === post.id);
 
 const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
 const nextPost =
@@ -83,22 +82,23 @@ const nextPost =
 ---
 
 <Layout {...layoutProps}>
-  <Header />
+  <Header section={post.data.type === "thought" ? "notes" : "posts"} />
   <BackButton />
   <main
     id="main-content"
     class:list={["app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
     data-pagefind-body
   >
-    <h1
-      transition:name={slugifyStr(title.replaceAll(".", "-"))}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
-    >
-        {title}
+    <h1 class="page-title">
+      {title}
     </h1>
-    {postDescription && <p class="mt-3 max-w-2xl opacity-80">{postDescription}</p>}
+    {
+      postDescription && (
+        <p class="mt-3 max-w-2xl opacity-80">{postDescription}</p>
+      )
+    }
     <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+      <Datetime {pubDatetime} {modDatetime} {timezone} />
       <span
         aria-hidden="true"
         class:list={[
@@ -120,7 +120,7 @@ const nextPost =
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
     <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+      {tags.map((tag) => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
     </ul>
 
     <BackToTopButton />
@@ -139,7 +139,9 @@ const nextPost =
           >
             <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
             <div>
-              <span>Previous Post</span>
+              <span>
+                Previous {post.data.type === "thought" ? "Note" : "Post"}
+              </span>
               <div class="text-sm text-accent/85">{prevPost.title}</div>
             </div>
           </a>
@@ -152,7 +154,7 @@ const nextPost =
             class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"
           >
             <div>
-              <span>Next Post</span>
+              <span>Next {post.data.type === "thought" ? "Note" : "Post"}</span>
               <div class="text-sm text-accent/85">{nextPost.title}</div>
             </div>
             <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
@@ -164,7 +166,7 @@ const nextPost =
   <Footer />
 </Layout>
 
-<script is:inline data-astro-rerun>
+<script is:inline>
   /** Create a progress indicator
    *  at the top */
   function createProgressBar() {
@@ -210,7 +212,7 @@ const nextPost =
    *  allowing sharing of sections easily */
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll("h2, h3, h4, h5, h6"),
     );
     for (const heading of headings) {
       heading.classList.add("group");
@@ -278,9 +280,4 @@ const nextPost =
     }
   }
   attachCopyButtons();
-
-  /* Go to page start after page swap */
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
 </script>

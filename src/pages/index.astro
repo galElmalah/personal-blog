@@ -1,152 +1,88 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
+import { getCollection } from "astro:content";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const thoughts = sortedPosts.filter(({ data }) => data.type === "thought");
-const blogPosts = sortedPosts.filter(({ data }) => data.type !== "thought");
-const featuredPosts = blogPosts.filter(({ data }) => data.featured);
-const recentPosts = blogPosts.filter(({ data }) => !data.featured);
+const entries = getSortedPosts(await getCollection("blog"));
+const posts = entries.filter(({ data }) => data.type !== "thought").slice(0, 2);
+const notes = entries.filter(({ data }) => data.type === "thought").slice(0, 2);
 ---
 
 <Layout>
-  <Header />
-  <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Gal Elmalah
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
-
-      <p>
-        Writing on engineering, systems, leadership, and the work behind the
-        work.
-      </p>
-      <p class="mt-2">
-        Long-form posts, shorter notes, and practical lessons from building and
-        shipping software.
-      </p>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
-    </section>
-
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+  <main id="main-content" class="home-intro app-layout" data-layout="index">
+    <h1>Hi, I’m <span class="serif-accent">Gal.</span></h1>
+    <p>
+      I write about engineering, systems, leadership, and the work behind the
+      work. Practical lessons from building and shipping software.
+    </p>
+    <p>
+      Longer pieces live in <a href="/posts">posts</a>. Smaller ideas go into
+      <a href="/notes">notes</a>. Side projects and experiments end up in the
+      <a href="/lab">lab</a>. And here’s a little more <a href="/about"
+        >about me</a
+      >.
+    </p>
+    <p>
+      You can find my code on <a href="https://github.com/galelmalah">GitHub</a
+      >, follow along on <a href="https://twitter.com/galelmalah">X</a>, or
+      connect on
+      <a href="https://www.linkedin.com/in/gal-elmalah-71874115a/">LinkedIn</a>.
+    </p>
+    <section class="desk" aria-labelledby="desk-heading">
+      <h2 id="desk-heading" class="eyebrow">On the desk</h2>
+      <div class="desk-grid">
+        <section aria-labelledby="desk-posts">
+          <h3 id="desk-posts">
+            <a href="/posts">Posts <span aria-hidden="true">↗</span></a>
+          </h3>
           <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
+            {
+              posts.map((post) => (
+                <li>
+                  <a href={getPath(post.id, post.filePath)}>
+                    {post.data.title}
+                  </a>
+                </li>
+              ))
+            }
           </ul>
         </section>
-      )
-    }
-
-    <section class="grid gap-10 pt-12 pb-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-      {
-        recentPosts.length > 0 && (
-          <div id="recent-posts">
-            <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-            <ul>
-              {recentPosts.map(
-                (data, index) =>
-                  index < SITE.postPerIndex && <Card variant="h3" {...data} />
-              )}
-            </ul>
-          </div>
-        )
-      }
-
-      {
-        thoughts.length > 0 && (
-          <aside class="lg:sticky lg:top-6">
-            <div class="rounded-xl border border-border bg-muted/20 p-4">
-              <div class="mb-4 flex items-center justify-between gap-3 border-b border-border pb-3">
-                <h2 class="text-lg font-semibold tracking-wide">Thoughts</h2>
-                <span class="text-xs opacity-70">{thoughts.length}</span>
-              </div>
-
-              <div class="max-h-96 space-y-3 overflow-y-auto pe-1">
-                {thoughts.map(({ id, data, filePath }) => (
-                  <a
-                    href={getPath(id, filePath)}
-                    class="block rounded-lg border border-transparent px-3 py-2 transition-colors hover:border-border hover:bg-background/70"
-                  >
-                    <div class="mb-1 flex items-center justify-between gap-3 text-[0.7rem] uppercase tracking-[0.18em] opacity-60">
-                      <span>{data.thoughtId ?? "Thought"}</span>
-                      <time datetime={data.pubDatetime.toISOString()}>
-                        {data.pubDatetime.toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </time>
-                    </div>
-                    <p class="text-sm leading-6">{data.title}</p>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </aside>
-        )
-      }
+        <section aria-labelledby="desk-notes">
+          <h3 id="desk-notes">
+            <a href="/notes">Notes <span aria-hidden="true">↗</span></a>
+          </h3>
+          <ul>
+            {
+              notes.map((note) => (
+                <li>
+                  <a href={`/notes#${note.id}`}>{note.data.title}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section aria-labelledby="desk-lab">
+          <h3 id="desk-lab">
+            <a href="/lab">Lab <span aria-hidden="true">↗</span></a>
+          </h3>
+          <ul>
+            <li>
+              <a href="https://orbit.galelmalah.dev">Read in Orbit</a><span
+                class="desk-caption">A little universe for your books.</span
+              >
+            </li>
+          </ul>
+        </section>
+      </div>
     </section>
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
-  <Footer />
+  <Footer compact />
 </Layout>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset?.layout;
-    if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
-    }
-  });
+  if (document.querySelector('[data-layout="index"]')) {
+    sessionStorage.setItem("backUrl", "/");
+  }
 </script>

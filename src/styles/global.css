@@ -5,23 +5,26 @@
 
 :root,
 html[data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
+  --background: #ffffff;
+  --foreground: #222222;
+  --accent: #171717;
+  --secondary: #666666;
   --muted: #e6e6e6;
   --border: #ece9e9;
 }
 
 html[data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --muted: #343f60;
-  --border: #ab4b08;
+  --background: #171717;
+  --foreground: #e8e8e8;
+  --accent: #f5f5f5;
+  --secondary: #a3a3a3;
+  --muted: #292929;
+  --border: #333333;
 }
 
 @theme inline {
-  --font-app: var(--font-google-sans-code);
+  --font-app: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: var(--font-google-sans-code), monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
@@ -36,7 +39,7 @@ html[data-theme="dark"] {
     scrollbar-color: var(--color-muted) transparent;
   }
   html {
-    @apply overflow-y-scroll scroll-smooth;
+    @apply overflow-y-scroll;
   }
   body {
     @apply flex min-h-svh flex-col bg-background font-app text-foreground selection:bg-accent/75 selection:text-background;
@@ -52,11 +55,11 @@ html[data-theme="dark"] {
 }
 
 @utility max-w-app {
-  @apply max-w-3xl;
+  max-width: 40rem;
 }
 
 @utility app-layout {
-  @apply mx-auto w-full max-w-app px-4;
+  @apply mx-auto w-full max-w-app px-6;
 }
 
 .active-nav {
@@ -67,4 +70,276 @@ html[data-theme="dark"] {
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 1rem;
+}
+
+/* A quiet shared scale; reading text stays at 16px. */
+body {
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+.page-title {
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.site-header nav,
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+}
+
+.site-header nav,
+.site-footer {
+  color: var(--secondary);
+}
+
+.site-header a,
+.site-footer a,
+.site-footer button {
+  display: inline-block;
+  padding-block: 0.5rem;
+}
+
+.site-header [aria-current="page"],
+.site-header a:hover,
+.site-footer a:hover,
+.site-footer button:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.site-name {
+  font-weight: 500;
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-top: 4rem;
+  padding-bottom: 1.5rem;
+  font-size: 0.75rem;
+}
+
+.home-intro,
+.home-footer {
+  max-width: 40rem;
+}
+
+.home-intro {
+  padding-top: clamp(4rem, 12vh, 7rem);
+  padding-bottom: 4rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--secondary);
+}
+
+.home-intro h1 {
+  margin-bottom: 1.75rem;
+  font-size: inherit;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.home-intro p + p {
+  margin-top: 1.5rem;
+}
+
+.home-intro a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
+}
+
+.home-intro a:hover {
+  text-decoration-color: currentColor;
+}
+
+.skip-link {
+  position: absolute;
+  top: -5rem;
+  left: 1.5rem;
+  padding: 0.5rem;
+  background: var(--background);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (max-width: 639px) {
+  .home-intro {
+    font-size: 1rem;
+  }
+  .site-header {
+    padding-top: 1.5rem;
+  }
+}
+
+/* Small editorial details, with content doing most of the work. */
+.serif-accent {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+.home-intro h1 {
+  margin-bottom: 2rem;
+}
+
+.home-intro > p {
+  max-width: 34rem;
+}
+
+.desk {
+  margin-top: 3.5rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.desk-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 1.75rem;
+}
+
+.desk h3 {
+  margin-bottom: 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.desk h3 a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.desk h3 span {
+  display: inline-block;
+  margin-left: 0.25rem;
+}
+
+.desk ul {
+  list-style: none;
+  padding: 0;
+}
+.desk li + li {
+  margin-top: 1rem;
+}
+.desk li {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.desk-caption {
+  display: block;
+  margin-top: 0.35rem;
+}
+
+.notebook {
+  margin-top: 3rem;
+}
+
+.notebook-entry {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 1.5rem;
+  padding-block: 2rem;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 2rem;
+}
+
+.note-margin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.15rem;
+  color: var(--secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.note-margin > span {
+  font-size: 0.8125rem;
+}
+
+.notebook-entry h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.notebook-entry h2 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.note-body > :first-child {
+  margin-top: 0.75rem;
+}
+.note-body > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 479px) {
+  .desk-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .desk-grid > section {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .desk h3 {
+    margin: 0;
+    line-height: 1.75;
+  }
+  .desk h3 span {
+    display: none;
+  }
+  .notebook-entry {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .note-margin {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1rem;
+  }
 }

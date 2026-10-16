@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { slugifyStr } from "@/utils/slugify";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 
@@ -17,17 +16,21 @@ const { title, description, ...props } = data;
   <a
     href={getPath(id, filePath)}
     class:list={[
-      "inline-block text-lg font-medium text-accent",
+      "inline-block text-base leading-6 font-medium text-accent",
       "decoration-dashed underline-offset-4 hover:underline",
       "focus-visible:no-underline focus-visible:underline-offset-0",
     ]}
   >
-    <Heading
-      style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
-    >
+    <Heading>
       {title}
     </Heading>
   </a>
   <Datetime {...props} />
-  {description && <p>{description}</p>}
+  {
+    description && (
+      <p class="mt-1 text-[0.9375rem] leading-6 text-(--secondary)">
+        {description}
+      </p>
+    )
+  }
 </li>

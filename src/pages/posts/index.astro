@@ -10,37 +10,35 @@ import getSortedPosts from "@/utils/getSortedPosts";
 
 const posts = await getCollection("blog");
 const sortedPosts = getSortedPosts(posts).filter(
-  ({ data }) => data.type !== "thought"
+  ({ data }) => data.type !== "thought",
 );
 
 const postsByYear = Object.entries(
-  getPostsByGroupCondition(
-    sortedPosts,
-    post => post.data.pubDatetime.getFullYear()
-  )
+  getPostsByGroupCondition(sortedPosts, (post) =>
+    post.data.pubDatetime.getFullYear(),
+  ),
 ).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
 ---
 
-<Layout title="Posts">
+<Layout title="Posts | Gal Elmalah">
   <Header />
-  <Main
-    pageTitle="Posts"
-    pageDesc="All posts in one list, grouped by year."
-  >
+  <Main pageTitle="Posts" pageDesc="All posts in one list, grouped by year.">
     <div class="space-y-12">
-      {postsByYear.map(([year, yearPosts]) => (
-        <section class="border-t border-border pt-6 first:border-t-0 first:pt-0">
-          <div class="mb-4 flex items-baseline gap-2">
-            <h2 class="text-2xl font-bold">{year}</h2>
-            <span class="text-sm opacity-70">{yearPosts.length}</span>
-          </div>
-          <ul>
-            {yearPosts.map(post => (
-              <Card {...post} />
-            ))}
-          </ul>
-        </section>
-      ))}
+      {
+        postsByYear.map(([year, yearPosts]) => (
+          <section class="border-t border-border pt-6 first:border-t-0 first:pt-0">
+            <div class="mb-4 flex items-baseline gap-2">
+              <h2 class="text-sm font-medium text-(--secondary)">{year}</h2>
+              <span class="text-sm opacity-70">{yearPosts.length}</span>
+            </div>
+            <ul>
+              {yearPosts.map((post) => (
+                <Card variant="h3" {...post} />
+              ))}
+            </ul>
+          </section>
+        ))
+      }
     </div>
   </Main>
   <Footer />

@@ -28,7 +28,7 @@ const {
 const isModified = modDatetime && modDatetime > pubDatetime;
 
 const datetime = dayjs(isModified ? modDatetime : pubDatetime).tz(
-  postTimezone || SITE.timezone
+  postTimezone || SITE.timezone,
 );
 
 const date = datetime.format("D MMM, YYYY"); // e.g., '22 Mar, 2025'
@@ -36,20 +36,17 @@ const date = datetime.format("D MMM, YYYY"); // e.g., '22 Mar, 2025'
 
 <div class:list={["flex items-center gap-x-2 opacity-80", className]}>
   <IconCalendar
-    class:list={[
-      "inline-block size-6 min-w-5.5",
-      { "scale-90": size === "sm" },
-    ]}
+    class:list={["inline-block size-4 shrink-0", { "scale-90": size === "sm" }]}
   />
   {
     isModified && (
-      <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>
+      <span class:list={["text-xs", { "sm:text-base": size === "lg" }]}>
         Updated:
       </span>
     )
   }
   <time
-    class:list={["text-sm", { "sm:text-base": size === "lg" }]}
+    class:list={["text-xs", { "sm:text-base": size === "lg" }]}
     datetime={datetime.toISOString()}>{date}</time
   >
 </div>
