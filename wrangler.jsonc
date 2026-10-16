@@ -1,6 +1,7 @@
 {
   "name": "personal-blog",
   "account_id": "2b0122c5ca74870ca33ce676ea66490e",
+  "workers_dev": true,
   "routes": [{ "pattern": "galelmalah.dev", "custom_domain": true }],
   "compatibility_date": "2026-02-10",
   "assets": {
